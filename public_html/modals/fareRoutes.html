@@ -1,0 +1,249 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">{{data.modalHeader}}</h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs ">
+                <li class="{{data.linkAdd}}" >
+                    <a href="#/globalSettings" 
+                       ng-dblclick="modalData.clearGlobalData()"
+                       ng-click="data.makeActive('add', 'TBL_INSURANCES')">Add +</a></li>
+                <li class="{{data.linkView}}">
+                    <a href="#/globalSettings" 
+                       ng-dblclick="modalData.getGlobalData('TBL_ROUTES')"
+                       ng-click="data.getRoutes('TBL_ROUTES')">View</a>
+                </li>
+            </ul>
+            <notification></notification>
+            <div ng-show="data.linkView == 'active'">
+                <table class="table table-responsive  table-striped" ng-show="modalData.hideTableTillResponse">
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th ng-hide="modalData.hideCode" >route Code</th>
+                            <th>Route Name</th>
+                            <th>Area Thru'</th>
+                            <th>Total Fare</th>
+                            <th>Created By</th>
+                            <th>Status</th>
+                             <th></th>
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="routes in data.routesAllData">
+                            <td><input type='checkbox'></td> 
+                            <td ng-hide="modalData.hideCode" >{{routes.code}}</td>
+                            <td>{{routes.routeName}}</td>
+                            <td>{{routes.areaThru}}</td>
+                            <td>{{routes.totalfare}}</td>
+                            <td>{{routes.createdBy}}</td>
+                             <td>{{routes.Status}}</td>
+                            <td><div class="dropdown">
+                                    <a href="#/globalSettings" data-toggle="dropdown">Action
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#/globalSettings" 
+                                               ng-click="modalData.deactivateRecord(routes.id, 'TBL_ROUTES', 2)">Delete</a></li>
+                                        <li><a href="#/globalSettings"
+                                               ng-click="modalData.editFunction(routes.id, 'TBL_ROUTES', 3)"
+                                               >Edit</a></li>
+                                        <li><a href="#/globalSettings"
+                                               ng-click="modalData.deactivateRecord(routes.id, 'TBL_ROUTES', 0)" ng-show="routes.status == 1">Deactivate</a></li>
+                                        <li><a href="#/globalSettings" 
+                                               ng-click="modalData.deactivateRecord(routes.id, 'TBL_ROUTES', 1)"
+                                               ng-hide="routes.status == 1">Activate</a></li>
+                                        <li><a href="#/globalSettings" 
+                                               ng-click="modalData.printRecord(routes.id, 'TBL_ROUTES', 1)"
+                                               >Reports</a></li>
+                                    </ul>
+                                </div></td>
+                        </tr>
+                    </tbody>    
+                </table>
+            </div>
+            <div class="text-center" ng-show="data.linkAdd == 'active'">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2" >
+
+                    <form novalidate="" name="globalSettings" class="form-horizontal">
+
+                        <div ng-show='data.globalSettings.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.globalSettings.responseMessage}}</div>   
+
+                        <div class="form-group" style="padding:10px;"  ng-class="{ 'has-error' : globalSettings.code.$invalid && !globalSettings.code.$pristine }">
+                            <label for="code" class="control-label col-md-2">Code</label>
+                            <div class="col-md-10">
+                                <input type="text" readonly class="form-control" placeholder="{{data.modalHeader|lowercase}} code" name='code'
+
+                                       required  ng-model='data.globalSettings.code'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.routeName.$invalid && !globalSettings.routeName.$pristine }">
+                            <label for="name" class="control-label col-md-2">Name</label>
+                            <div class="col-md-10">
+                                <input type="text" ng-click="modalData.getGlobalData('TBL_AREAS')"
+                                       class="form-control" placeholder="Route Name" capitalize name='routeName' required ng-model='data.globalSettings.routeName'/>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" ng-show="data.showNextNo == 0" style="padding:0px;" 
+                             ng-class="{ 'has-error' : globalSettings.destFrom.$invalid && !globalSettings.destFrom.$pristine }">
+                            <label for="destFrom" class="control-label col-md-2">From</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name='destFrom' ng-disabled="data.showNextNo == 1" required ng-model='data.globalSettings.destFrom'/>
+
+                                <option selected disabled>First Destination</option>  
+                                <option ng-repeat="areas in modalData.fetchCurrentData" value="{{areas.id}}">{{areas.areaName}}</option>
+
+                                </select>
+                                
+                              
+                            </div>
+                            
+
+                        </div>
+                        <div class="form-group" ng-show="data.showNextNo == 0 || data.showNextNo == 1" style="padding:0px;"
+                             ng-class="{ 'has-error' : globalSettings.dest1.$invalid && !globalSettings.dest1.$pristine }">
+                            <label for="dest1" class="control-label col-md-2">Dest 1</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name='dest1' ng-disabled="data.showNextNo == 1" required ng-model='data.globalSettings.dest1'/>
+
+                                <option selected disabled>Dest 1</option>  
+                                <option ng-repeat="areas in modalData.fetchCurrentData" value="{{areas.id}}" >{{areas.areaName}}</option>
+
+                                </select>
+                                
+                                  <input type="Number" ng-hide="data.showNextNo != 0"
+                                         class="form-control" placeholder="Fare" name='fare0' required ng-model='data.globalSettings.fare0'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-show="data.showNextNo == 1 || data.showNextNo == 2" 
+                             ng-class="{ 'has-error' : globalSettings.dest2.$invalid && !globalSettings.dest2.$pristine }">
+                            <label for="dest2" class="control-label col-md-2">dest 2</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name='dest2' ng-disabled="data.showNextNo == 2"  ng-model='data.globalSettings.dest2'/>
+
+                                <option selected disabled>First Destination</option>  
+                                <option ng-repeat="areas in modalData.fetchCurrentData" value="{{areas.id}}">{{areas.areaName}}</option>
+
+                                </select>
+                                  <input type="Number" ng-hide="data.showNextNo != 1"
+                                         class="form-control" placeholder="Fare" name='fare1'  ng-model='data.globalSettings.fare1'/>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="data.showNextNo == 2 || data.showNextNo == 3" style="padding:0px;" 
+                             ng-class="{ 'has-error' : globalSettings.dest3.$invalid && !globalSettings.dest3.$pristine }">
+                            <label for="dest3" class="control-label col-md-2">Dest 3</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name='dest3' ng-disabled="data.showNextNo == 3"  ng-model='data.globalSettings.dest3'/>
+
+                                <option selected disabled>First Destination</option>  
+                                <option ng-repeat="areas in modalData.fetchCurrentData" value="{{areas.id}}">{{areas.areaName}}</option>
+
+                                </select>
+                                  <input type="Number" ng-hide="data.showNextNo != 2"
+                                         class="form-control" placeholder="Fare" name='fare2'  ng-model='data.globalSettings.fare2'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="data.showNextNo == 3 || data.showNextNo == 4" style="padding:0px;"
+                             ng-class="{ 'has-error' : globalSettings.dest4.$invalid && !globalSettings.dest4.$pristine }">
+                            <label for="dest4" class="control-label col-md-2">Dest 4</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name='dest4' ng-disabled="data.showNextNo == 4"  ng-model='data.globalSettings.dest4'/>
+
+                                <option selected disabled>First Destination</option>  
+                                <option ng-repeat="areas in modalData.fetchCurrentData" value="{{areas.id}}">{{areas.areaName}}</option>
+
+                                </select>
+                                  <input type="Number" ng-hide="data.showNextNo != 3"
+                                         class="form-control" placeholder="Fare" name='fare3'  ng-model='data.globalSettings.fare3'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="data.showNextNo == 4 || data.showNextNo == 5" style="padding:0px;" 
+                             ng-class="{ 'has-error' : globalSettings.dest5.$invalid && !globalSettings.dest5.$pristine }">
+                            <label for="dest5" class="control-label col-md-2">Dest 5</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name='dest5' ng-disabled="data.showNextNo == 5"  ng-model='data.globalSettings.dest5'/>
+
+                                <option selected disabled>First Destination</option>  
+                                <option ng-repeat="areas in modalData.fetchCurrentData" value="{{areas.id}}">{{areas.areaName}}</option>
+
+                                </select>
+                                  <input type="Number" ng-hide="data.showNextNo != 4"
+                                         class="form-control" placeholder="Fare" name='fare4'  ng-model='data.globalSettings.fare4'/>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="data.showNextNo == 5 || data.showNextNo == 6" style="padding:0px;" 
+                             ng-class="{ 'has-error' : globalSettings.dest6.$invalid && !globalSettings.dest6.$pristine }">
+                            <label for="dest6" class="control-label col-md-2">Final</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name='dest6'   ng-model='data.globalSettings.dest6'/>
+
+                                <option selected disabled>Final Destination</option>  
+                                <option ng-repeat="areas in modalData.fetchCurrentData" value="{{areas.id}}">{{areas.areaName}}</option>
+
+                                </select>
+                                  <input type="Number" ng-hide="data.showNextNo != 5"
+                                         class="form-control" placeholder="Fare" name='fare5'  ng-model='data.globalSettings.fare5'/>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <!--    <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.fare.$invalid && !globalSettings.fare.$pristine }">
+                                <label for="fare" class="control-label col-md-2">Fare</label>
+                                <div class="col-md-10">
+                                    <input type="Number" class="form-control" placeholder="Fare" name='fare' required ng-model='data.globalSettings.fare'/>
+                                </div>
+                            </div>
+                        -->
+                        <div class="form-group" style="padding:0px;">
+                            <label for="extras" class="control-label col-md-3"></label>
+                            <div class="col-md-9">
+                                <div class="col-md-6">
+                                    <button class=" btn " id='{{data.pickRandomColorPicked}}' style='width:100%'
+                                            ng-click="data.showNextRoute('p')" ng-disabled="data.showNextNo <= 0"  
+                                            >Previous</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class=" btn " id='{{data.pickRandomColorPicked}}' style='width:100%' 
+                                            ng-disabled="data.showNextNo == 5"
+                                            ng-click="data.showNextRoute('n')"
+                                            >Next</button>
+                                </div>
+
+                            </div> 
+                        </div>
+
+
+
+                        <div class="form-group col-sm-12 " style="padding:10px;">
+                            <label for="extras" class="control-label col-md-2"></label>
+                            <div class="col-md-10">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.globalSettingsSave(data.globalSettings, 'TBL_ROUTES','routeName')" 
+                                        ng-disabled="globalSettings.$invalid "
+                                        >save {{data.modalHeader|lowercase}}</button>
+                            </div>
+                        </div>    
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

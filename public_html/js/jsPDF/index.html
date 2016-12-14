@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<script src='jspdf.debug.js'></script>
+<script src='from_html.js'></script> 
+<script src='split_text_to_size.js'></script>
+<script src='standard_fonts_metrics.js'></script>
+
+ <body>
+    <p id="ignorePDF"><a href='' onclick='pdfTwo()'>don't print this to pdf</a></p>
+    <div id='pdf'>
+      <table class="table table-condensed table-bordered  table-striped table-fixed" id="exportTable">
+                   
+                        
+  							 <tr>
+                           
+                                <th>#</th>
+                                <th >Device ID</th>
+                                <th >Tracker Name</th>
+                                <th >GPS Time</th> 
+                                <th  >Receiving Time</th>
+                                <th >GPS Valid</th>
+                               
+                                <th  >Latitude</th>
+                                <th>Longitude</th>
+
+                                <th  >Speed</th>
+                                <th ng-show="data.eventReports.address">Location</th>
+                                <th >Direction</th>
+                                <th >Mileage</th>
+                                <th >Running Time</th>
+                                <th >Tracker Battery</th>
+                                <th >Car Battery</th>
+                            </tr>
+							   <tr >
+							
+                                <td > 1</td>
+                                <td >dev di 1</td> 
+                                <td >data 4</td> 
+                               
+                                <td >datetime}</td>
+                                <td >date</td> 
+                                <td >Valid 5</td>
+                                <td >tracker</td>
+                                <td >latitde 7</td>
+                                
+                                <td >xxsx</td>
+                               <td  ng-show="data.eventReports.address">asdd}</td>
+                               <td >asd </td>
+                               <td >dsas </td>
+                               <td >1234 </td>
+                               <td >485 </td>
+                               <td >4582</td>
+                               
+                                
+                            </tr>
+							   <tr >
+							
+                                <td >2</td>
+                                <td >di 2</td> 
+                                <td >data 4</td> 
+                               
+                                <td >datetime}</td>
+                                <td >date</td> 
+                                <td >Valid 5</td>
+                                <td >tracker</td>
+                                <td >latitde 6</td>
+                                
+                                <td >xxsx</td>
+                               <td  ng-show="data.eventReports.address">asdd}</td>
+                               <td >asd 6</td>
+                               <td >dsas 6</td>
+                               <td >1234 </td>
+                               <td >485 6</td>
+                               <td >4582</td>
+                               
+                                
+                            </tr>
+
+                      
+                    </table>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</html>
+<script>
+function gPdf(){
+var doc = new jsPDF('p','pt', 'a4');          
+var elementHandler = {
+  '#ignorePDF': function (element, renderer) {
+    return true;
+  }
+};
+margins = {
+            top: 5,
+                 bottom: 5,
+                 left: 5,
+                 width: 522
+};
+var source = window.document.getElementById("pdf");
+doc.fromHTML(
+    source,
+    15,
+    15,
+    {
+      'width': 180,'elementHandlers': elementHandler
+    });
+
+doc.save("pdf.pdf");
+}
+
+function pdfTwo(){
+ var table1 = 
+        tableToJson($('#exportTable').get(0)),
+        cellWidth =19,
+        rowCount = 0,
+        cellContents,
+        leftMargin = 4,
+        topMargin = 11,
+        topMarginTable = 30,
+        headerRowHeight = 13,
+        rowHeight = 8,
+
+         l = {
+         orientation: 'l',
+         unit: 'mm',
+         format: 'a4',
+         compress: true,
+         fontSize: 8,
+         lineHeight: 1,
+         autoSize: true,
+         printHeaders: true
+     };
+
+    var doc = new jsPDF(l, '', '', '');
+
+    doc.setProperties({
+        title: 'Test PDF Document',
+        subject: 'This is the subject',
+        author: 'author',
+        keywords: 'generated, javascript, web 2.0, ajax',
+        creator: 'author'
+    });
+
+    doc.cellInitialize();
+
+   $.each(table1, function (i, row)
+    {
+
+        rowCount++;
+
+        $.each(row, function (j, cellContent) {
+
+            if (rowCount == 1) {
+                doc.margins = 1;
+                doc.setFont("helvetica");
+                doc.setFontType("bold");
+                doc.setFontSize(9);
+
+                doc.cell(leftMargin, topMargin, cellWidth, headerRowHeight, cellContent, i)
+            }
+            else if (rowCount==2) {
+                doc.margins = 1;
+                doc.setFont("courier ");
+                doc.setFontType("bolditalic");  // or for normal font type use ------ doc.setFontType("normal");
+                doc.setFontSize(7);                    
+
+                doc.cell(leftMargin, topMargin, cellWidth, rowHeight, cellContent, i); 
+            }
+            else {
+
+                doc.margins = 1;
+                doc.setFont("courier ");
+                doc.setFontType("bolditalic ");
+                doc.setFontSize(7);                    
+
+                doc.cell(leftMargin, topMargin, cellWidth, rowHeight, cellContent, i);  // 1st=left margin    2nd parameter=top margin,     3rd=row cell width      4th=Row height
+            }
+        })
+    })
+
+doc.save('sample Report.pdf');  
+}
+
+
+
+
+function tableToJson(table) {
+var data = [];
+
+// first row needs to be headers
+var headers = [];
+for (var i=0; i<table.rows[0].cells.length; i++) {
+    headers[i] = table.rows[0].cells[i].innerHTML.toLowerCase().replace(/ /gi,'');
+}
+
+// go through cells
+for (var i=0; i<table.rows.length; i++) {
+
+    var tableRow = table.rows[i];
+    var rowData = {};
+
+    for (var j=0; j<tableRow.cells.length; j++) {
+
+        rowData[ headers[j] ] = tableRow.cells[j].innerHTML;
+
+    }
+
+    data.push(rowData);
+}       
+
+return data; 
+}
+
+
+
+
+</script>

@@ -1,0 +1,92 @@
+
+<div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}' ng-click="modalData.clearAllFormData(1)">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Send Email : {{data.email.subject}}</h4>
+        </div>
+        <div class="modal-body">
+
+            <div class="progress progress-striped" ng-show="data.timer > 0">
+                <div class="progress-bar {{data.divProg}} " role="progressbar"
+                     aria-valuenow="{{data.timer}}" aria-valuemin="0" aria-valuemax="100" style="width:{{data.timer}}%">
+                    {{data.timer}}% {{data.sendingMessage}} 
+                </div>
+            </div>
+            <div class="text-center" ng-controller="modalsController">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2" ng-controller="ticketsController"
+                     ng-init="modalData.getGlobalData('TBL_USERS')">
+
+                    <form novalidate="" name="email" class="form-horizontal" >
+
+                        <div class="form-group" style="padding:3px;"  ng-class="{ 'has-error' : email.to.$invalid && !email.to.$pristine }">
+                            <label for="email" class="control-label col-xs-3">To</label>
+                            <div class="col-md-9" >
+                                <input type="text" class="form-control " required   ng-model="data.email.to" name='to' 
+                                       placeholder="Enter Mail To">
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:3px;"  ng-class="{ 'has-error' : email.cc.$invalid && !email.cc.$pristine }">
+                            <label for="cc" class="control-label col-xs-3">CC</label>
+                            <div class="col-md-9" >
+                                <input type="text" class="form-control "   ng-model="data.email.cc" name='cc' 
+                                       placeholder="Enter CC">
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:3px;"  ng-class="{ 'has-error' : email.subject.$invalid && !email.subject.$pristine }">
+                            <label for="subject" class="control-label col-xs-3">Subject</label>
+                            <div class="col-md-9" >
+                                <input type="text" class="form-control " readonly required   ng-model="data.email.subject" name='subject' 
+                                       placeholder="Subject">
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:3px;" ng-init="data.email.message='Message will be auto-generated'"
+                             ng-class="{ 'has-error' : email.message.$invalid && !email.message.$pristine }">
+                            <label for="message" class="control-label col-xs-3">Message</label>
+                            <div class="col-md-9" >
+                                <textarea class="form-control "    ng-model="data.email.message" name='todo' ng-disabled="true"
+                                          placeholder="Message will be system generated">
+
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group" 
+                             style="padding:3px;"  ng-class="{ 'has-error' : email.message.$invalid && !email.message.$pristine }">
+                            <label for="message" class="control-label col-xs-3">Attachment</label>
+                            <div class="col-md-9" >
+                                <i class="fa fa-paperclip"></i>
+                                <a href="#/certificates" target="_self">
+                                    {{data.emailData.certNo}}
+                                </a>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group" style="padding:3px;"  ng-class="{ 'has-error' : email.code.$invalid && !email.code.$pristine }">
+                            <label for="code" class="control-label col-xs-3"></label>
+                            <div class="col-md-9" >
+                                <button class=" btn btn-success"  style='width:100%'
+                                        ng-click="modalData.sendEmailConfirm(data.email)"
+                                        ng-disabled="email.$invalid"
+                                        >Send Email</button>
+
+                            </div> 
+                        </div>
+
+
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

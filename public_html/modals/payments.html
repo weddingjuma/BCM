@@ -1,0 +1,120 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">{{data.modalHeader}}</h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs ">
+                <li class="{{data.linkAdd}}" >
+                    <a href="#/globalSettings" 
+                       ng-dblclick="modalData.clearGlobalData()"
+                       ng-click="data.makeActive('add', 'TBL_PAYMENT_MODES')">Add +</a></li>
+                <li class="{{data.linkView}}">
+                    <a href="#/globalSettings" 
+                       ng-dblclick="modalData.getGlobalData('TBL_PAYMENT_MODES')"
+                       ng-click="data.makeActive('view', 'TBL_PAYMENT_MODES')">View</a>
+                </li>
+            </ul>
+            <notification></notification>
+            <div ng-show="data.linkView == 'active'">
+                <table class="table table-responsive  table-striped" ng-show="modalData.hideTableTillResponse">
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th ng-hide="modalData.hideCode">Payment Mode Code</th>
+                            <th>Payment Mode Name</th>
+                            <th ng-hide="modalData.hideCode" >Allowed Amount</th>
+                            <th>Status</th>
+                            <th>Date Created</th>
+                            <th>Created By</th>
+                            <th>Extras</th>
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="pricesGroup in modalData.fetchCurrentData">
+                            <td><input type='checkbox'></td> 
+                            <td ng-hide="modalData.hideCode">{{pricesGroup.code}}</td>
+                            <td>{{pricesGroup.modeName}}</td>
+                            <td ng-hide="modalData.hideCode" >{{pricesGroup.allowedAmount}}</td>
+                            <td>{{modalData.returnStatus(pricesGroup.status)}}</td>
+                            <td>{{data.convertToHumanTime(pricesGroup.dateCreated)}}</td>
+                             <td>{{modalData.getUserName(pricesGroup.createdBy)}}</td>
+                            <td>{{pricesGroup.extras}}</td>
+                            <td><div class="dropdown">
+                                    <a href="#/globalSettings" data-toggle="dropdown">Action
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#/globalSettings" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_PAYMENT_MODES', 2)">Delete</a></li>
+                                        <li><a href="#/globalSettings"
+                                               ng-click="modalData.editFunction(pricesGroup.id, 'TBL_PAYMENT_MODES', 3)"
+                                               >Edit</a></li>
+                                        <li><a href="#/globalSettings"
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_PAYMENT_MODES', 0)" ng-show="pricesGroup.status == 1">Deactivate</a></li>
+                                        <li><a href="#/globalSettings" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_PAYMENT_MODES', 1)"
+                                               ng-hide="pricesGroup.status == 1">Activate</a></li>
+                                        <li><a href="#/globalSettings" 
+                                               ng-click="modalData.printRecord(pricesGroup.id, 'TBL_PAYMENT_MODES', 1)"
+                                               >Reports</a></li>
+                                    </ul>
+                                </div></td>
+                        </tr>
+                    </tbody>    
+                </table>
+            </div>
+            <div class="text-center" ng-show="data.linkAdd == 'active'">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+
+                    <form novalidate="" name="globalSettings">
+
+                        <div ng-show='data.globalSettings.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.globalSettings.responseMessage}}</div>   
+
+                        <div class="form-group" style="padding:10px;"  ng-class="{ 'has-error' : globalSettings.code.$invalid && !globalSettings.code.$pristine }">
+                            <label for="code" class="control-label col-md-2">Code</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" readonly="" placeholder="{{data.modalHeader|lowercase}} code" name='code'
+
+                                       required  ng-model='data.globalSettings.code'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : globalSettings.modeName.$invalid && !globalSettings.modeName.$pristine }">
+                            <label for="modeName" class="control-label col-md-2">Name</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="mode Name" capitalize name='modeName' required ng-model='data.globalSettings.modeName'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-hide="modalData.hideCode" style="padding:10px;" ng-class="{ 'has-error' : globalSettings.allowedAmount.$invalid && !globalSettings.allowedAmount.$pristine }">
+                            <span class="form-group-addon"><i class='fa fa-navicon'> Amount </i></span>
+                            <input type="number" class="form-control" placeholder="max amount allowed" name='allowedAmount'  ng-model='data.globalSettings.allowedAmount'/>
+                        </div>
+                        <div class="form-group" ng-hide="modalData.hideCode" style="padding:10px;" ng-class="{ 'has-error' : globalSettings.extras.$invalid && !globalSettings.extras.$pristine }">
+                            <span class="form-group-addon"><i class='fa fa-list'> Extras</i></span>
+                            <input type="text" class="form-control" placeholder="extras" name='extras'  ng-model='data.globalSettings.extras'/>
+                        </div>
+
+                        <div class="form-group col-sm-12 " style="padding:10px;">
+                            <label for="modeName" class="control-label col-md-2"></label>
+                            <div class="col-md-10">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.globalSettingsSave(data.globalSettings, 'TBL_PAYMENT_MODES')" ng-disabled="globalSettings.$invalid || data.globalSettings.signinDisabled"
+                                        >save {{data.modalHeader|lowercase}}</button>
+                            </div>
+                        </div>    
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

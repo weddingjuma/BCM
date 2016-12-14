@@ -1,0 +1,82 @@
+<div class="panel-body">
+    <div class="pull-right">
+        <ul class="nav nav-tabs" >
+
+            <li class='pull-right'>
+                <input type="search" ng-change = "modalData.searchDataFxn(search,'serialNumber','simCard','datalines')"
+                       class="form-control" placeholder='Search Dataline' ng-model='modalData.search'/>
+            </li>
+            <li class='pull-right'>
+                <button class="btn btn-primary" ng-show="modalData.returnMenuFlag(61)"
+                        data-toggle="modal" data-controls-modal="addDataline" ng-click="data.generateRandomTicketCode()"
+                        data-backdrop="static" data-keyboard="false" data-target="#addDataline"
+                        >Add Dataline</button>
+            </li>
+            <li class='pull-right'>
+                <button class="btn btn-default" ng-click="modalData.getDataLines('TBL_DATALINES','2')">
+                    <i class="fa fa-refresh " style="color:black"></i>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="pre-scrollable col-md-12" >
+        <table class="table table-responsive  ">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th ng-hide="modalData.hideCode">Code</th>
+                    <th>Serial No</th>
+                    <th>SIM Number</th>
+                    <th>Provider</th>
+                    <th>Vehicle</th>
+                    <th>Status</th>
+                    <th>Date Created</th>
+                </tr>    
+            </thead>
+            <tbody>
+                <tr dir-paginate="simcard in modalData.datalinesData|limitTo:data.limit | itemsPerPage: pageSize" 
+                                current-page="currentPage" pagination-id="dataPagination">
+                    <td nowrap><div class="dropdown">
+                            <a href="#/devices" data-toggle="dropdown">Action
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#/devices" 
+                                       ng-click="modalData.deactivateRecord(simcard.id, 'TBL_DATALINES', 2)">
+                                        <i class="fa fa-remove"></i> Delete</a></li>
+                                <li><a href="#/devices"
+                                       data-toggle="modal" data-controls-modal="addDataline" 
+                                       data-backdrop="static" data-keyboard="false" data-target="#addDataline"
+                                       ng-click="modalData.editFunction(simcard.id, 'TBL_DATALINES', 3)"
+                                       ><i class="fa fa-edit"></i> Edit</a></li>
+                                <li><a href="#/devices"
+                                       ng-click="modalData.deactivateRecord(simcard.id, 'TBL_DATALINES', 0)" ng-show="simcard.status == 1">
+                                        <i class="fa fa-lock"></i> Deactivate</a></li>
+                                <li><a href="#/devices" 
+                                       ng-click="modalData.deactivateRecord(simcard.id, 'TBL_DATALINES', 1)"
+                                       ng-hide="simcard.status == 1"><i class="fa fa-check"></i> Activate</a></li>
+
+                            </ul>
+                        </div></td> 
+                    <td ng-hide="modalData.hideCode">{{simcard.code}}</td>
+                    <td>{{simcard.serialNumber}}</td>
+
+                    <td>{{simcard.simNumber}}</td>
+                    <td>{{simcard.provider}}</td>
+                     <td>{{simcard.regNo}}</td>
+                    <td> {{modalData.returnAssigned(simcard.assignedStatus)}} and {{modalData.returnUsed(simcard.usedStatus)}}</td>
+                    <td>{{data.convertToHumanTime(simcard.dateCreated)}}</td>                                     
+                    
+                </tr>
+            </tbody> 
+
+        </table>
+        <pagination></pagination>
+    </div>
+
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="addDataline" role="dialog">
+            <div ng-include="'modals/dataLine.html'"></div>
+        </div>
+    </div> 
+</div>

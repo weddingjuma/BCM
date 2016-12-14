@@ -1,0 +1,204 @@
+<div class="" ng-controller="modalsController" ng-cloak ng-show="modalData.returnMenuFlag(17)">
+    <div class="" ng-controller="ticketsController" ng-init="data.getAllTickets()">
+        <div  >
+            <ul class="nav nav-tabs">
+                <!--
+                <li class="{{modalData.returnActiveLink('account')}}"  ng-show="modalData.returnMenuFlag(69)">
+                    <a href="#/accounts"  target="_self" ng-click="modalData.makeLinkActive('account')">New Payment</a>
+                </li>
+                -->
+                <li   class="{{modalData.returnActiveLink('vehicles')}}" ng-show="modalData.returnMenuFlag(43)">
+                    <a target="_self" href="#/accInv"  ng-click="modalData.makeLinkActive('vehicles')">Generate Invoice
+                    </a>
+
+                </li>
+                <li  class="{{modalData.returnActiveLink('invoice')}}">
+                    <a href="#/accInv"  target="_self" ng-click="modalData.makeLinkActive('invoice')">View Invoices</a></li>
+
+
+                <li class='pull-right'>
+                    <input type="search" ng-model="search"
+                           class="form-control" placeholder='Search Payments' ng-model='search'/>
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-default" ng-click="data.getAllPayments('tbl_invoice')"><i class="fa fa-refresh " style="color:black"></i></button>
+                </li>
+            </ul>
+        </div>
+        <div class="panel panel-default" ng-controller="ticketsController">
+
+
+            <div class="panel-body" ng-init="modalData.getAllCustomers('1')">
+
+                <div ng-show="modalData.activeLink == 'vehicles'" ng-init="data.getAllPayments('tbl_invoice')" style="overflow: auto;max-height: 550px">
+                    <div class="pull-right col-md-12 ">
+
+                        <div   class="pre-scrollable" >
+                            <div class="pull-right col-md-12" style="overflow: auto;min-height: 600px" ng-show="modalData.returnMenuFlag(69)" ng-controller='ticketsController'>
+                                <div class="col-lg-8 col-md-8 col-lg-offset-1 col-md-offset-1" >
+
+                                    <div class="pull-right col-lg-12">Invoice  : {{modalData.customerDetails.name}} <hr></div>
+
+                                    <form novalidate="" name="invoice" class="form-horizontal">
+
+                                        <div ng-show='data.invoice.responseStatus' ng-class="{
+                            'has-error' : true }" class='text-center alert btn-sm  alert-danger'>
+                                            {{data.invoice.responseMessage}}</div>   
+
+                                        <div class="form-group" style="padding:0px;"  ng-class="{        'has-error' : invoice.code.$invalid && !invoice.code.$pristine }">
+                                            <label for="code" class="control-label col-xs-3">Code</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" placeholder="invoice code" name='code'
+                                                       readonly="" capitalize
+                                                       ng-model='data.invoice.code'/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding:0px;" ng-controller="TypeaheadCtrl" ng-class="{        'has-error' : 
+                                        invoice.idNo.$invalid && !invoice.idNo.$pristine || data.custError}">
+                                            <label for="idNo" class="control-label col-xs-3">Customer Name</label>
+                                            <div class="col-md-9">
+                                                <input type="text" ng-model="selected" typeahead-on-select="modalData.pickInvCustomer(selected)" typeahead-select-on-exact="true"
+                                                       typeahead-focus-first="true" ng-click="data.invoice.code = modalData.getRandomCode()"
+                                                       uib-typeahead="state for state in Typeahead.returnAllCustomers() | filter:$viewValue | limitTo:15" class="form-control">
+                                            </div>
+                                            <input type="text" hidden="true" ng-model="data.invoice.custId">
+                                        </div>
+
+                                        <div class="form-group" style="padding:0px;"  ng-class="{        'has-error' : invoice.receiptNo.$invalid && !invoice.receiptNo.$pristine }">
+                                            <label for="code" class="control-label col-xs-3">Invoice No.</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" placeholder="Invoice Number" name='invoiceNo'
+                                                       capitalize  required  ng-model='data.invoice.invoiceNo'/>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group" style="padding:0px;" ng-controller="datePicker"
+                                             ng-class="{ 'has-error' : invoice.bankName.$invalid && !invoice.date.$pristine }">
+                                            <label for="date" class="control-label col-xs-3">Date </label>
+
+
+                                            <div class="col-md-9">
+                                                <input type="text" id="date" class="form-control" placeholder="date"
+                                                       name="date"   required ng-model='data.invoice.date'/>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding:0px;" ng-class="{   'has-error' : invoice.amount.$invalid && !invoice.amount.$pristine }">
+                                            <label for="amount" class="control-label col-xs-3">Amount Charged</label>
+                                            <div class="col-md-9">
+                                                <input type="number" class="form-control"
+                                                       ng-keyup='modalData.calculateBalance(data.invoice.priceGroupId)'
+                                                       ng-click="modalData.priceGroups('TBL_PRICE_GROUPS')"
+                                                       placeholder="amount received" name='amount'  required ng-model='data.invoice.amount'/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding:0px;" ng-class="{   
+                            'has-error' : invoice.actualCommission.$invalid && !invoice.vat.$pristine || data.invoice.vat > data.invoice.amount
+                        }">
+                                            <label for="vat" class="control-label col-xs-3">vat</label>
+                                            <div class="col-md-9">
+                                                <input type="number" class="form-control" 
+                                                       placeholder="amount received" name='vat'  required ng-model='data.invoice.vat'/>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="form-group" style="padding:0px;"  
+                                             ng-class="{ 'has-error' : invoice.pieces.$invalid && !invoice.pieces.$pristine }">
+                                            <label for="pieces" class="control-label col-xs-3">Pieces</label>
+
+                                            <div class="col-md-9">
+                                                <input type="number" class="form-control" ng-keyup="data.invoice.totalAmount = data.invoice.pieces*data.invoice.amount"
+                                                       ng-change="modalData.calculateActualServiceAmount(data.invoice.serviceId,data.invoice.pieces)" 
+                                                       placeholder="Total vehicles/pieces being supplied" name='pieces'
+                                                       required  ng-model='data.invoice.pieces'/>
+                                            </div>
+
+
+
+                                        </div>
+                                         <div class="form-group" style="padding:0px;" ng-class="{
+                                 'has-error' : invoice.mode.$invalid && !invoice.mode.$pristine }">
+                                            <label for="priceGroup" class="control-label col-xs-3">Group</label>
+                                            <div class="col-md-9">
+                                                <select type="text"
+                                                        class="form-control" placeholder="" name='serviceId' 
+                                                        ng-change="modalData.calculateActualServiceAmount(data.invoice.serviceId,data.invoice.pieces)" 
+                                                        capitalize required ng-model='data.invoice.serviceId'>
+                                                    <option value="{{payment.id}}" ng-repeat="payment in modalData.separateData"> {{payment.priceGroupName}} </option>
+
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group" style="padding:0px;"  ng-init="modalData.getGlobalData('TBL_PAYMENT_MODES')">
+                                            <label for="balance" class="control-label col-xs-3">Actual Amount</label>
+                                            <div class="col-md-9">
+
+                                                <input type="number" readonly=""  class="form-control" value="0" name='actualServiceAmount' 
+                                                       ng-model='data.invoice.actualServiceAmount'/>
+
+                                            </div>
+                                        </div>
+                                         <div class="form-group" style="padding:0px;"  >
+                                            <label for="balance" class="control-label col-xs-3">Total Amount</label>
+                                            <div class="col-md-9" ng-bind="data.invoice.totalAmount = data.invoice.pieces*data.invoice.amount">
+
+                                                <input type="number" readonly="" class="form-control" value="0" name='totalAmount' 
+                                                       ng-model='data.invoice.totalAmount'/>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding:0px;" >
+                                            <label for="extras" class="control-label col-xs-3">Other</label>
+                                            <div class="col-md-9">
+
+
+                                                <input type="text" class="form-control" placeholder="Other particulars"
+                                                       name='extras' capitalize  ng-model='data.invoice.extras'/>
+
+
+                                            </div>
+                                        </div>
+                                        <input type="text" hidden  ng-model="data.invoice.custId">
+
+                                        <div class="form-group" style="padding:0px;">
+                                            <label for="extras" class="control-label col-md-3"></label>
+                                            <div class="col-md-9">
+
+                                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+
+                                                        ng-click="modalData.globalSettingsSave(data.invoice, 'TBL_INVOICES')"  
+                                                        >Save</button>
+
+                                            </div> 
+                                        </div>    
+                                    </form>
+
+                                    <div class="clearfix" style="padding-bottom: 150px;">
+                                        &nbsp;
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="prices" role="dialog">
+            <div ng-include="'modals/prices.html'"></div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,130 @@
+<div class="panel panel-default" ng-controller="modalsController" ng-show="modalData.returnMenuFlag(51)">
+    <div class="panel-heading" >
+        Company Settings <spinner></spinner>
+    </div>
+    <div class="panel-body">
+        <div class="">
+            <ul class="nav nav-tabs" ng-init="activeLink = 'users'">
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'users'}" ng-show="modalData.returnMenuFlag(12)">
+                    <a href="" ng-click="activeLink = 'users'" >Users</a>
+                </li>
+                <li class='pull-left' ng-click="activeLink = 'rights'" ng-show="modalData.returnMenuFlag(25)"
+                    ng-class="{'active' : activeLink == 'rights'}">
+                    <a href="">User Rights</a>
+                </li>
+                <li class='pull-left' ng-click="activeLink = 'machineIps'" ng-show="modalData.returnMenuFlag(87)"
+                    ng-class="{'active' : activeLink == 'machineIps'}">
+                    <a href="">Machine IPs</a>
+                </li>
+                <li class='pull-left' ng-click="activeLink = 'sms'" ng-show="modalData.returnMenuFlag(94)"
+                    ng-class="{'active' : activeLink == 'sms'}">
+                    <a href="">SMS settings</a>
+                </li>
+
+
+                <li class='pull-right'>
+                    <input type="search" 
+                           class="form-control" placeholder='Search User' ng-model='filterUser'/>
+                </li>
+
+                <li class='pull-right'>
+                    <button class="btn btn-primary" ng-show="modalData.returnMenuFlag(56)"
+                            data-toggle="modal" data-controls-modal="addUser" ng-click="data.generateRandomTicketCode()"
+                            data-backdrop="static" data-keyboard="false" data-target="#addUser"
+                            >Add user +</button>
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-info" ng-show="modalData.returnMenuFlag(13)"
+                            data-toggle="modal" data-controls-modal="groups" ng-click="data.generateRandomTicketCode()"
+                            data-backdrop="static" data-keyboard="false" data-target="#groups"
+                            >Add Group +</button>
+                </li>
+                <li class='pull-right' ng-show="modalData.returnMenuFlag(26)">
+                    <button class="btn label-success" 
+                            data-toggle="modal" data-controls-modal="settings" ng-click="data.getUserSettings()"
+                            data-backdrop="static" data-keyboard="false" data-target="#settings"
+                            >Edit Settings</button>
+                </li>
+
+                <li class='pull-right'>
+                    <button class="btn btn-default"  ng-click="data.getAllUsers()">
+                        <i class="fa fa-refresh " style="color:black"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div  class="pre-scrollable col-md-12" ng-controller="ticketsController">
+
+            <div ng-show="activeLink == 'users'" ng-show="modalData.returnMenuFlag(12)">
+                <table class="table " ng-init="data.getAllUsers()">
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Username</th>
+                            <th>Names</th>
+                            <th>Area Id</th>
+                            <th>Status</th>
+
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="pricesGroup in data.allUsers| filter: filterUser"
+                            class="{{modalData.returnRowClass($index, pricesGroup.status, 0)}}" ng-click="modalData.makeRowActive($index)"
+                            >
+                            <td nowrap><div class="dropdown">
+                                    <a href="#/company" data-toggle="dropdown">Action
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#/company" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_USERS', 2)">
+                                                <i class="fa fa-remove"></i> Delete</a></li>
+                                        <li><a href="#/company" 
+                                               data-toggle="modal" data-controls-modal="addUser" data-backdrop="static" data-keyboard="false" data-target="#addUser"
+                                               ng-click="modalData.editFunction(pricesGroup.id, 'TBL_USERS', 3)"
+                                               > <i class="fa fa-edit"></i> Edit</a></li>
+                                        <li><a href="#/company"
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_USERS', 0)" ng-show="pricesGroup.status == 1">
+                                                <i class="fa fa-lock"></i> Deactivate</a></li>
+                                        <li><a href="#/company" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_USERS', 1)"
+                                               ng-hide="pricesGroup.status == 1"> <i class="fa fa-check"></i> Activate</a></li>
+
+                                    </ul>
+                                </div></td>
+                            <td>{{pricesGroup.username}}</td>
+                            <td>{{pricesGroup.fullnames}}</td>
+                            <td>{{pricesGroup.areaCode}}</td>
+                            <td>{{data.returnStatusWords(pricesGroup.status)}}</td>
+                            <td>{{modalData.getUserName(pricesGroup.createdBy)}}</td>
+
+                        </tr>
+                    </tbody>    
+                </table>
+
+
+            </div>
+
+            <div ng-show="activeLink == 'rights'">
+                <div ng-include="'partialViews/userMenus.html'"></div>
+            </div>
+            <div ng-show="activeLink == 'machineIps'" ng-show="modalData.returnMenuFlag(87)">
+                <div ng-include="'partialViews/machineIps.html'"></div>
+            </div>
+        </div>
+
+        <div ng-controller="modalsController">
+            <div class="modal fade" id="settings" role="dialog">
+                <div ng-include="'modals/settings.html'"></div>
+            </div>
+        </div>
+
+        <div ng-controller="modalsController">
+            <div class="modal fade" id="addUser" role="dialog">
+                <div ng-include="'modals/users.html'"></div>
+            </div>
+        </div>
+        <div class="modal fade" id="groups" role="dialog">
+            <div ng-include="'modals/groups.html'"></div>
+        </div>

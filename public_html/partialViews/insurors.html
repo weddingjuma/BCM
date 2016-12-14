@@ -1,0 +1,85 @@
+<div class="panel panel-default" ng-controller="modalsController">
+    <div class="panel-heading" ng-init="modalData.getAllInsurers('1')">
+        Insurance Firms  <spinner></spinner>
+    </div>
+    <div class="panel-body"  ng-controller="ticketsController">
+        <div class="pull-right" >
+            <ul class="nav nav-tabs">
+
+                <li class='pull-right'>
+                    <input type="search" ng-model="search"
+                           class="form-control" placeholder='Search Insuror' />
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-primary" ng-show="modalData.returnMenuFlag(59)"
+                            data-toggle="modal" data-controls-modal="addInsuror" ng-click="data.generateRandomTicketCode()"
+                            data-backdrop="static" data-keyboard="false" data-target="#addInsuror"
+                            >Add Insurance +</button>
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-default" ng-click="modalData.getAllInsurers('2')">
+                        <i class="fa fa-refresh " style="color:black"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div  class="pre-scrollable col-md-12">
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>insurance Name</th>
+                        <th>Region</th>
+                        <th>Contact Person</th>
+                        <th>Email/Mobile</th>
+                        <th>Created On</th>
+
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr ng-repeat="pricesGroup in modalData.insurers| filter : search"
+                        class="{{modalData.returnRowClass($index, pricesGroup.status, 0)}}" ng-click="modalData.makeRowActive($index)"
+                        >
+                        <td ng-show="modalData.returnMenuFlag(60)" nowrap><div class="dropdown">
+                                <a href="#/insurance" data-toggle="dropdown">Action
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#/insurance" 
+                                           ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_INSURANCES', 2)">
+                                              <i class="fa fa-remove" ></i> Delete</a></li>
+                                    <li><a href="#/insurance"
+                                           ng-click="modalData.editFunction(pricesGroup.id, 'TBL_INSURANCES', 3)"
+                                           data-toggle="modal" data-controls-modal="addInsuror"
+                                           data-backdrop="static" data-keyboard="false" data-target="#addInsuror"
+
+                                           >  <i class="fa fa-edit" ></i> Edit</a></li>
+                                    <li><a href="#/insurance"
+                                           ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_INSURANCES', 0)" ng-show="pricesGroup.status == 1">
+                                              <i class="fa fa-lock" ></i> Deactivate</a></li>
+                                    <li><a href="#/insurance" 
+                                           ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_INSURANCES', 1)"
+                                           ng-hide="pricesGroup.status == 1">  <i class="fa fa-check" ></i> Activate</a></li>
+
+                                </ul>
+                            </div></td>
+
+                        <td>{{pricesGroup.insuranceName}}</td>
+                        <td>{{pricesGroup.region}}</td>
+                        <td>{{pricesGroup.contactName}}</td>
+                        <td>{{pricesGroup.email}}/{{pricesGroup.mobile}}</td>
+                        <td>{{data.convertToHumanTime(pricesGroup.dateCreated)}}</td>
+                        <td>{{modalData.getUserName(pricesGroup.createdBy)}}</td>
+                        <td ng-hide="modalData.hideCode" >{{pricesGroup.extras}}</td>
+
+                    </tr>
+                </tbody>    
+            </table>
+        </div>
+
+        <div ng-controller="modalsController">
+            <div class="modal fade" id="addInsuror" role="dialog">
+                <div ng-include="'modals/insurances.html'"></div>
+            </div>
+        </div>

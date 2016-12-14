@@ -1,0 +1,184 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">{{data.modalHeader}}</h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs ">
+                <li class="{{data.linkAdd}}" >
+                    <a href="#/accounts" 
+                       ng-dblclick="modalData.clearGlobalData()"
+                       ng-click="data.makeActive('add', 'TBL_PRICE_GROUPS')">Add +</a></li>
+                <li class="{{data.linkView}}">
+                    <a href="#/accounts" 
+                       ng-init="modalData.getGlobalData('TBL_PRICE_GROUPS')"
+                       ng-click="data.makeActive('view', 'TBL_PRICE_GROUPS')">View</a>
+                </li>
+            </ul>
+            <notification></notification>
+            <div ng-show="data.linkView == 'active'">
+                <table class="table table-responsive  table-striped" ng-show="modalData.hideTableTillResponse">
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th ng-hide="modalData.hideCode"> Code</th>
+                            <th> Name</th>
+                            <th>Status</th>
+                            <th> Period</th>
+                            <th> Type</th>
+                            <th> Min Amount</th>
+                            <th>Discount</th>
+                           
+                            <th>Created By</th>
+
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="pricesGroup in modalData.fetchCurrentData" nowrap>
+                            <td><input type='checkbox'></td> 
+                            <td ng-hide="modalData.hideCode">{{pricesGroup.code}}</td>
+                            <td>{{pricesGroup.priceGroupName}}</td>
+                            <td>{{modalData.returnStatus(pricesGroup.status)}}</td>
+                            <td>{{pricesGroup.period}}</td>
+                            <td>{{pricesGroup.type}}</td>
+                            <td>{{pricesGroup.minAmount}}</td>
+                            <td>{{pricesGroup.discount}}</td>
+
+                            
+                            
+                             <td>{{modalData.getUserName(pricesGroup.createdBy)}}</td>
+
+                            <td nowrap><div class="dropdown">
+                                    <a href="#/accounts" data-toggle="dropdown">Action
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#/accounts" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_PRICE_GROUPS', 2)">Delete</a></li>
+                                        <li><a href="#/accounts"
+                                               ng-click="modalData.editFunction(pricesGroup.id, 'TBL_PRICE_GROUPS', 3)"
+                                               >Edit</a></li>
+                                        <li><a href="#/accounts"
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_PRICE_GROUPS', 0)" ng-show="pricesGroup.status == 1">Deactivate</a></li>
+                                        <li><a href="#/accounts" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_PRICE_GROUPS', 1)"
+                                               ng-hide="pricesGroup.status == 1">Activate</a></li>
+                                        <li><a href="#/accounts" 
+                                               ng-click="modalData.printRecord(pricesGroup.id, 'TBL_PRICE_GROUPS', 1)"
+                                               >Reports</a></li>
+                                    </ul>
+                                </div></td>
+                        </tr>
+                    </tbody>    
+                </table>
+            </div>
+            <div class="text-center" ng-show="data.linkAdd == 'active'">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+
+                    <form novalidate="" name="globalSettings" class="form-horizontal">
+
+                        <div ng-show='data.globalSettings.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.globalSettings.responseMessage}}</div>   
+
+                        <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error' : globalSettings.code.$invalid && !globalSettings.code.$pristine }">
+                            <label for="accountID" class="control-label col-xs-2">Code</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="{{data.modalHeader|lowercase}} codess" name='code'
+                                       required  ng-model='data.globalSettings.code'
+                                       ng-init="data.globalSettings.code = modalData.getRandomCode()" disabled
+                                       />
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.priceGroupName.$invalid && !globalSettings.priceGroupName.$pristine }">
+                            <label for="accountID" class="control-label col-xs-2">Name</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="price Group Name" capitalize
+                                       value="123" ng-click="data.globalSettings.code = modalData.getRandomCode()"
+                                       name='priceGroupName' required ng-model='data.globalSettings.priceGroupName'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.price.$invalid && !globalSettings.price.$pristine }">
+                            <label for="accountID" class="control-label col-xs-2">Price</label>
+                            <div class="col-md-10">
+                                <input type="number" class="form-control" placeholder="price" name='price' required ng-model='data.globalSettings.price'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.discount.$invalid && !globalSettings.discount.$pristine }">
+                            <label for="discount" class="control-label col-xs-2">Discount</label>
+                            <div class="col-md-10">
+                                 
+                                <input type="number" class="form-control" ng-keyup="modalData.calculateDiscount(data.amountDiscount,'A')"
+                                        ng-click="modalData.calculateDiscount(data.amountDiscount,'A')"
+                                       placeholder="discount amount" name='discount' ng-model='data.amountDiscount'/>
+                                 OR PERCENTAGE
+                                <input type="number" class="form-control" min="0" max="100"  ng-keyup="modalData.calculateDiscount(data.globalSettings.discount,'D')"
+                                       ng-click="modalData.calculateDiscount(data.globalSettings.discount,'D')"
+                                       placeholder="discount %" name='discount' required ng-model='data.globalSettings.discount'/>
+                               
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.period.$invalid && !globalSettings.period.$pristine }">
+                            <label for="period" class="control-label col-xs-2">Period</label>
+                            <div class="col-md-10">
+                                <input type="number" class="form-control" placeholder="period" name='period' required ng-model='data.globalSettings.period'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' 
+                            : globalSettings.minAmount.$invalid && !globalSettings.minAmount.$pristine 
+                             || data.globalSettings.minAmount > data.globalSettings.price
+                        }">
+                            <label for="minAmount" class="control-label col-xs-2">Min Allowed</label>
+                            <div class="col-md-10">
+                                <input type="number" class="form-control" placeholder="min amount" name='minAmount' required ng-model='data.globalSettings.minAmount'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.type.$invalid && !globalSettings.type.$pristine }">
+                            <label for="type" class="control-label col-xs-2">Type</label>
+                            <div class="col-md-10">
+                                <select  class="form-control" placeholder="type"  name='type' required ng-model='data.globalSettings.type'>
+                                    <option>Initial Payment</option>
+                                    <option>Subscription</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;"
+                             ng-class="{ 'has-error' : globalSettings.priceCategory.$invalid && !globalSettings.priceCategory.$pristine }">
+                            <label for="type" class="control-label col-xs-2">Category</label>
+                            <div class="col-md-10">
+                                <select  class="form-control" placeholder="priceCategory"  name='type' required ng-model='data.globalSettings.priceCategory'>
+                                    <option>Direct Sale</option>
+                                    <option>Insurance</option>
+                                    <option>Bank</option>
+                                    <option>Dealership</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-hide="true" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.extras.$invalid && !globalSettings.extras.$pristine }">
+                            <label for="accountID" class="control-label col-xs-2">extras</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="extras" name='extras'  ng-model='data.globalSettings.extras'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group " style="padding:0px;">
+                            <label for="accountID" class="control-label col-xs-2"></label>
+                            <div class="col-md-10">   <button class=" btn " id="{{data.modalHeaderColor}}"
+                                                              ng-click="modalData.globalSettingsSave(data.globalSettings, 'TBL_PRICE_GROUPS')" ng-disabled="globalSettings.$invalid || data.globalSettings.signinDisabled"
+                                                              >save {{data.modalHeader|lowercase}}</button>
+                            </div>
+                        </div>    
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

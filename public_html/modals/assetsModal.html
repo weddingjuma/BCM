@@ -1,0 +1,82 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.pickRandomColorPicked}}'>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">{{data.assetAccount}} : {{data.assetDescription}}</h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs ">
+
+                <li class="active">
+                    <a href="#"   ng-dblclick="modalData.getGlobalData('TBL_DEVICES')"
+                       >View</a>
+                </li>
+                <li class='pull-right'>
+
+
+                    <input type="search"
+
+                           class="form-control" placeholder='Search {{data.assetAccount}}' ng-model='search'/>
+
+                </li>
+            </ul>
+
+            <div ng-show="true">
+                <table class="table table-responsive  table-striped">
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Device ID</th>
+                            <th>Description</th>
+                            <th>Last Online</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>action</th>
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="pricesGroup in data.accountAssets | filter :search| itemsPerPage: pageSize"
+                            current-page="currentPage" pagination-id="assetsPagination"
+                            >
+                            <td>{{$index + 1}}</td> 
+                            <td>{{pricesGroup.deviceID}}</td>
+                            <td>{{data.returnSubstring(pricesGroup.description, 8)}}</td>
+
+
+                            <td>{{data.returnSubstring(data.convertToHumanTime(pricesGroup.lastUpdateTime), 17)}}</td>
+                            <td>{{modalData.returnStatus(pricesGroup.lastUpdateTime)}}</td>
+                            <td>{{pricesGroup.createdBy}}</td>
+
+                            <td><div class="dropdown">
+                                    <a href="#" data-toggle="dropdown">Action
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">Delete</a></li>
+                                        <li><a href="#">View Full Details</a></li>
+                                        <li><a href="#">Deactivate</a></li>
+                                        <li><a href="#">Activate</a></li>
+                                        <li><a href="#" >Reports</a></li>
+                                    </ul>
+                                </div></td>
+                        </tr>
+                    </tbody>    
+                </table>
+
+                <div class="text-right pull-right">
+                    <dir-pagination-controls boundary-links="true" pagination-id="assetsPagination" on-page-change="pageChangeHandler(newPageNumber)" 
+                                             template-url="partialViews/dirPagination.tpl.html">
+
+                    </dir-pagination-controls>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

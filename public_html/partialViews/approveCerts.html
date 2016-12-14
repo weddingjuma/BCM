@@ -1,0 +1,137 @@
+<div class="panel panel-default" ng-controller="modalsController" >
+    <div class="panel-heading" ng-init="modalData.getApproveCertificates()">
+        Approve Certificates  <spinner></spinner>
+    </div>
+    <div class="panel-body" ng-show="modalData.returnMenuFlag(39)">
+        <div class="pull-right" >
+            <ul class="nav nav-tabs">
+
+                <li class='pull-right'>
+                    <input type="search" ng-change = "modalData.searchDataFxn(filterCerts,'regNo','certNo','certs')"
+                           class="form-control" placeholder='Search Certficate' ng-model='filterCerts'/>
+                </li>
+                <li class='pull-right'>
+                    <div class="dropdown " >
+
+                        <button  class="btn btn-primary"  data-toggle="dropdown">Filter Certs
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <a href="#/accounts" target="_self"
+
+                                   ng-click="modalData.filterCertsFxn(1)">Approved 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#/accounts" target="_self"
+                                   ng-click="modalData.filterCertsFxn(0)">Un-approved 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#/accounts" target="_self" 
+                                   ng-click="modalData.filterCertsFxn(2)">Held 
+                                </a></li>
+
+                            <li><a href="#/accounts"  target="_self"
+                                   ng-click="modalData.filterCertsFxn('')"
+                                   >All Certs</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class='pull-right'>
+                    <button class="btn btn-default" ng-click="modalData.getApproveCertificates(2)">
+                        <i class="fa fa-refresh " style="color:black"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div  class="pre-scrollable col-md-12">
+            <table class="table table-responsive  ">
+
+                <thead>
+                    <tr>
+
+                        <th>Certificate No</th>
+                        <th>Customer Name</th>
+                        <th>Vehicle</th>
+                        <th>Created By</th>
+                        <th>Date printed</th>
+                        <th>Status</th>
+                        <th></th>
+
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr dir-paginate="certs in modalData.approveCerts|filter : {status:1,approved:data.filterCerts}|limitTo:25 |itemsPerPage: pageSize"
+                        class="{{modalData.returnRowClass($index)}}" ng-click="modalData.makeRowActive($index)"
+                        current-page="currentPage" pagination-id="dataPagination">
+
+
+                        <td>{{certs.certNo}}</td>
+                        <td>{{certs.name}}</td>
+                        <td>{{certs.regNo}}</td>
+                        <td>{{certs.createdBy}}</td>
+                        <td>{{data.convertToHumanTime(certs.dateCreated)}}</td>
+                        <td>{{certs.approvalStatus}} </td>
+                        <td>
+                            <div
+
+                                data-toggle="modal" data-controls-modal="approvePayment" 
+                                data-backdrop="static" data-keyboard="false" data-target="#approvePayment" ng-disabled="certs.paidFor == 1"
+                                class="btn btn-sm btn-success" ng-hide="certs.approved == 1 "
+                                ng-click="modalData.certificateUpdates(certs, 1)">
+                                Approve 
+                            </div> 
+                            <div
+
+                               data-toggle="modal" data-controls-modal="commentOnHold" 
+                                data-backdrop="static" data-keyboard="false" data-target="#commentOnHold"
+                                class="btn btn-sm btn-success" ng-show="certs.paidFor == 1 && certs.approved == 0" 
+                                ng-click="modalData.certificateUpdates(certs, 1)">
+                                Re-Approve
+                            </div> 
+                            
+                            <div ng-show="modalData.returnMenuFlag(1102)"
+                                data-toggle="modal" data-controls-modal="commentOnHold" 
+                                data-backdrop="static" data-keyboard="false" data-target="#commentOnHold"
+                                class="btn  btn-sm btn-danger" ng-show="certs.approved == 1 || certs.approved == 2"
+                                ng-click="modalData.certificateUpdates(certs, 0)">
+                                Cancel
+                            </div>
+                            <div ng-show="modalData.returnMenuFlag(1101)"
+                                data-toggle="modal" data-controls-modal="commentOnHold" 
+                                data-backdrop="static" data-keyboard="false" data-target="#commentOnHold"
+                                class="btn  btn-sm btn-danger" ng-show="certs.status == 1"
+                                ng-click="modalData.certificateUpdates(certs, 3)">
+                                Delete
+                            </div>
+                            <div
+                                data-toggle="modal" data-controls-modal="commentOnHold" 
+                                data-backdrop="static" data-keyboard="false" data-target="#commentOnHold"
+                                class="btn  btn-sm btn-primary" ng-show="certs.approved == 0"
+                                ng-click="modalData.certificateUpdates(certs, 2)">
+                                Hold
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>    
+            </table>
+            <pagination></pagination>
+        </div>
+    </div>
+
+    <div class="modal fade" id="approvePayment" role="dialog">
+        <div ng-include="'modals/approvePayments.html'"></div>
+    </div>
+    <div class="modal fade" id="commentOnHold" role="dialog">
+        <div ng-include="'modals/commentOnHold.html'"></div>
+    </div>
+</div>
+<!-- <div ng-controller="modalsController">
+     <div class="modal fade" id="commentCertficates" role="dialog">
+         <div ng-include="'modals/certComment.html'"></div>
+     </div>
+ </div>
+-->

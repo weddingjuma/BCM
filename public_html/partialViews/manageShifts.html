@@ -1,0 +1,136 @@
+<div class='main-div' ng-controller='modalsController'>
+
+ <div class="clearfix">&nbsp;</div>
+    <div class='' id='supervixsor-panel' ng-init="">
+        <ul class="nav nav-tabs ">
+            <ul class="nav nav-tabs" ng-init="aLink = 'ashifts'">
+                <li class='pull-left ' ng-class="{'active' : aLink == 'ashifts'}" >
+                    <a href="#/userDayOperations" ng-click="aLink = 'ashifts'" >Assign Shifts</a>
+                </li>
+                <li class='pull-left'  
+                    ng-class="{'active' : aLink == 'cushifts'}">
+                    <a href="#/userDayOperations" ng-click="aLink = 'cushifts'">Current User Shifts</a>
+                </li>
+
+                <li class='pull-right'>
+                    <input type="search"
+
+                           class="form-control" placeholder='Search {{data.assetAccount}}' ng-model='search'/>
+
+                </li>
+                <li class='pull-right'>
+                    <button ng-click="modalData.exportToExcel('Current User Shifts', 'currentUserShifts')" class=" btn btn-success">Excel</button>
+
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-default"  ng-click="data.getShifts('TBL_USER_SHIFTS')">
+                        <i class="fa fa-refresh " style="color:black"></i>
+                    </button>
+                </li>
+            </ul>
+            <div class="form-group"  style="max-height: 300px;overflow: auto"
+                 ng-class="{ 'has-error' : globalSettings.moduleType.$invalid && !globalSettings.moduleType.$pristine }">
+
+                <div ng-show="aLink == 'ashifts'" class="pre-scrollable">
+                   
+                    <div class="col-md-8 col-lg-8 col-sm-8" ng-init="modalData.getGlobalData('TBL_SHIFTS')">
+                        <label for="accountID" class="control-label col-xs-1">Shift</label>
+                        <div class="col-md-11">
+                            <div class="col-md-6">
+                                <select class="form-control" ng-model='data.shiftId'>
+                                    <option selected disabled >-- SELECT SHIFT --</option>
+                                    <option ng-repeat="shift in modalData.fetchCurrentData"   value="{{shift.id}}">
+                                        {{shift.shiftName}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" ng-init="modalData.counterFcn()"  >
+                                <select class="form-control" ng-model='data.days'>
+                                    <option selected disabled>----Next Number Of Days----</option>
+                                    <option ng-repeat="shift in modalData.counter"   value="{{shift}}">
+                                        {{shift}}
+                                    </option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-sm-4 pull-right">
+                        <div class="col-md-12 col-lg-12 col-sm-12 text-right" style="border:0px;">
+                            <button class="btn btn-success col-md-12 col-lg-12 col-sm-12 " ng-click="modalData.saveUserShifts(data.shiftId, data.days)">Save info
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+                    <table class="table table-responsive" ng-init="modalData.getAllUsers('TBL_USERS')" >
+
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Full Name</th>
+                                <th>Department Id</th>
+                                <th>status</th>
+
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="user in modalData.allSystemUsers| filter : search">
+                                <td><input type='checkbox' ng-true-value="true"  ng-false-value="false" 
+                                           ng-click="modalData.addToSelectedShift(user.id)"></td>
+                                <td>{{user.fullnames}}</td>
+                                <td>{{user.groupId}}</td>
+                                <td>{{modalData.returnStatus(user.status)}}</td>
+
+                            </tr>
+                        </tbody>    
+                    </table>
+                </div>
+            </div>
+            <div ng-show="aLink == 'cushifts'" class="" style="max-height: 300px;overflow: auto" id="currentUserShifts">
+                <table ng-hide="true" ><tr style="background-color: grey;"><td></td><td> <h3>Current User Shifts</h3></td><td></td><td></td><td></td>
+                    <td></td><td></td><td></td><td></td><td></td></tr></table>
+                <table class="table table-responsive" ng-controller="ticketsController"
+                       ng-init="data.getShifts('TBL_USER_SHIFTS')" >
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th ng-click="data.sortByColumnFxn('fullname')">Full Name</th>
+                            <th ng-click="data.sortByColumnFxn('shiftName')">Shift</th>
+                            <th ng-click="data.sortByColumnFxn('starts')">Starts</th>
+                            <th ng-click="data.sortByColumnFxn('ends')">Ends</th>
+                            <th ng-click="data.sortByColumnFxn('noOfDays')">No Of Days</th>
+                            <th ng-click="data.sortByColumnFxn('createdBy')">Created By</th>
+                            <th ng-click="data.sortByColumnFxn('daysLeft')">Days Left</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="user in data.userShifts| orderBy :data.sortByColumn|filter:search| itemsPerPage: pageSize" 
+                                        current-page="currentPage" pagination-id="dataPagination"
+                            
+                            >
+                            <td>{{$index + 1}}</td>
+                            <td>{{user.fullname}}</td>
+                            <td>{{user.shiftName}}</td>
+                            <td>{{data.convertToHumanTime(user.starts)}}</td>
+                            <td>{{data.convertToHumanTime(user.ends)}}</td>
+                            <td>{{user.noOfDays}}</td>
+                            <td>{{user.createdBy}}</td>
+                            <td>{{user.daysLeft}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination></pagination>
+            </div>
+            <div class="clearfix">
+                &nbsp;
+            </div>
+    </div>
+
+</div>

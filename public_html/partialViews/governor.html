@@ -1,0 +1,80 @@
+<div class="panel panel-default" ng-controller="modalsController" ng-show="modalData.returnMenuFlag(50)">
+    <div class="panel-heading" ng-init="modalData.getGlobalData('TBL_GOVERNORS')">
+        Governors
+    </div>
+    <div class="panel-body">
+        <div class="pull-right"  ng-controller="ticketsController">
+            <ul class="nav nav-tabs">
+
+                <li class='pull-right'>
+                    <input type="search" ng-model="search"
+                           class="form-control" placeholder='Search Governor' ng-model='search'/>
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-primary" ng-show="modalData.returnMenuFlag(66)"
+                            data-toggle="modal" data-controls-modal="addgovernor" ng-click="data.generateRandomTicketCode()"
+                            data-backdrop="static" data-keyboard="false" data-target="#addgovernor"
+                            >Add Governor +</button>
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-default" ng-click="modalData.getGlobalData('TBL_GOVERNORS')">
+                        <i class="fa fa-refresh " style="color:black"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div  class="pre-scrollable col-md-12">
+            <table class="table table-responsive  table-striped">
+
+                <thead>
+                    <tr>
+
+                        <th>Governor IMEI</th>
+                        <th>Serial Number</th>
+                        <th>Vehicles</th>
+                        <th>Certificate Number</th>
+                        <th>Checker NO</th>
+
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr ng-repeat="pricesGroup in modalData.fetchCurrentData">
+
+
+                        <td>{{pricesGroup.deviceImei}}</td>
+                        <td>{{pricesGroup.serialNo}}</td>
+                        <td>{{pricesGroup.contactName}}</td>
+                        <td>{{pricesGroup.certNo}}</td>
+                        <td>{{pricesGroup.checkerNo}}</td>
+                        <td>{{data.returnStatus(pricesGroup.status)}}</td>
+                        <td ng-show="modalData.returnMenuFlag(67)"><div class="dropdown">
+                                <a href="#/governor" data-toggle="dropdown">Action
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#/governor" 
+                                           ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_GOVERNORS', 2)">Delete</a></li>
+                                    <li><a href="#/governor"
+                                           ng-click="modalData.editFunction(pricesGroup.id, 'TBL_GOVERNORS', 3)"
+                                           data-toggle="modal" data-controls-modal="addgovernor"
+                                           data-backdrop="static" data-keyboard="false" data-target="#addgovernor"
+
+                                           >Edit</a></li>
+                                    <li><a href="#/governor"
+                                           ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_GOVERNORS', 0)" ng-show="pricesGroup.status == 1">Deactivate</a></li>
+                                    <li><a href="#/governor" 
+                                           ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_GOVERNORS', 1)"
+                                           ng-hide="pricesGroup.status == 1">Activate</a></li>
+
+                                </ul>
+                            </div></td>
+                    </tr>
+                </tbody>    
+            </table>
+        </div>
+
+        <div ng-controller="modalsController">
+            <div class="modal fade" id="addgovernor" role="dialog">
+                <div ng-include="'modals/governors.html'"></div>
+            </div>
+        </div>

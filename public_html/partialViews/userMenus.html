@@ -1,0 +1,72 @@
+<div class='main-div' ng-controller='modalsController'>
+
+    <div class='' id='supervixsor-panel' ng-init="data.getAllMenus()">
+
+        <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error' : globalSettings.moduleType.$invalid && !globalSettings.moduleType.$pristine }">
+           
+            <br>
+            <div class="col-md-8 col-lg-8 col-sm-8" ng-init="modalData.getGlobalData('TBL_USER_GROUPS')">
+                <label for="accountID" class="control-label col-xs-1">Group</label>
+                <div class="col-md-5">
+                   
+                        
+                            <select  type="text" class="form-control" ng-change ="modalData.getMenusPerGroup(data.userGroups.groupId)"
+                                     required  ng-model='data.userGroups.groupId'
+                                     >
+                                <option ng-repeat="group in modalData.fetchCurrentData"   value="{{group.id}}">
+                                    {{group.groupName}}
+                                </option>
+                            </select>
+                        
+                    
+                </div>
+
+                <div class="col-md-5">
+                    <input type="text" class="form-control" placeholder="Search Menus"  ng-model='search' ui-select2/>
+
+
+
+
+                </div>
+
+
+            </div>
+            <div class="col-md-4 col-lg-4 col-sm-4 pull-right">
+                <button class="dropdown col-md-12 col-lg-12 col-sm-12 btn btn-success form-control text-right" style="border:0px;" ng-disabled="modalData.selectedMenus.length == 0"
+                        ng-click="modalData.saveAssignedMenus(data.userGroups.groupId)">Assign
+                    {{modalData.selectedMenus.length}} Menus
+
+
+
+
+
+                </button>
+            </div>
+            <table class="table table-responsive " >
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Menu Name</th>
+                        <th>Setting</th>
+                        <th>Status</th>
+
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr ng-repeat="accounts in data.allMenus| filter : search">
+                        <td><input type='checkbox' ng-true-value="true"  ng-false-value="false" ng-checked="modalData.returnAssignedStatus(accounts.id)"
+                                   ng-click="modalData.addToSelectedMenus(accounts.id)"></td>
+                        <td>{{accounts.menuName}}</td>
+                        <td>{{accounts.side}}</td>
+                        <td>{{modalData.returnStatus(accounts.status)}}</td>
+                        <td></td>
+
+
+                    </tr>
+                </tbody>    
+            </table>
+
+        </div>
+
+    </div>

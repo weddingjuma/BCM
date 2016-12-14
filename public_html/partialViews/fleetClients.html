@@ -1,0 +1,75 @@
+<div class="panel panel-green" ng-controller="modalsController">
+    <div class="panel panel-heading" ng-init="searchUser='all'">
+        Customer Details
+         <button class="btn btn-primary col-lg-offset-9" ng-click="modalData.getUserDetails(searchUser)">
+                        Fetch Users
+                    </button>
+        <spinner></spinner>
+    </div>
+    <div class="panel panel-body" ng-init="">
+            <ul class="nav nav-tabs" ng-init="certs = 'viewGen'">
+                <li class='pull-right'>
+                   
+                </li>
+                <li class='pull-right'>
+                    <input type="search"
+                           class="form-control col-lg-4" placeholder='Search user' ng-model='search'/>
+                </li>
+            </ul>
+
+        <div class="pre-scrollable">
+
+            <div ng-repeat="userInfo in modalData.usernameDetails | filter : search" class="pre-scrollable">
+                <div class="clearfix">&nbsp;</div>
+                <div class="col-xs-4 pull-left">
+                    <img src="images/profile.png" class="img-responsive" width="250" height="150">
+                    <div class="clearfix">&nbsp;</div>
+                    <button class="btn btn-info col-lg-8" ng-click="modalData.composePasswordMessage(userInfo)"
+                            data-toggle="modal" data-controls-modal="composeSMS" 
+                            data-backdrop="static" data-keyboard="false" data-target="#composeSMS"
+                            >SMS Password To {{userInfo.user_account}}</button>
+                </div>
+                <div class="col-xs-8 well">
+                    <div class="col-xs-12  btn-info"><h4>User Personal Details</h4></div>
+                    <table class="table table-responsive" >
+                        <tr>
+                            <td>Username</td><td>{{userInfo.user_account}}</td>
+                        </tr>
+                        <tr>
+                            <td>Account Name </td><td>{{userInfo.user_name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Cell Phone</td><td>{{userInfo.user_cellphone}}</td>
+                        </tr>
+                        <tr>
+                            <td>Account Expiry</td><td>{{userInfo.user_expired_time}}</td>
+                        </tr>
+                        <tr>
+                            <td>User Email</td><td>{{userInfo.user_email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Tracker Limit</td><td>{{userInfo.user_tracker_limit}}</td>
+                        </tr>
+                    </table>
+                
+                    <div class="col-lg-12 btn-info"><h4>Tracker Details</h4></div>
+                    <table class="table table-responsive">
+                        <tr>
+                            <td>Tracker Name</td><td>Tracker Expiry Name</td><td>Device Imei</td><td>Tracker Simcard</td>
+                        </tr>
+                        <tr ng-repeat="tracker in userInfo.Trackers">
+                            <td>{{tracker.tracker_name}}</td><td>{{tracker.tracker_expired_time}}</td><td>{{tracker.sn_imei_id}}</td>
+                            <td>{{tracker.tracker_sim_number}}</td>
+                        </tr>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-controller="modalsController">
+    <div class="modal fade" id="composeSMS" role="dialog">
+        <div ng-include="'modals/composeSMS.html'"></div>
+    </div>
+</div>

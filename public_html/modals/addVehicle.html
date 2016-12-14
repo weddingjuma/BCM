@@ -1,0 +1,160 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Add Vehicle</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+               
+                <form novalidate="" name="vehicleSettings" class="form-horizontal">
+
+                    <div ng-show='data.vehicleSettings.responseStatus' ng-class="{
+                            'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                        {{data.vehicleSettings.responseMessage}}</div>   
+
+                    <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error'  : vehicleSettings.code.$invalid && !vehicleSettings.code.$pristine }">
+                        <label for="accountID" class="control-label col-xs-3">Code</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" placeholder="vehicle code" name='code'
+                                   readonly="" ng-model='data.vehicleSettings.code'/>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.regNo.$invalid && !vehicleSettings.regNo.$pristine }">
+                        <label for="regNo" class="control-label col-xs-3">Reg No.</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" placeholder="reg number" 
+                                  ng-maxlength="8" ng-pattern='/^[a-zA-Z0-9 ]*$/' ng-click="data.vehicleSettings.code = data.getRandomCode()"
+                                   ng-keyup="modalData.checkForVehicles(data.vehicleSettings.regNo)" name='regNo' capitalize required ng-model='data.vehicleSettings.regNo'/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.color.$invalid && !vehicleSettings.color.$pristine }">
+                        <label for="color" class="control-label col-xs-3">Color</label>
+                        <div class="col-md-9">
+                            <input type="text" list="color" class="form-control" placeholder="color" name='color'  ng-click="modalData.getGlobalData('TBL_VEHICLE_MODELS')" 
+                                   capitalize required ng-model='data.vehicleSettings.color'/>
+                            <datalist id="color">
+                                <option value="White">
+                                <option value="Silvery grey">
+                                <option value="Black">
+                                <option value="Blue">
+                                <option value="Jungle green">
+                                <option value="Yellow">
+                                <option value="Red">
+                                <option value="navy Blue">
+                                <option value="Maroon">
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:0px;" 
+                         ng-class="{ 'has-error' : vehicleSettings.model.$invalid && !vehicleSettings.model.$pristine }">
+
+                        <label for="model" class="control-label col-xs-3">Model</label>
+                        <div class="col-md-9">
+
+                            <input type="text" class="form-control" list="models" ng-pattern='/^[a-zA-Z0-9\_\- ]*$/'
+                                   placeholder="model" name='model' capitalize required ng-model='data.vehicleSettings.model'/>
+                            <datalist id="models" class="col-md-9">
+                                <option value="{{model.model}}" ng-repeat="model in modalData.fetchCurrentData">{{groups.model}}</option>
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.make.$invalid && !vehicleSettings.make.$pristine }">
+                        <label for="make" class="control-label col-xs-3">Make</label>
+                        <div class="col-md-9">
+
+                            <input type="text" class="form-control" placeholder="make" name='make' ng-pattern='/^[a-zA-Z0-9\_\- ]*$/'
+                                   capitalize required ng-model='data.vehicleSettings.make'/>
+
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.engNo.$invalid && !vehicleSettings.engNo.$pristine }">
+                        <label for="EngNo" class="control-label col-xs-3">Eng. No</label>
+                        <div class="col-md-9">
+
+
+                            <input type="text" class="form-control" placeholder="engNo" ng-pattern='/^[a-zA-Z0-9 ]*$/'
+                                   name='engNo' capitalize required ng-model='data.vehicleSettings.engNo'/>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.chassisNo.$invalid && !vehicleSettings.chassisNo.$pristine }">
+                        <label for="chassisNo" class="control-label col-xs-3">Chassis No.</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" placeholder="chassis No" name='chassisNo' ng-pattern='/^[a-zA-Z0-9\- ]*$/'
+                                   capitalize required ng-model='data.vehicleSettings.chassisNo'/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.insurors.$invalid && !vehicleSettings.insurors.$pristine }">
+                        <label for="insurors" class="control-label col-xs-3">Insurer</label>
+                        <div class="col-md-9" >
+
+                            <select class="form-control" 
+                                    name='insurors'  ng-model='data.vehicleSettings.insurorId'>
+                                <option value="{{insuror.id}}">--NONE--</option>
+                                <option value="{{insuror.id}}" ng-repeat="insuror in modalData.insurers|orderBy :'insuranceName'">{{insuror.insuranceName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:0px;" ng-class="{'has-error' : vehicleSettings.financierId.$invalid && !vehicleSettings.financierId.$pristine }"
+                        >
+                        <label for="financierId" class="control-label col-xs-3">Financier</label>
+                        <div class="col-md-9">
+                            <select class="form-control" 
+                                    name='financierId'  ng-model='data.vehicleSettings.financierId'>
+                                <option value=" ">--NONE--</option>
+                                <option value="{{financier.id}}" ng-repeat="financier in modalData.financiers|orderBy :'financierName'">{{financier.financierName}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div  class="form-group"  style="padding:0px;" ng-class="{
+                            'has-error' : vehicleSettings.extras.$invalid && !vehicleSettings.extras.$pristine }">
+                        <label for="accountID" class="control-label col-xs-3">Policy</label>
+                        <div class="col-md-9" ng-init="data.vehicleSettings.extras=''">
+                            Use Customer as policy name ? <input type="checkbox" ng-model="policyStatus" ng-change = "modalData.assignPolicy(policyStatus)">
+                            <input type="text" class="form-control" placeholder="Policy Name" ng-disabled="policyStatus" 
+                                   name='extras' capitalize ng-model='data.vehicleSettings.extras'/>
+                             <input type="text" class="form-control" placeholder="Policy Number"  name='policyNo' capitalize ng-model='data.vehicleSettings.policyNo'/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="padding:0px;">
+                        <label for="extras" class="control-label col-md-3"></label>
+                        <div class="col-md-9">
+
+                            <button class=" btn " id='{{data.pickRandomColorPicked}}' style='width:100%' 
+                                    ng-disabled="vehicleSettings.$invalid || data.globalSettings.signinDisabled"
+                                    ng-click="modalData.globalSettingsSave(data.vehicleSettings, 'TBL_VEHICLES')" 
+                                    >Add Car</button>
+
+
+                        </div> 
+                    </div>    
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

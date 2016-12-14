@@ -1,0 +1,114 @@
+<div class="panel panel-default" ng-controller="modalsController" ng-show="modalData.returnMenuFlag(50)">
+    <div class="panel-heading" >
+        Devices  <spinner></spinner>
+    </div>
+    <div class="panel-body">
+        <div class="">
+            <ul class="nav nav-tabs" ng-init="activeLink = 'trackers'">
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'trackers'}" ng-show="modalData.returnMenuFlag(50)">
+                    <a href="" ng-click="activeLink = 'trackers'" >Trackers/Governors</a>
+                </li>
+                <li class='pull-left' ng-click="activeLink = 'datalines'" ng-show="modalData.returnMenuFlag(81)"
+                    ng-class="{'active' : activeLink == 'datalines'}">
+                    <a href="#/devices" ng-click="activeLink = 'datalines'">Data Lines</a>
+                </li>
+
+
+
+
+            </ul>
+            <div class="col-xs-12">
+                <div ng-show="activeLink == 'trackers'" ng-init="modalData.getDevices('TBL_DEVICES',1)">
+                    <div class="panel-body">
+                        <div class="pull-right">
+                            <ul class="nav nav-tabs" >
+
+                                <li class='pull-right'>
+                                  
+                                    <input type="search" ng-change = "modalData.searchDataFxn(search,'imei','regNo','devices')"
+                               class="form-control" placeholder='Search Vehicle' ng-model='search'/>
+                                </li>
+                                
+                                <li class='pull-right'>
+                                    <button class="btn btn-primary" ng-show="modalData.returnMenuFlag(81)"
+                                            data-toggle="modal" data-controls-modal="addDevice" ng-click="data.generateRandomTicketCode()"
+                                            data-backdrop="static" data-keyboard="false" data-target="#addDevice"
+                                            >Add Device</button>
+                                </li>
+                                <li class='pull-right'>
+                                    <button class="btn btn-default" ng-click="modalData.getDevices('TBL_DEVICES','2')">
+                                        <i class="fa fa-refresh " style="color:black"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="pre-scrollable col-xs-12" >
+                            <table class="table table-responsive  ">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th ng-hide="modalData.hideCode">Code</th>
+                                        <th>Device type</th>
+                                        <th> Imei</th>
+                                        <th>Device Serial</th>
+                                        <th>Vehicle</th>
+                                        <th>Status</th>
+                                        <th>Date Created</th>
+
+                                    </tr>    
+                                </thead>
+                                <tbody>
+                                    <tr dir-paginate="imeisGroup in modalData.devices |  limitTo : data.limit | itemsPerPage: pageSize" 
+                                        current-page="currentPage" pagination-id="dataPagination">
+                                        <td nowrap><div class="dropdown">
+                                                <a href="#/devices" data-toggle="dropdown">Action<span class="caret"></span></a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#/devices" 
+                                                           ng-click="modalData.deactivateRecord(imeisGroup.id, 'TBL_DEVICES', 2)"><i class="fa fa-remove"></i>  Delete</a></li>
+                                                    <li><a href="#/devices"
+                                                           data-toggle="modal" data-controls-modal="addDevice" 
+                                                           data-backdrop="static" data-keyboard="false" data-target="#addDevice"
+                                                           ng-click="modalData.editFunction(imeisGroup.id, 'TBL_DEVICES', 3)"
+                                                           ><i class="fa fa-edit"></i> Edit</a></li>
+                                                    <li><a href="#/devices"
+                                                           ng-click="modalData.deactivateRecord(imeisGroup.id, 'TBL_DEVICES', 0)" ng-show="imeisGroup.status == 1">
+                                                            <i class="fa fa-lock"></i> Deactivate</a></li>
+                                                    <li><a href="#/devices" 
+                                                           ng-click="modalData.deactivateRecord(imeisGroup.id, 'TBL_DEVICES', 1)"
+                                                           ng-hide="imeisGroup.status == 1"><i class="fa fa-check"></i> Activate</a></li>
+
+                                                </ul>
+                                            </div></td> 
+                                        <td ng-hide="modalData.hideCode">{{imeisGroup.code}}</td>
+                                        <td>{{imeisGroup.type}}</td>
+
+                                        <td>{{imeisGroup.imei}}</td>
+                                        <td>{{imeisGroup.serialNumber}}</td>
+                                        <td>{{imeisGroup.regNo}}</td>
+                                        <td> {{modalData.returnAssigned(imeisGroup.assignedStatus)}} and {{modalData.returnUsed(imeisGroup.usedStatus)}}</td>
+                                        <td>{{data.convertToHumanTime(imeisGroup.dateCreated)}}</td>
+
+
+                                    </tr>
+                                </tbody> 
+
+                            </table>
+                            <pagination></pagination>
+                        </div>
+
+                        <div ng-controller="modalsController">
+                            <div class="modal fade" id="addDevice" role="dialog">
+                                <div ng-include="'modals/deviceSerial.html'"></div>
+                            </div>
+                        </div> 
+                    </div>
+
+                </div>
+                <div ng-show="activeLink == 'datalines'" ng-init="modalData.getDataLines('TBL_DATALINES', '1')">
+                    <div ng-include="'partialViews/dataLines.html'"></div>
+                </div>
+            </div>
+
+
+        </div>

@@ -1,0 +1,166 @@
+<div class="panel {{data.vehicleDetailsWherePanel}}" ng-controller="modalsController">
+    <div class="panel panel-heading" >
+        <a href="#/vehicles" style="color:white"> 
+            <i class="fa fa-backward"></i> Back </a> 
+        <div class="pull-right">
+            <a href="#/viewVehicleDetails" style="color:white"  ng-click="modalData.getNextVehicleDetails(0)"> 
+                <i class="fa fa-backward"></i> Previous 
+            </a>
+            | 
+            Vehicle All Details
+            | 
+            <a href="#/viewVehicleDetails" style="color:white"  ng-click="modalData.getNextVehicleDetails(1)"> 
+                <i class="fa fa-forward"></i> Next </a>
+        </div>
+        <spinner></spinner>
+    </div>
+    <div class="panel panel-body" ng-if="loadVehicle" ng-init="modalData.callVI()" 
+         ng-init="modalData.changePanelColor(modalData.vehicleDetailsWhere.timeToday, modalData.vehicleDetailsWhere.validEndOn)">
+        <div class="pre-scrollable">
+            <div class="col-lg-3 pull-left">
+
+                <img src="images/{{data.vehicleDetailsWherePanel}}.jpg" class="img-responsive" alt="Cinque Terre" width="250" height="180">
+
+                <h3>{{modalData.vehicleDetailsWhere.regNo}}</h3>
+                <h5>{{modalData.vehicleDetailsWhere.name}}</h5>
+                <table class="table ">
+                    <a href="insurors.html"></a>
+                    <tbody >
+                        <tr>
+                            <td>Next Of kin</td><td>: {{modalData.vehicleDetailsWhere.nextOfKin}} </td>
+                        </tr>
+                        <tr>
+                            <td>Next Of kin Mobile</td><td>: {{modalData.vehicleDetailsWhere.nextOfKinMobile_1}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-8 pull-right">
+                <table class="table ">
+                    <tbody >
+                        <tr>
+                            <td><b>Customer Name</b></td><td>: {{modalData.vehicleDetailsWhere.name}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Mobile Number</b></td><td>: {{modalData.vehicleDetailsWhere.mobile_1}} </td>
+                        </tr>
+
+                        <tr>
+                            <td><b>Chassis Number</b></td><td>: {{modalData.vehicleDetailsWhere.chassisNo}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Engine Number</b></td><td>: {{modalData.vehicleDetailsWhere.engNo}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Model</b> </td><td>: {{modalData.vehicleDetailsWhere.model}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Make</b></td><td>: {{modalData.vehicleDetailsWhere.make}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Color</b></td><td>: {{modalData.vehicleDetailsWhere.color}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Insurer</b></td><td>: {{modalData.vehicleDetailsWhere.insuror}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Financier</b></td><td>: {{modalData.vehicleDetailsWhere.financier}} </td>
+                        </tr>
+                        <tr class='alert-success'>
+                            <td><b>Tracker Certificate</b></td><td>: {{modalData.vehicleDetailsWhere.certNo}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Valid From</b></td><td>: {{modalData.vehicleDetailsWhere.validBeginOn}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Valid Until</b></td><td>: {{modalData.vehicleDetailsWhere.validEndOn}} </td>
+                        </tr>
+
+                        <tr class='alert-warning'>
+                            <td><b>Governor Certificate</b></td><td>: {{modalData.vehicleDetailsWhere.governorCertNo}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Valid From</b></td><td>: {{modalData.vehicleDetailsWhere.validGvBeginOn}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Valid Until</b></td><td>: {{modalData.vehicleDetailsWhere.validGvEndOn}} </td>
+                        </tr>
+
+
+                        <tr>
+                            <td><b>Location</b></td><td>: <a href="#/viewVehicleDetails">{{modalData.vehicleDetailsWhere.location}}</a></td>
+                        </tr>
+                        <tr>
+                            <td><b>Last Online Time</b></td><td>: {{modalData.vehicleDetailsWhere.lastOnlineTime}} </td>
+                        </tr>
+                        <tr ng-init="modalData.showDataline = false">
+                            <td><b>Data Line</b></td><td>: {{modalData.vehicleDetailsWhere.simCard}} 
+                               
+                                <a href="#/viewVehicleDetails" ng-click="modalData.showDataline = !modalData.showDataline"
+                                   
+                                   >Change</a>
+                                
+
+                                <div ng-controller="TypeaheadCtrl" ng-init="modalData.delayDatalineCall('TBL_DATALINES', '1')" ng-show="modalData.showDataline"
+                                     >
+                                    <div class='container-fluid typeahead-demo' ng-class="{ 'has-error' :
+                                    assignUserResources.dataLineId.$invalid && !assignUserResources.dataLineId.$pristine
+                                                                || modalData.datalineExists }">
+
+                                        <label> Data Line</label>
+                                        <input type="text" ng-model="data.dataLineId"
+                                               typeahead-on-select="modalData.updateVehicleDataline(data.dataLineId,modalData.vehicleDetailsWhere)" typeahead-select-on-exact="true"
+                                               typeahead-focus-first="true"
+                                               uib-typeahead="state for state in Typeahead.returnDatalines() | filter:$viewValue | limitTo:15" class="form-control">
+
+                                    </div>
+                                </div>
+
+
+                            </td>
+                        </tr>
+                        <tr  ng-init="modalData.showImei = false">
+                            <td><b>Device Imei</b></td><td>: {{modalData.vehicleDetailsWhere.deviceSerial}} 
+                                <a href="#/viewVehicleDetails" ng-click="modalData.showImei = !modalData.showImei"
+                                  
+                                   >Change</a>
+
+
+                                <div ng-controller="TypeaheadCtrl"  ng-init="modalData.delayDeviceCall('TBL_DEVICES', '1')" ng-show="modalData.showImei">
+                                    <div class='container-fluid typeahead-demo' ng-class="{ 'has-error' :
+                                 assignUserResources.deviceId.$invalid && !assignUserResources.deviceId.$pristine || modalData.deviceExists
+                                 }">
+
+                                        <label> Tracker IMEI</label>
+                                        <input type="text" ng-model="data.deviceId" 
+                                               typeahead-on-select="modalData.updateVehicleImei(data.deviceId,modalData.vehicleDetailsWhere)" typeahead-select-on-exact="true"
+                                               typeahead-focus-first="true" 
+                                               uib-typeahead="state for state in Typeahead.returnDevices() | filter:$viewValue | limitTo:15" class="form-control">
+
+                                    </div>
+                                </div>
+
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Governor Serial</b></td><td>: {{modalData.vehicleDetailsWhere.governorSerial}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Policy Name</b></td><td>: {{modalData.vehicleDetailsWhere.policy}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Policy Number</b></td><td>: {{modalData.vehicleDetailsWhere.policyNo}} </td>
+                        </tr>
+                        <tr>
+                            <td><b>Account Validity</b></td><td>: {{modalData.vehicleDetailsWhere.accountValidity}} </td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

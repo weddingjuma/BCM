@@ -1,0 +1,39 @@
+<div ng-controller="modalsController" >
+    <div class='panel panel-default' id='supervixsor-panel'  
+         >
+        <div class="panel-heading" >
+            <i class="fa fa-bank"></i> Accounts Invoices <spinner></spinner>
+        </div>
+        <div class="panel-body" ng-show="modalData.returnMenuFlag(52)">
+            <div class="">
+                <ul class="nav nav-tabs" ng-init="activeLink = 'invoice'">
+                    <li class='pull-left ' ng-class="{'active' : activeLink == 'invoice'}" ng-show="modalData.returnMenuFlag(25)">
+                        <a href="#/accInv" ng-click="activeLink = 'invoice'" >Invoices</a>
+                    </li>
+                    <li class='pull-left' ng-click="activeLink = 'quot'" ng-show="modalData.returnMenuFlag(25)"
+                        ng-class="{'active' : activeLink == 'quot'}">
+                        <a href="#/accInv" ng-click="activeLink = 'quot'">Quotations</a>
+                    </li>
+                       <li class='pull-left' ng-click="activeLink = 'lpo'" ng-show="modalData.returnMenuFlag(25)"
+                        ng-class="{'active' : activeLink == 'lpo'}">
+                        <a href="#/accInv" ng-click="activeLink = 'lpo'">LPO</a>
+                    </li>
+
+
+
+
+                </ul>
+                <div class="">
+                    <div ng-show="activeLink == 'invoice'">
+                        <div ng-include="'partialViews/invoice.html'"></div>
+                    </div>
+                    <div ng-show="activeLink == 'quot'">
+                        <div ng-include="'partialViews/quot.html'"></div>
+                    </div>
+                    <div ng-show="activeLink == 'lpo'">
+                        <div ng-include="'partialViews/lpo.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

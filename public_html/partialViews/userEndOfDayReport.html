@@ -1,0 +1,162 @@
+<div class='panel panel-default' ng-controller='modalsController'>
+    <div class='panel panel-heading'>
+        User End Of Day Reports 
+        <button ng-click="modalData.exportToExcel('My Daily Ticket','tableExcel')" class="pull-right btn btn-success btn-sm">Excel</button>
+    </div>
+    <div class='panel panel-body pre-scrollable' id="tableExcel">
+
+        <div class='well bg-success'>
+
+            <h3>Tickets Summary</h3>
+
+            <table ng-hide="true" ><tr style="background-color: grey;"><td></td><td> <h3>Tickets Summary</h3></td><td></td><td></td><td></td>
+                    <td></td><td></td><td></td><td></td><td></td></tr></table>
+            <table class="table table-bordered " ng-init="modalData.getUserDailyTickets()">
+
+                <thead>
+                    <tr class='btn-primary'>
+                        <th>  #</th>
+                        <th ng-click="data.sortByColumnFxn('fullnames')">Full Names</th>
+                        <th ng-click="data.sortByColumnFxn('total')">Total Tickets</th>
+                        <th ng-click="data.sortByColumnFxn('closed')">Total Closed</th>
+                        <th ng-click="data.sortByColumnFxn('open')">Total Open</th>
+                        <th ng-click="data.sortByColumnFxn('escalated')">escalated</th>
+                        <th ng-click="data.sortByColumnFxn('suspended')">Suspended</th>
+                        <th ng-click="data.sortByColumnFxn('merged')">All Tickets</th>
+                        <th>Work Load</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr  dir-paginate="tickets in modalData.userDailyTicketsSumm| orderBy :data.sortByColumn| itemsPerPage: 100"
+
+                         class="alert-info" ng-click="modalData.makeRowActive($index)"
+                         current-page="currentPage" pagination-id="dataPagination"
+
+                         >
+                        <td>{{$index + 1}}</td>
+                        <td>{{tickets.fullnames}}</td>
+                        <td>{{tickets.total}}</td>
+                        <td>{{tickets.closed}}</td>
+                        <td>{{tickets.open}}</td>
+                        <td>{{tickets.escalated}}</td>
+                        <td>{{tickets.suspended}}</td>
+                        <td>{{tickets.allTickets}}</td>
+                        <td>{{data.cutNumberTotals(tickets.total, tickets.allTickets, 2)}}% </td>
+                        <td>{{tickets.dateAndTime}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class='well'>
+
+            <h3>Certificates Summary</h3>
+            <table ng-hide="true"><tr><td></td><td> <h3>Certificates Summary</h3></td><td></td><td></td><td></td>
+                    <td></td><td></td><td></td><td></td><td></td></tr></table>
+            <table class="table  table-bordered " ng-init="modalData.getUserDailyCerts()">
+                <tr class='btn-success'>
+                    <th>#</th>
+                    <th ng-click="data.sortByColumnFxn('fullnames')">Full Names</th>
+                    <th ng-click="data.sortByColumnFxn('total')">Total Certs</th>
+                    <th ng-click="data.sortByColumnFxn('closed')">Total Installation</th>
+                    <th ng-click="data.sortByColumnFxn('open')">Total Renewal</th>
+                    <th ng-click="data.sortByColumnFxn('escalated')">All Certs</th>
+                    <th ng-click="data.sortByColumnFxn('escalated')">Percent</th>
+                    <th>Date</th>
+                </tr>
+                <tr  dir-paginate="tickets in modalData.userDailyCertsSumm| orderBy :data.sortByColumn| itemsPerPage: 100"
+                     current-page="currentPage" pagination-id="dataPagination"
+                     class="alert-success"
+
+
+                     >
+                    <td>{{$index + 1}}</td>
+                    <td>{{tickets.fullnames}}</td>
+                    <td>{{tickets.totalInst + tickets.totalRenewal}}</td>
+                    <td>{{tickets.totalInst}}</td>
+                    <td>{{tickets.totalRenewal}}</td>
+                    <td>{{tickets.allCerts}}</td>
+                    <td>{{data.cutNumberTotals(tickets.totalInst, tickets.allCerts, 2)}}%</td>
+                    <td>{{tickets.dateCertTime}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class='well' >	
+
+            <h3>Tickets History ({{modalData.userDayTickets.length}} Tickets)</h3>
+            <table ng-hide="true"><tr><td></td><td><h3>Tickets History ({{modalData.userDayTickets.length}} Tickets)</h3></td><td></td><td></td><td></td>
+                    <td></td><td></td><td></td><td></td><td></td></tr></table>
+            <table class="table table-responsive " ng-init="modalData.getUserDayTickets()">
+
+                <thead>
+                    <tr class="btn-warning">
+                        <th>#</th>
+                        <th>Issue Name</th>
+                        <th>Desc</th>
+                        <th>Customer Name</th>
+                        <th>Type</th>
+                        <th>Date Created</th>
+                        <th>Status</th>
+                        <th>Assigned To</th>
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr ng-repeat="tickets in modalData.userDayTickets" class='alert-warning'>
+                        <td>{{tickets.id}}</td>
+                        <td>{{tickets.issue}}</td>
+                         <td>{{tickets.desc}}</td>
+                        <td>{{tickets.name}} /{{tickets.regNo}}</td>
+                        <td>{{tickets.type}}</td>
+                        <td>{{data.convertToHumanTime(tickets.dateCreated)}}</td>
+
+                        <td>{{data.returnTicketStatus(tickets.closedFlag)}}</td>
+                        <td>{{tickets.assignedTo}}</td>
+                    <tr>
+                </tbody>
+
+            </table>
+        </div>
+        <div class='well'>
+
+            <h3>Certificates History ({{modalData.UserDayCerts.length}} Certificates)</h3>
+            <table ng-hide="true"><tr><td></td><td><h3>Certificates History ({{modalData.UserDayCerts.length}} Certificates)</h3></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>
+            <table class="table table-responsive " ng-init="modalData.getUserDayCerts()">
+
+                <thead>
+                    <tr class='btn-info'>
+                        <th>#</th>
+                        <th>Certificate No</th>
+                        <th>Customer Name</th>
+                        <th>Vehicle</th>
+                        <th>Created By</th>
+                        <th>Date printed</th>
+                        <th>Status</th>
+                        <th>Type</th>
+
+
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr ng-repeat="certs in modalData.UserDayCerts"
+                        current-page="currentPage" pagination-id="dataPagination">
+
+                        <td>{{$index + 1}}</td>
+                        <td>{{certs.certNo}}</td>
+                        <td>{{certs.name}}</td>
+                        <td>{{certs.regNo}}</td>
+                        <td>{{certs.createdBy}}</td>
+                        <td>{{data.convertToHumanTime(certs.dateCreated)}}</td>
+                        <td>{{certs.approvalStatus}} </td>
+                        <td>{{certs.type}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+</div>

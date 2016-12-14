@@ -1,0 +1,144 @@
+<div class="panel panel-default" ng-controller="modalsController" ng-show="modalData.returnMenuFlag(40)">
+    <div class="panel-heading" ng-init="modalData.getAllVehiclesJoinCustomer('1')">
+        Vehicle <i class="fa fa-link"></i> Customer Connection  <spinner></spinner>
+
+
+    </div>
+    <div class="panel-body">
+        <div class="col-lg-12">
+            <div  ng-init="modalData.getUnlinkedDelay()">
+                <ul class="nav nav-tabs" ng-init="activeLink = 'lVehicles'">
+                    <li class='pull-left ' ng-class="{'active' : activeLink == 'lVehicles'}">
+                        <a href="" ng-click="activeLink = 'lVehicles'" >Linked Vehicles</a>
+                    </li>
+                    <li class='pull-left ' ng-class="{'active' : activeLink == 'uVehicles'}"  ng-show="modalData.returnMenuFlag(45)">
+                        <a href="" ng-click="activeLink = 'uVehicles'" >Unlinked Vehicles</a>
+                    </li>
+                    <li class='pull-right'>
+                        <input type="search" ng-change = "modalData.searchDataFxn(search,'regNo','name','cv')"
+                               class="form-control" placeholder='Search Vehicle' ng-model='search'/>
+                    </li>
+                    
+                    <li class='pull-right'>
+                        <button class="btn btn-primary" ng-show="modalData.returnMenuFlag(63)"
+                                data-toggle="modal" data-controls-modal="addVehicle" ng-click="modalData.getAllUnlinkedVehicles(1)"
+                                data-backdrop="static" data-keyboard="false" data-target="#addVehicleToCustomer"
+                                >Add client <i class="fa fa-link"></i> Car</button>
+                    </li>
+                    <li class='pull-right' ng-show="activeLink == 'lVehicles'">
+                        <button class="btn btn-default" ng-click="modalData.getAllVehiclesJoinCustomer('2')">
+                            <i class="fa fa-refresh " style="color:black"></i>
+                        </button>
+                    </li>
+                    <li class='pull-right' ng-show="activeLink == 'uVehicles'" >
+                        <button class="btn btn-primary" ng-click="modalData.getAllUnlinkedVehicles(2)">
+                            <i class="fa fa-refresh " style="color:black"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div  class="col-lg-12 pre-scrollable" ng-if="activeLink == 'lVehicles'">
+            <table class="table table-responsive ">
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th ng-click="data.sortByColumnFxn('custonerName')">Client Name</th>
+                        <th ng-click="data.sortByColumnFxn('regNo')">Reg No</th>
+                        <th ng-click="data.sortByColumnFxn('make')">Make</th>
+                        <th ng-click="data.sortByColumnFxn('mobile_1')">Mobile</th>
+                        <th ng-click="data.sortByColumnFxn('certNo')">Current Cert #</th>
+                        <th ng-click="data.sortByColumnFxn('deviceType')">Device Type</th>
+
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr dir-paginate="carJoinClient in modalData.vehicleJoinCustomers | 
+                        limitTo:data.limit| orderBy :data.sortByColumn| itemsPerPage: pageSize" 
+                        current-page="currentPage" pagination-id="dataPagination">
+                        <td ng-show="modalData.returnMenuFlag(63)" nowrap>
+                            <div class="dropdown">
+                                <a href="#/cv" data-toggle="dropdown">Action
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#/cv" ng-click = "modalData.unlinkCustomerVehicle(carJoinClient.id)"> 
+                                            <i class="fa fa-unlink"></i> Unlink</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>{{carJoinClient.name}}</td>
+                        <td>{{carJoinClient.regNo}}</td>
+                        <td>{{carJoinClient.make}}</td>
+                        <td>{{carJoinClient.mobile_1}}</td>
+
+                        <td>{{carJoinClient.certNo}}</td>
+                        <td>{{carJoinClient.deviceType}}</td>
+                        <td>{{carJoinClient.createdBy}}</td>
+
+
+                    </tr>
+                </tbody>    
+            </table>
+            <pagination></pagination>
+
+        </div>
+        <div  class="col-lg-12 pre-scrollable" ng-if="activeLink == 'uVehicles'">
+            <table class="table">
+                <caption>Unlinked Vehicles</caption>
+                <thead>
+                    <tr>
+                        <th ng-click="data.sortByColumnFxn('code')">action</th>
+                        <th ng-click="data.sortByColumnFxn('regNo')">Reg Number</th>
+                        <th ng-click="data.sortByColumnFxn('make')">Make</th>
+
+                        <th ng-click="data.sortByColumnFxn('code')">Engine No</th>
+                        <th ng-click="data.sortByColumnFxn('code')">Cert No</th>
+                        <th ng-click="data.sortByColumnFxn('code')">Status</th>
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr dir-paginate="vehicle in modalData.unlinkedVehicles | filter :{regNo:search}| orderBy :data.sortByColumn| itemsPerPage: pageSize" 
+                        current-page="currentPage" pagination-id="dataPagination"
+                        class="{{modalData.returnRowClass($index, vehicle.status, 0)}}" ng-click="modalData.makeRowActive($index)"
+                        >
+
+                        <td><div class="dropdown"  ng-controller="modalsController">
+                                <a href="#/cv" data-toggle="dropdown" class="dropdown-toggle">Action<span class="caret"></span></a>
+                                <ul class="dropdown-menu" >
+                                    <li><a href="#/cv" 
+                                           ng-click="modalData.deactivateRecord(vehicle.id, 'TBL_VEHICLES', 2)">
+                                            <i class="fa fa-remove"></i> Delete</a></li>
+                                  
+                                    <li><a href="#/cv"
+                                           ng-click="modalData.deactivateRecord(vehicle.id, 'TBL_VEHICLES', 0)" 
+                                           ng-show="vehicle.status == 1">
+                                            <i class="fa fa-lock"></i> Deactivate</a></li>
+                                    <li><a href="#/cv" 
+                                           ng-click="modalData.deactivateRecord(vehicle.id, 'TBL_VEHICLES', 1)"
+                                           ng-show="vehicle.status == 0"><i class="fa fa-check"></i> Activate</a></li>
+
+                                </ul>
+                            </div></td>
+                        <td>{{vehicle.regNo}}</td>
+                        <td>{{vehicle.make}}</td>
+
+
+                        <td>{{vehicle.engNo}}</td>
+                        <td>{{vehicle.certNo}}</td>
+                        <td>{{data.returnStatusWords(vehicle.status)}}</td>
+                        <td>{{vehicle.createdBy}}</td>
+
+
+                    </tr>
+                </tbody>    
+            </table>
+            <pagination ></pagination>
+        </div>
+    </div>
+</div>   
+<div ng-controller="modalsController">
+    <div class="modal fade" id="addVehicleToCustomer" role="dialog">
+        <div ng-include="'modals/addVehicleToCustomer.html'"></div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+
+<div class="modal-dialog modal-sm" ng-controller="modalsController">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Buy Internet for another number</h4>
+        </div>
+        <div class="modal-body">
+
+
+
+            <div class="text-center" >
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2" ng-controller="ticketsController">
+
+                    <form novalidate="" name="composeSMS" class="form-horizontal" >
+                        <input type="text" class="form-control " required   
+                               ng-class="{ 'has-error' : contact.mobile.$invalid && !contact.mobile.$pristine }"
+                               ng-model="data.sambaza.mobile" name='mobile' maxlength="10"
+                               ng-pattern="/[0]{1}[7]{1}[0-9]{8}/"
+                               placeholder="Enter Mobile Number ">
+
+                        <input class="form-control " type="number"
+                               style="padding:5px;margin:5px;" required   ng-model="data.sambaza.amount" name='amount'
+                                  
+                                  placeholder="Amount">
+
+
+
+                        <div class="form-group" style="padding:4px;">
+
+                            <div class="col-md-12">
+                                <button class=" btn btn-success"  style='width:100%' data-dismiss="modal"
+                                        ng-click="data.saveAirtime(data.sambaza)"
+                                        ng-disabled="composeSMS.$invalid "
+                                        >Send</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

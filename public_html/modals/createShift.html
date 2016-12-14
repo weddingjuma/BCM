@@ -1,0 +1,124 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}' ng-click="modalData.clearAllFormData(1)">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">{{data.modalHeader}}</h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs ">
+                <li class="{{data.linkAdd}}" >
+                    <a href="#/globalSettings" 
+                       ng-dblclick="modalData.clearGlobalData()"
+                       ng-click="data.makeActive('add', 'TBL_SHIFTS')">Add +</a></li>
+                <li class="{{data.linkView}}">
+                    <a href="#/globalSettings" 
+                       ng-dblclick="modalData.getGlobalData('TBL_SHIFTS')"
+                       ng-click="data.makeActive('view', 'TBL_SHIFTS')">View</a>
+                </li>
+            </ul>
+            <notification></notification>
+            <div ng-show="data.linkView == 'active'">
+                <table class="table table-responsive  table-striped" ng-show="modalData.hideTableTillResponse">
+
+                    <thead>
+                        <tr>
+
+                            <th>Shift Name</th>
+                            <th>Starts</th>
+                            <th>Ends</th>
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="pricesGroup in modalData.fetchCurrentData">
+
+
+                            <td>{{pricesGroup.shiftName}}</td>
+
+                            <td>{{pricesGroup.startTime}}</td>
+                            <td>{{pricesGroup.endTime}}</td>
+                            <td><div class="dropdown">
+                                    <a href="#/globalSettings" data-toggle="dropdown">Action
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#/globalSettings" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_SHIFTS', 2)">Delete</a></li>
+                                        <li><a href="#/globalSettings"
+                                               ng-click="modalData.editFunction(pricesGroup.id, 'TBL_SHIFTS', 3)"
+                                               >Edit</a></li>
+                                        <li><a href="#/globalSettings"
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_SHIFTS', 0)" ng-show="pricesGroup.status == 1">Deactivate</a></li>
+                                        <li><a href="#/globalSettings" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_SHIFTS', 1)"
+                                               ng-hide="pricesGroup.status == 1">Activate</a></li>
+
+                                    </ul>
+                                </div></td>
+                        </tr>
+                    </tbody>    
+                </table>
+            </div>
+            <div class="text-center" ng-show="data.linkAdd == 'active'">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+
+                    <form novalidate="" name="globalSettings">
+
+                        <div ng-show='data.globalSettings.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.globalSettings.responseMessage}}</div>   
+
+                        <div class="form-group  col-sm-12" style="padding:0px;"  ng-class="{ 'has-error' : globalSettings.code.$invalid && !globalSettings.code.$pristine }">
+                            <label for="code" class="control-label col-xs-2">Code</label>
+                            <div class="col-md-10">
+                                <input type="text" readonly="" class="form-control"  name='code'
+
+                                       required  ng-model='data.globalSettings.code'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.shiftName.$invalid && !globalSettings.shiftName.$pristine }">
+                            <label for="shiftName" class="control-label col-xs-2">Shift Name</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="shift Name" name='shiftName' capitalize required ng-model='data.globalSettings.shiftName'/>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group col-sm-12" style="padding:0px;"  ng-class="{ 'has-error' : globalSettings.startTime.$invalid && !globalSettings.startTime.$pristine }">
+                            <label for="startTime" class="control-label col-md-2">Starts </label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="start Time" capitalize name='startTime'  ng-model='data.globalSettings.startTime'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12" style="padding:0px;"   ng-class="{ 'has-error' : globalSettings.endTime.$invalid && !globalSettings.endTime.$pristine }">
+                            <label for="endTime" class="control-label col-md-2">Ends</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="end Time" capitalize name='endTime'  ng-model='data.globalSettings.endTime'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12 " style="padding:10px;">
+                            <label for="extras" class="control-label col-xs-2"></label>
+                            <div class="col-md-10">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.globalSettingsSave(data.globalSettings, 'TBL_SHIFTS')" ng-disabled="globalSettings.$invalid || data.globalSettings.signinDisabled"
+                                        >save {{data.modalHeader|lowercase}}</button>
+                            </div>
+                        </div>    
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(function () {
+        $('#basicExample').timepicker();
+    });
+</script>

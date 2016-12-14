@@ -1,0 +1,46 @@
+
+<div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Close To-Do</h4>
+        </div>
+        <div class="modal-body">
+
+            
+
+            <div class="text-center" ng-controller="modalsController">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2" ng-controller="ticketsController"
+                     ng-init="modalData.getGlobalData('TBL_USERS')">
+
+                    <form novalidate="" name="assignUser" class="form-horizontal" >
+                        <textarea class="form-control " required   ng-model="modalData.feedback" name='todo' 
+                            placeholder="type a brief feedback">
+                                      
+                        </textarea>
+
+                      
+
+                        <div class="form-group" style="padding:4px;">
+
+                            <div class="col-md-12">
+                                <button class=" btn btn-success"  style='width:100%'
+                                        ng-click="data.saveAssignedTodo(0,modalData.feedback, data.updateId, 'r')"
+                                        ng-disabled="assignUser.$invalid || data.assignUser.signinDisabled"
+                                        >Save</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

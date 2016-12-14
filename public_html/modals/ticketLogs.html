@@ -1,0 +1,45 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Ticket Logs</h4>
+        </div>
+        <div class="modal-body">
+            <div >
+                <table class="table table-responsive  table-striped" >
+
+                    <thead>
+                        <tr>
+
+                            <th>Tkt #</th>
+                            <th>Action</th>
+                            <th>Done By</th>
+                            <th>Comments</th>
+                            <th>date/time</th>
+
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="ticketLogs in data.ticketLogs">
+
+
+                            <td>{{ticketLogs.ticketId}}</td>
+                            <td>{{ticketLogs.action}}</td>
+                            <td>{{ticketLogs.doneBy}}</td>
+                            <td>{{ticketLogs.technicalFeedback}} / {{ticketLogs.resolutionFeedback}}</td>
+                            <td>{{data.convertToHumanTime(ticketLogs.dateCreated)}}</td>
+                            
+                        </tr>
+                    </tbody>    
+                </table>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

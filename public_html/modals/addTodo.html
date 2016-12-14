@@ -1,0 +1,56 @@
+
+<div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Assign User</h4>
+        </div>
+        <div class="modal-body">
+
+            <notification></notification>
+
+            <div class="text-center" ng-controller="modalsController">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2" ng-controller="ticketsController"
+                     ng-init="modalData.getGlobalData('TBL_USERS')">
+
+                    <form novalidate="" name="assignUser" class="form-horizontal" >
+                        <input type="text" class="form-control " required   ng-model="modalData.todo.todo" name='todo' 
+                               placeholder="add to do task">
+
+                        <div ng-show='data.assignUser.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.assignUser.responseMessage}}</div>   
+
+
+                        <div class="form-group" style="padding:4px;">
+
+                            <div class="col-md-12">
+                                <select type="text" class="form-control" placeholder="Customer ID/mobile" name='customerSearch' 
+                                        capitalize required ng-model='modalData.todo.assignedTo'>
+                                    <option ng-repeat="user in modalData.fetchCurrentData"  value = "{{user.id}}"> {{user.fullnames}} </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:4px;">
+
+                            <div class="col-md-12">
+                                <button class=" btn btn-success"  style='width:100%'
+                                        ng-click="data.addToList(modalData.todo)"
+                                        ng-disabled="assignUser.$invalid || data.assignUser.signinDisabled"
+                                        >Save User</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

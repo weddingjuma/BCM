@@ -1,0 +1,54 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Assign User</h4>
+        </div>
+        <div class="modal-body">
+
+            <notification></notification>
+
+            <div class="text-center">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2"
+                     ng-init="modalData.getGlobalData('TBL_USERS')">
+
+                    <form novalidate="" name="assignUser" class="form-horizontal" >
+
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' :
+                                    assignUser.customerSearch.$invalid && !assignUser.customerSearch.$pristine }">
+
+
+                            <label for="code" class="control-label col-xs-2">Pick User</label>
+                            <div class="col-md-9">
+                                <select type="text" class="form-control" name='customerSearch' 
+                                        required ng-model='data.assignUser.assignedTo'>
+                                    <option ng-repeat="user in modalData.fetchCurrentData |filter : {canBeAssignedTicket : 1}"  value = "{{user.id}}"> {{user.fullnames}} </option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="padding:0px;">
+
+                            <label for="code" class="control-label col-xs-2"></label>
+                            <div class="col-md-9">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.SaveTicketAssignee(data.assignUser, data.currentTicketId)"
+                                        ng-disabled="assignUser.$invalid"
+                                        >Assign</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

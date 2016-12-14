@@ -1,0 +1,201 @@
+<div class="panel panel-default" ng-controller="modalsController">
+
+    <div class="panel panel-body" ng-controller="ticketsController" ng-init="data.getAllVehiclesJoinCustomer()" ng-show="modalData.returnMenuFlag(45)"> 
+
+        <div ng-controller="TypeaheadCtrl">
+            <div class='container-fluid typeahead-demo' ng-init="Typeahead.createArrayCustomers()">
+
+                <label> {{Typeahead.test}} 
+                    <a href="#/tickets" ng-click="data.getAllVehiclesJoinCustomer()"><i class="fa fa-refresh"></i></a> | 
+                    <a href='#/tickets' 
+                       data-toggle="modal" data-controls-modal="callInCustomer" 
+                       data-backdrop="static" data-keyboard="false" data-target="#callInCustomer"                   
+                       >Non-existing Customer</a></label>
+                <input type="text" ng-model="selected" typeahead-on-select="modalData.pickGovernorCVehicle(selected,0)" typeahead-select-on-exact="true"
+                       typeahead-focus-first="true"
+                       uib-typeahead="state for state in Typeahead.returnArrayCustomersJoinVehicles() | filter:$viewValue | limitTo:15" class="form-control">
+
+            </div>
+        </div>
+
+        <div class="row col-lg-12 text-center" ng-hide="data.showList">
+            <div class="clearfix col-md-10"></div>
+            <div class="col-lg-12">
+
+                <div class="col-lg-12 btn bg-primary">
+                    Name  : {{modalData.customerTicketInfo.name}} | 
+                    mobile : {{modalData.customerTicketInfo.mobile_1}} | Next Of Kin : {{modalData.customerTicketInfo.nextOfKin}}
+                </div>
+
+                <table class="table">
+                    <tr>
+                        <td>Total Assets</td><td>{{modalData.vehiclePerCustomer.length}}</td>
+                        <td></td><td><input class="search " ng-model="searchCar"></td></tr>
+                </table>
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Reg No</td>  <td>Financier</td>  <td>Insurance</td> <td>Location</td><td>Expiry-T/G</td>
+                        <td>Tracking Status</td>
+                    </tr>
+                    <tr dir-paginate="vehicles in modalData.vehiclePerCustomer| itemsPerPage: pageSize | filter : searchCar" 
+                        current-page="currentPage" pagination-id="dataPagination"
+                        class="{{modalData.returnRowClass($index, vehicle.status, 0)}}" ng-click="modalData.makeRowActive($index)">
+                        <td>{{vehicles.regNo}}</td>  
+
+                        <td>{{vehicles.financierName}}</td> 
+                        <td>{{vehicles.insurorName}}</td>
+                        <td><a href ="#/tickets"  data-target="#us6-dialog" ng-click="modalData.showMapWithLocations(0, vehicles.id)"
+                               data-toggle="modal"><i class="fa fa-map"></i> view on map</a></td>
+                        <td>{{vehicles.expiryDate}} / {{vehicles.expiryGvDate}}</td>  
+                        <td>{{vehicles.trackingStatus}}</td>  
+                    </tr>
+                </table>
+                <pagination></pagination>
+
+            </div>
+            <div class=" col-xs-12" ng-init="data.getReasons('TBL_REASONS')">
+
+
+                <div class="col-xs-4 pull-right">
+                    <select  class="form-control"    name='issue' 
+                             required ng-model='data.saveTickets.issue' ng-change="modalData.showRecheck(data.saveTickets.issue)">
+                        <option selected disabled="">Reason</option>
+                        <option ng-repeat="reasons in data.reasons| filter : data.filterReason" >{{reasons.reason}}</option>
+                    </select>
+
+                </div>
+                <label for="issue" class="control-label col-xs-1 pull-right" ></i>
+                    <a href='#/tickets' ng-click="data.getReasons('TBL_REASONS')">Reason</a></label>
+                <div class="col-xs-4 pull-right">
+
+                    <select  class="form-control" placeholder="type" name='incomingType' ng-change="modalData.filterTicket(data.saveTickets.type)"
+                             required ng-model='data.saveTickets.type'>
+
+                        <option value="Inquiry" >Inquiry</option>
+                        <option value="support" >Support</option>
+                        <option value="complain">Complain</option>                       
+                        <option value="followup" >Follow-up</option>
+                        <option value="Compliment" >Compliment</option>
+                    </select>
+                </div>
+                <label for="issue" class="control-label col-xs-1 pull-right">Category</label>
+
+            </div>
+
+
+
+            <div class="col-xs-12">
+                <div ng-if="modalData.newInstallationTrue == false">
+                    <div class="pull-right col-xs-12">{{data.saveTickets.issue}} TICKET<hr></div>
+                    <form novalidate="" class="" name="saveTickets" ng-hide="modalData.recheckTrueS">
+                        <div class ng-if='modalData.showRegNo_Date'>
+                            <div class="form-group col-lg-12" style="padding:4px;" ng-class="{ 'has-error' : globalSettings.saveTickets.$invalid && !saveTickets.vehicleId.$pristine
+                                        || modalData.noVehicle
+                        }">
+                                <label for="bankName" class="control-label col-xs-2 col-xs-offset-2">vehicle Reg </label>
+                                <div class="col-xs-6">
+                                    <select type="text" class="form-control" name='vehicleId' capitalize ng-model='data.saveTickets.vehicleId'>
+                                        <option ng-repeat="vehicle in modalData.vehiclePerCustomer| filter : searchCar" ng-click='modalData.showRecheck()'
+                                                value="{{vehicle.id}}">{{vehicle.regNo}}</option>
+                                    </select>
+                                </div>
+                            </div>                    
+                            <div class="form-group col-xs-12" style="padding:4px;" ng-controller="datePicker"
+                                 ng-class="{ 'has-error' : saveTickets.date.$invalid && !saveTickets.date.$pristine }">
+                                <label for="date" class="control-label col-xs-2 col-xs-offset-2">Date </label>
+
+
+                                <div class="col-xs-6">
+                                    <input type="text" id="date" class="form-control" placeholder="date"
+                                           name="date"    ng-model='data.saveTickets.date'/>
+
+                                </div>
+                            </div>
+                            <div class="form-group" style="padding:0px;" ng-controller="datePicker"
+                                 ng-class="{ 'has-error' : saveTickets.date.$invalid && !saveTickets.date.$pristine }">
+                                <label for="date" class="control-label col-xs-2 col-xs-offset-2">Location</label>
+
+
+                                <div class="col-xs-6">
+                                    <input type="text"  class="form-control" placeholder="Location" capitalize
+                                           name="location"    ng-model='data.saveTickets.location'/>
+
+                                </div>
+
+                                <a href='#/tickets' class="col-xs-1 pull-left" data-target="#us6-dialog" ng-click="modalData.showMapWithLocations(1)"
+                                   data-toggle="modal"><i class="fa fa-location-arrow" > Map</i></a>
+
+                            </div>
+                            <div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group col-xs-12" style="padding:4px;" ng-class="{ 'has-error' : saveTickets.desc.$invalid && !saveTickets.desc.$pristine }">
+                            <label for="desc" class="control-label col-xs-2 col-xs-offset-2">Desc</label>
+                            <div class="col-xs-6">
+
+                                <textarea type="text" class="form-control" placeholder="desc" name='desc'  required ng-model='data.saveTickets.desc'></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:4px;" ng-init="data.saveTickets.closedFlag = 0"
+                             ng-class="{ 'has-error' : saveTickets.closedFlag.$invalid && !saveTickets.closedFlag.$pristine }">
+                            <label for="closedFlag" class="control-label col-xs-2 col-xs-offset-2"> close</label>
+                            <div class="col-xs-6">
+                                <input type="checkbox" class="form-control" ng-disabled="modalData.disableCheckBox"
+                                       name='closedFlag' ng-true-value="1" ng-false-value="0"
+                                       ng-model='data.saveTickets.closedFlag'>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12" style="padding:0px;">
+                            <label for="extras" class="control-label col-xs-2 col-xs-offset-2"></label>
+                            <div class="col-xs-6">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.saveTicket(data.saveTickets, 'TBL_SIMPLE_TICKETS')"
+                                        ng-disabled="saveTickets.$invalid || data.globalSettings.signinDisabled"
+                                        >save Ticket</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+                </div>
+                <!--    <div ng-if="modalData.newInstallationTrue">
+                        <div ng-include="'partialViews/newInstallationTicket.html'"></div>
+                    </div> 
+                -->
+
+            </div>
+            <div class="clearfix col-xs-10"></div>
+
+        </div>
+
+        <!---map--->
+
+
+        <!-----------------end of map--------------->
+
+    </div>
+</div>   
+
+<div ng-controller="modalsController">
+    <div class="modal fade" id="callInCustomer" role="dialog">
+        <div ng-include="'modals/callInCustomer.html'"></div>
+    </div>
+</div>
+<div ng-controller="modalsController">
+    <div>
+        <div ng-include="'partialViews/locationPicker.html'"></div>
+    </div>
+</div>
+
+<div ng-controller="modalsController">
+    <div>
+        <div ng-include="'partialViews/viewOnMap.html'"></div>
+    </div>
+</div>
+
+

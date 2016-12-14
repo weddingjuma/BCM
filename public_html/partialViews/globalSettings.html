@@ -1,0 +1,71 @@
+<div ng-controller="modalsController">
+
+    <div  id='{{menu.color}}' class='main-side-panels col-lg-5 col-md-5 pull-left' ng-repeat="menu in data.menus| filter:{side:'G'} " >
+        <div class='row col-lg-12 col-sm-12 pull-left' >
+            <a href='#/globalSettings' data-toggle="modal" data-controls-modal="{{menu.id}}" data-backdrop="static" data-keyboard="false"
+               data-target="#{{menu.id}}"  ng-click ="data.showModal(menu.color, menu.menuName)">
+                {{menu.menuName}}
+            </a></div>
+    </div>
+      
+
+</div>
+
+<div ng-controller="modalsController">
+
+    <div class="modal fade" id="1" role="dialog">
+        <div ng-include="'modals/prices.html'"></div>
+    </div>
+    <div class="modal fade" id="2" role="dialog">
+        <div ng-include="'modals/vehicles.html'"></div>
+    </div>
+    <div class="modal fade" id="3" role="dialog">
+        <div ng-include="'modals/payments.html'"></div>
+    </div>
+    <div class="modal fade" id="4" role="dialog">
+        <div ng-include="'modals/banks.html'"></div>
+    </div>
+    <div class="modal fade" id="5" role="dialog">
+        <div ng-include="'modals/insurances.html'"></div>
+    </div>
+    <div class="modal fade" id="6" role="dialog">
+        <div ng-include="'modals/dealership.html'"></div>
+    </div>
+    <div class="modal fade" id="7" role="dialog">
+        <div ng-include="'modals/branches.html'"></div>
+    </div>
+    <div class="modal fade" id="8" role="dialog">
+        <div ng-include="'modals/deviceTypes.html'"></div>
+    </div>
+    <div class="modal fade" id="9" role="dialog">
+        <div ng-include="'modals/deviceSerial.html'"></div>
+    </div>
+    <div class="modal fade" id="10" role="dialog">
+        <div ng-include="'modals/fareRoutes.html'"></div>
+    </div>
+    <div class="modal fade" id="11" role="dialog">
+        <div ng-include="'modals/areas.html'"></div>
+    </div>
+    <div class="modal fade" id="12" role="dialog">
+        <div ng-include="'modals/users.html'"></div>
+    </div>
+    <div class="modal fade" id="13" role="dialog">
+        <div ng-include="'modals/groups.html'"></div>
+    </div>
+    <div class="modal fade" id="14" role="dialog">
+        <div ng-include="'modals/reasons.html'"></div>
+    </div>
+     <div class="modal fade" id="21" role="dialog">
+        <div ng-include="'modals/areas.html'"></div>
+    </div>
+     <div class="modal fade" id="24" role="dialog">
+        <div ng-include="'modals/crmModules.html'"></div>
+    </div>
+      <div class="modal fade" id="31" role="dialog">
+        <div ng-include="'modals/createShift.html'"></div>
+    </div>
+     <div class="modal fade" id="34" role="dialog">
+        <div ng-include="'modals/financiers.html'"></div>
+    </div>
+</div>
+

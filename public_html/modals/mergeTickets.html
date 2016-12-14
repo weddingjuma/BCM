@@ -1,0 +1,51 @@
+
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Merge Tickets</h4>
+        </div>
+        <div class="modal-body">
+
+            <notification></notification>
+
+            <h3># {{data.ticketId}} :  {{data.ticketName}}</h3>
+            <input type="text" class="form-control " ng-model="modalData.searchText">
+            <table class="table table-responsive  table-striped">
+
+                <thead>
+                    <tr>
+
+                        <th>Ticket #</th>
+                        <th>Ticket Customer</th>
+                        <th>Ticket Description</th>
+                        <th>Date Created</th>
+
+                        <th ng-hide="modalData.hideCode">Merge</th>
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr ng-repeat="tickets in modalData.tickets| filter:modalData.searchText |filter : tickets.regNo" 
+                        ng-hide="tickets.id == data.ticketId  || tickets.closedFlag == 1">
+
+                        <td>{{tickets.id}}</td>
+                        <td>{{tickets.regNo}}</td>
+                        <td>{{tickets.name}}</td>
+                        <td>{{tickets.issue}}</td>
+                        <td>{{data.convertToHumanTime(tickets.dateCreated)}}</td>
+                        <td><button class="btn btn-primary" ng-disabled="tickets.mergeStatus"
+                                    ng-click="data.ticketMerged(tickets.id,modalData.tickets)"
+                                    >Merge</button></td>
+                    </tr>
+                </tbody>    
+            </table>
+        </div>
+    
+    </div>
+    <div class="modal-footer">
+        <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+    </div>
+</div>
+

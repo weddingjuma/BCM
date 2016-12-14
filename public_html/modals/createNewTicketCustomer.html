@@ -1,0 +1,139 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add New Customer</h4>
+        </div>
+        <div class="modal-body">
+            <notification></notification>
+            <div class="text-center" style="padding-top:0px">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+
+                    <form novalidate="" name="globalSettingCustomerDetails" class="form-horizontal" >
+
+                        <div ng-show='data.globalSettings.responseStatus' ng-class="{
+                            'has-error'
+                            : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.globalSettings.responseMessage}}
+                        </div>   
+
+                        <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error' : globalSettingCustomerDetails.code.$invalid && !globalSettingCustomerDetails.code.$pristine }">
+                            <label for="accountID" class="control-label col-xs-3">Code</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="customer code" name='code'
+                                       readonly="" capitalize
+                                       ng-model='data.globalSettings.code'/>
+                            </div>
+
+                        </div>
+                    
+                        <div class="form-group" style="padding:0px;" ng-class="{'has-error': globalSettingCustomerDetails.name.$invalid && !globalSettingCustomerDetails.name.$pristine }">
+                            <label for="name" class="control-label col-xs-3">Names</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" ng-pattern='/^[a-zA-Z0-9 ]*$/'
+                                       ng-click="modalData.getRandomCode()"
+                                       placeholder="customer Name" name='name' capitalize required ng-model='data.globalSettings.name'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{  'has-error'  : globalSettingCustomerDetails.address.$invalid && !globalSettingCustomerDetails.address.$pristine }">
+                            <label for="address" class="control-label col-xs-3">address</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="address" name='address' capitalize required ng-model='data.globalSettings.address'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettingCustomerDetails.email.$invalid && !globalSettingCustomerDetails.email.$pristine }">
+                            <label for="email" class="control-label col-xs-3">email</label>
+                            <div class="col-md-9">
+                                <input type="email" class="form-control" placeholder="email" name='email' required ng-model='data.globalSettings.email'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : globalSettingCustomerDetails.idNo.$invalid && !globalSettingCustomerDetails.idNo.$pristine }">
+                            <label for="idNo" class="control-label col-xs-3">ID NO</label>
+                            <div class="col-md-9" ng-class="{'has-error':!data.custError }">
+                                <input type="text" class="form-control" placeholder="Id No" name='idNo' required ng-model='data.globalSettings.idNo'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-init="showMobile = false">
+                            <label for="mobile_1" class="control-label col-xs-3">Mobile <a href="#/customers" target="_self"
+                                                                                           ng-click="showMobile = !showMobile"><i class="fa fa-plus"></i></a></label>
+                            <div class="col-md-9" ng-class="{
+                                'has-error'
+                                : globalSettingCustomerDetails.mobile_1.$invalid && !globalSettingCustomerDetails.mobile_1.$pristine  }">
+
+                                <input type="text"   ng-pattern="/^[0-9]{9,10}$/"  ng-click="data.validateCustomerDetails(data.globalSettings.idNo)"
+                                       class="form-control" placeholder="mobile number" name='mobile_1'  required ng-model='data.globalSettings.mobile_1'/>
+
+                            </div>
+                            <label for="mobile_2" class="control-label col-xs-3"></label>
+                            <div class="col-md-9" ng-show="showMobile" ng-class="{
+                                'has-error': globalSettingCustomerDetails.mobile_2.$invalid && !globalSettingCustomerDetails.mobile_2.$pristine }">
+
+                                <input type="text" class="form-control" ng-pattern="/^[0-9]{9,10}$/" placeholder="mobile number 2" name='mobile_2' 
+                                       ng-model='data.globalSettings.mobile_2'/>
+
+                            </div>
+                            <label for="text" class="control-label col-xs-3" ng-if="false"></label>
+                            <div class="col-md-9" ng-if="false" ng-class="{
+                                'has-error': globalSettingCustomerDetails.mobile_3.$invalid && !globalSettingCustomerDetails.mobile_3.$pristine }">
+
+                                <input type="number" class="form-control" ng-pattern="/^[0-9]{9,10}$/" placeholder="mobile number 3" name='mobile_3' 
+                                       ng-model='data.globalSettings.mobile_3'/>
+
+                            </div>
+
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : globalSettingCustomerDetails.nextOfKin.$invalid && !globalSettingCustomerDetails.nextOfKin.$pristine }">
+                            <label for="nextOfKin" class="control-label col-xs-3">next of kins</label>
+                            <div class="col-md-9">
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" placeholder="Full Names" name='nextOfKin' 
+                                           capitalize ng-model='data.globalSettings.nextOfKin'/>
+
+                                </div >
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" ng-pattern="/^[0-9]{9,10}$/"
+                                           placeholder="Mobile" name='mobile' ng-model='data.globalSettings.nextOfKinMobile_1'/>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" ng-hide="modalData.hideCode" style="padding:0px;" ng-class="{
+                            'has-error' : globalSettingCustomerDetails.extras.$invalid && !globalSettingCustomerDetails.extras.$pristine }">
+                            <label for="accountID" class="control-label col-xs-3">Extras</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="extras" name='extras' ng-model='data.globalSettings.extrasC'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;">
+                            <label for="extras" class="control-label col-xs-3"></label>
+                            <div class="col-md-9">
+                                <button class=" btn " id='{{data.pickRandomColorPicked}}' style='width:100%'
+                                        ng-click="modalData.globalSettingsSave(data.globalSettings, 'TBL_CUSTOMERS')"
+                                        ng-disabled="globalSettingCustomerDetails.$invalid"
+                                        >Next</button>
+                                <!--    ng-disabled="globalSettingCustomerDetails.$invalid || data.globalSettings.signinDisabled"-->
+
+                            </div> 
+                        </div>    
+                    </form>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+    </div>
+</div>
+</div>

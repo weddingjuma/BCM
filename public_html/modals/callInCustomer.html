@@ -1,0 +1,115 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Non-existing Customer</h4>
+        </div>
+        <div class="modal-body">
+
+            <notification></notification>
+
+            <div class="text-center" ng-controller="modalsController">
+                <div class="col-lg-10 col-md-10  col-xs-12 col-lg-offset-1 col-md-offset-1">
+
+                    <form novalidate="" name="saveNewClientTickets" class="form-horizontal" >
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : saveNewClientTickets.name.$invalid && !saveNewClientTickets.name.$pristine
+                                            }">
+                            <label for="bankName" class="control-label col-xs-2">Name</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name='name' capitalize required ng-model='data.saveNewClientTickets.name'/>
+
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : saveNewClientTickets.mobile_1.$invalid && !saveNewClientTickets.mobile_1.$pristine
+                                            || modalData.noVehicle }">
+                            <label for="bankName" class="control-label col-xs-2">Mobile</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name='mobile_1' ng-pattern="/[0]{1}[7]{1}[0-9]{8}/"
+                                       capitalize required ng-model='data.saveNewClientTickets.mobile_1'/>
+
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : saveNewClientTickets.type.$invalid && !saveNewClientTickets.type.$pristine }">
+                            <label for="issue" class="control-label col-xs-2">Type</label>
+                            <div class="col-md-10 col-xs-12" ng-init="data.saveNewClientTickets.type='Inquiry'">
+                                <select  class="form-control" placeholder="type" name='incomingType' ng-change="modalData.filterTicket(data.saveNewClientTickets.type)"
+                                         required ng-model='data.saveNewClientTickets.type'>
+                                    
+                                    <option value="complain">Complain</option>
+                                    <option value="Inquiry" >Inquiry</option>
+                                    <option value="Compliment" >Compliment</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-init="data.getReasons('TBL_REASONS')"
+                             style="padding:0px;" ng-class="{ 'has-error' : saveNewClientTickets.issue.$invalid && !saveNewClientTickets.issue.$pristine }">
+                            <label for="issue" class="control-label col-xs-2"> <a href='#/tickets' ng-click="data.getReasons('TBL_REASONS')">Issue</a></label>
+                            <div class="col-md-10" ng-init="data.saveNewClientTickets.issue='GENERAL INQUIRY'">
+                                <select  class="form-control"    name='issue' required ng-model='data.saveNewClientTickets.issue' ng-change="modalData.showRecheck(data.saveNewClientTickets.issue)">
+                                    <option selected disabled="">Reason</option>
+                                    <option ng-repeat="reasons in data.reasons| filter : data.filterReason" >{{reasons.reason}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group" style="padding:4px;" ng-controller="datePicker"
+                             ng-class="{ 'has-error' : saveNewClientTickets.date.$invalid && !saveNewClientTickets.date.$pristine }">
+                            <label for="date" class="control-label col-xs-2 ">Date </label>
+
+
+                            <div class="col-md-10">
+                                <input type="text" id="date" class="form-control" placeholder="date"
+                                       name="date"    ng-model='data.saveNewClientTickets.date'/>
+
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:4px;" ng-controller="datePicker"
+                             ng-class="{ 'has-error' : saveNewClientTickets.location.$invalid && !saveNewClientTickets.location.$pristine }">
+                            <label for="date" class="control-label col-xs-2 ">Location </label>
+                            <div class="col-md-10" ng-init='data.saveNewClientTickets.location = data.saveTickets.location'>
+                                <input type="text"  class="form-control" placeholder="Location" capitalize
+                                       name="location"    ng-model='data.saveNewClientTickets.location'/>
+
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : saveNewClientTickets.desc.$invalid && !saveNewClientTickets.desc.$pristine }">
+                            <label for="desc" class="control-label col-xs-2">Desc</label>
+                            <div class="col-md-10">
+                                <textarea type="text" class="form-control" placeholder="desc" name='desc'  required ng-model='data.saveNewClientTickets.desc'></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:4px;" ng-init="data.saveNewClientTickets.closedFlag=0"
+                             ng-class="{ 'has-error' : saveNewClientTickets.closedFlag.$invalid && !saveNewClientTickets.closedFlag.$pristine }">
+                          <label for="closedFlag" class="control-label col-xs-2 ">Close </label>
+                            <div class="col-md-10">
+                                <input type="checkbox" class="form-control"  name='closedFlag' ng-true-value="1" ng-false-value="0"
+                                       ng-model='data.saveNewClientTickets.closedFlag'>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;">
+                            <label for="extras" class="control-label col-xs-2"></label>
+                            <div class="col-md-10">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.saveTicket(data.saveNewClientTickets, 'TBL_SIMPLE_TICKETS')"
+                                        ng-disabled="saveNewClientTickets.$invalid"
+                                        >save ticket</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,122 @@
+<div ng-controller="modalsController" >
+
+    <div class="col-lg-12 col-xs-12"   ng-init="modalData.getOnlineUsers()">
+        <div class='panel panel-default col-lg-3 col-md-3 col-xs-12'>
+            <button ng-click="modalData.updateOnlineStats()"><i class="fa fa-refresh"></i></button>
+            <div class='panel-body'>
+                <table class="table table-hovered table-responsive">
+                    <tr>
+                        <td>Username</td>
+                        <td>Status</td>
+                    </tr>
+                    <tr ng-repeat="user in modalData.onlineUsers|orderBy : onlineStatus" 
+                        ng-click="modalData.getUserMessages(user.username, user.userId, user.onlineStatus, user.onlineTiming)"
+                        ng-hide="user.username == username"
+                        >
+                        <td>{{user.username}}
+                            <span class="label label-success">{{modalData.getUnreadMessages(user.userId)}}</span>
+                        </td>
+                        <td ng-show="user.onlineStatus == 1"><small><i>{{user.onlineTiming}} </i></small><i class="fa fa-circle fa-1x"  style="color: green"></i></td>
+                        <td ng-show="user.onlineStatus == 0"><small><i>{{user.onlineTiming}} </i></small><i class="fa fa-circle fa-1x" style="color: lightgrey"></i></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-8" ng-init="modalData.getCrmMessages()">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <span class="pull-right">
+
+                                <span ng-show="modalData.onlineUserStatus == 1">
+                                    <small><i>online </i></small><i class="fa fa-circle fa-1x"  style="color: green"></i>
+                                </span>
+                                <span ng-show="modalData.onlineUserStatus == 0">
+                                    <small><i>last online {{modalData.onlineUserTiming}} </i></small><i class="fa fa-circle fa-1x" style="color: lightgrey"></i>
+                                </span>
+                                <button ng-click="modalData.getCrmMessagesDirect()"><i class="fa fa-refresh"></i></button>
+                            </span> 
+                            Chat | {{modalData.messageUser}}
+
+                        </div>
+
+                        <div class="panel-body pre-scrollable">
+                            <ul class="chat">
+                                <li class="{{modalData.getUserLine(messages.userId, messages.receiver)}} clearfix col-lg-12"
+                                    ng-repeat="messages in modalData.crmMssages">
+                                    <span class="chat-img {{modalData.getUserImage(messages.userId, messages.receiver)}}">
+                                        <i class="fa fa-user fa-3x"></i>
+                                    </span>
+                                    <div class="chat-body clearfix {{modalData.getUserImage(messages.userId, messages.receiver)}}">
+                                        <div class="header">
+                                            <strong class="primary-font">{{messages.senderName}} </strong> <small class="pull-right text-muted">
+                                                <span class="fa fa-clock-o"></span> <i>{{messages.sentTime}}</i></small>
+                                        </div>
+                                        <p>
+                                            {{messages.message}} 
+                                            <span ng-show="messages.senderName == username">
+                                                <span ng-show="messages.readStatus == 1">
+                                                    <i class="fa fa-check" 
+                                                       style="color:green"></i><i class="fa fa-check" style="color:green"></i>
+                                                </span>
+                                                <span ng-show="messages.readStatus == 0">
+                                                    <i class="fa fa-check" 
+                                                       style="color:grey"></i><i class="fa fa-check" style="color:grey"></i>
+                                                </span>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="right clearfix col-lg-12" ng-show='modalData.showSending'
+                                    >
+                                    <span class="chat-img pull-right">
+                                        <i class="fa fa-user fa-3x"></i>
+                                    </span>
+                                    <div class="chat-body clearfix pull-right">
+                                        <div class="header">
+                                            <strong class="primary-font">{{username}} </strong> <small class="pull-right text-muted">
+                                                <span class="fa fa-clock-o"></span> <i>just now</i></small>
+                                        </div>
+                                        <p>
+                                            ...
+                                        </p>
+                                    </div>
+                                </li>
+                                <!--  <li class="right clearfix col-lg-12" ng-show='modalData.showRefreshing && !modalData.showSending'
+                                      >
+                                      <span class="chat-img pull-right">
+                                          <i class="fa fa-user fa-3x"></i>
+                                      </span>
+                                      <div class="chat-body clearfix pull-right">
+  
+                                          <p>
+                                              updating...
+                                          </p>
+                                      </div>
+                                  </li>
+                                -->
+                            </ul>
+                            <form novalidate="" ng-submit="modalData.saveMessage(data.crmMessage)">
+                                <input type='text' class=' form-control input-lg' id="crmMessage"
+                                       placeholder='Type something to {{modalData.messageUser}} . . .'
+                                       class="col-lg-12 col-xs-12" ng-model="data.crmMessage">
+
+
+                                <input type="button" style='margin-top:4px;' class="btn btn-success pull-right col-lg-2"  ng-disabled="modalData.messageId == 0"
+                                       value="send" ng-click="modalData.saveMessage(data.crmMessage)"> 
+                            </form>
+                            <div class="clearfix">&nbsp;</div>
+
+                            <div class="clearfix">&nbsp;</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

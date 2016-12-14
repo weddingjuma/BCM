@@ -1,0 +1,56 @@
+
+<div class="modal-dialog"  style='background-color: black;'>
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}' ng-click="modalData.clearAllFormData(1)">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit Approved By/Credited by</h4>
+        </div>
+        <div class="modal-body" ng-init="modalData.getAllUsers('TBL_USERS')">
+            <ul class='list-group'>
+                <li class="list-group-item ">
+                    <form novalidate="" name="approvedBy" class="form-horizontal" >
+
+                        <div ng-show='data.approvedBy.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.approvedBy.responseMessage}}</div>   
+
+                        Approved BY<hr>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' :
+                                    approvedBy.customerSearch.$invalid && !approvedBy.customerSearch.$pristine }">
+
+                            <div class="col-md-12">
+                                <select type="text" class="form-control" name='customerSearch' 
+                                        required ng-model='data.approvedBy.approvedBy'>
+                                    <option ng-repeat="user in modalData.allSystemUsers| filter :'FELIX':limitTo:1"  value = "{{user.id}}"> {{user.fullnames}} </option>
+                                    <option ng-repeat="user in modalData.allSystemUsers| filter :'titus':limitTo:1"  value = "{{user.id}}"> {{user.fullnames}} </option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="padding:0px;">
+
+
+
+
+                            <button class="btn btn-primary col-md-5 col-md-offset-1" ng-disabled="approvedBy.$invalid"
+                                    ng-click="modalData.saveApproved(data.approvedBy, '1', 'TBL_SETTINGS')" 
+                                    data-dismiss="modal">
+                                Print 
+                            </button>
+                            <button class="btn btn-danger col-md-5 " data-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+
+
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

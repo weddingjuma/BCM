@@ -1,0 +1,162 @@
+<div  class="pre-scrollable col-xs-12" ng-controller="ticketsController" >
+    <div ng-show="modalData.returnMenuFlag(29)" class="panel panel-default">
+        <div class="panel-heading" >
+            Assign Resources  <spinner></spinner>
+        </div>
+        <div class="panel-body">
+            <div class="">
+                <ul class="nav nav-tabs" ng-init="activeAssign = 'assignTickets'">
+
+                    <li class='pull-left ' ng-class="{'active' : activeAssign == 'assignTickets'}">
+                        <a href="" ng-click="activeAssign = 'assignTickets'" >Tickets</a>
+                    </li>
+                    <li class='pull-left ' ng-class="{'active' : activeAssign == 'assignedDevices'}">
+                        <a href="" ng-click="activeAssign = 'assignedDevices'" >Assigned Devices</a>
+                    </li>
+
+                    <!--   <li class='pull-left' ng-click="activeLink='rights'" ng-class="{'active' : activeLink=='rights'}">
+                           <a href="">User Rights</a>
+                       </li>
+                    -->
+
+
+                    <li class='pull-right'>
+                        <input type="search" 
+                               class="form-control" placeholder='Search Devices' ng-model='searchDevice'/>
+                    </li>
+                    <li class='pull-right' ng-show="modalData.returnMenuFlag(45)">
+                        <button class="btn btn-success" 
+                                data-toggle="modal" data-controls-modal="assignUser" data-backdrop="static" data-keyboard="false" data-target="#assignUser"
+                                >Assign Device</button>
+                    </li>
+                    <li class='pull-right' ng-show="activeAssign == 'assignTickets'" >
+                        <button class="btn btn-default"  ng-click="modalData.getTickets()">
+                            <i class="fa fa-refresh " style="color:black"></i>
+                        </button>
+                    </li>
+                     <li class='pull-right' ng-show="activeAssign == 'assignedDevices'" >
+                        <button class="btn btn-info"  ng-click="modalData.getAllAssignedDevices()">
+                            <i class="fa fa-refresh " style="color:whitesmoke"></i>
+                        </button>
+                    </li>
+
+                </ul>
+            </div>
+
+
+            <div ng-show="activeLink == 'assign'" >
+                <div ng-show="activeAssign == 'assignTickets'"  ng-keydown="modalData.scroll()">
+                    <table class="table table-responsive ">
+
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Reg No#</th>
+                                <th>Desc</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Assigned To</th>
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="tickets in modalData.tickets| filter :searchDevice|
+                                filter:{closedFlag:0}| filter:{assignedToId:modalData.myIdFilter} |
+                                orderBy :data.sortByColumn| itemsPerPage: 25" 
+                                current-page="currentPage" pagination-id="dataPagination"
+                                class="{{modalData.returnRowClass(tickets.id, tickets.closedFlag, 1)}}"
+                                ng-show="tickets.issue=='NEW INSTALLATION' || tickets.issue=='RECHECK' || tickets.issue=='REPLACEMENT'"
+                                ng-click="modalData.makeRowActive(tickets.id)">
+                                <td>{{tickets.id}}</td>
+                                <td>{{tickets.regNo}}</td>
+                                <td>{{tickets.desc}}</td>
+                                <td>{{tickets.location}}</td>
+                                <td>{{data.returnTicketStatus(tickets.closedFlag)}}</td>
+
+                                <td>{{tickets.assignedTo}}</td>
+                                <td><div class="dropdown">
+                                        <a href="#/tickets" data-toggle="dropdown">Action
+                                            <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#/tickets" ng-show="modalData.returnMenuFlag(72)"
+                                                   ng-click="modalData.deactivateRecord(tickets.id, 'TBL_SIMPLE_TICKETS', 2)">Delete</a></li>
+                                            <li ng-show="modalData.returnMenuFlag(47)">
+                                                <a href="#/tickets"  
+                                                   data-toggle="modal" data-controls-modal="assignUserToTicket" data-backdrop="static" 
+                                                   data-keyboard="false" data-target="#assignUserToTicket"
+                                                   ng-click="modalData.assignUser(tickets.id)">Assign User</a>
+                                            </li>
+
+                                            <li>
+
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>    
+                    </table>
+                    <pagination></pagination>
+
+
+                </div>
+                <div ng-show="activeAssign == 'assignedDevices'" ng-init="modalData.getAllAssignedDevices()">
+
+                    <table class="table table-responsive ">
+
+                        <thead>
+                            <tr>
+                                <TH></TH>
+                                <th>#</th>
+
+                                <th>Device Imei</th>
+                                <th>Data Line</th>
+                                <th>Status</th>
+                                <th>Technician</th>
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="assignedDevices in modalData.assignedDevices| filter :search|
+                                orderBy :data.sortByColumn| itemsPerPage: pageSize" 
+                                current-page="currentPage" pagination-id="dataPagination"
+                                class="{{modalData.returnRowClass(assignedDevices.id, assignedDevices.closedFlag, 1)}}" 
+                                ng-click="modalData.makeRowActive(assignedDevices.id)">
+                                   <td nowrap><div class="dropdown">
+                                        <a href="#/tickets" data-toggle="dropdown">Action
+                                            <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="#/tickets" ng-show="modalData.returnMenuFlag(72)"
+                                                   ng-click="modalData.deactivateRecord(assignedDevices.id, 'TBL_ASSIGNED_DEVICES', 2)">
+                                                    <i class="fa fa-unlink"></i>Unassigned</a>
+                                            </li>
+                                           
+
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>{{assignedDevices.id}}</td>
+                                <td>{{assignedDevices.deviceSerial}}</td>
+                                <td>{{assignedDevices.dataLine}}</td>
+                                <td>{{data.returnTicketStatus(assignedDevices.closedFlag)}}</td>
+                                <td>{{assignedDevices.technician}}</td>
+
+
+                                <td>{{data.convertToHumanTime(assignedDevices.dateCreated)}}</td>
+                             
+                            </tr>
+                        </tbody>    
+                    </table>
+                    <pagination></pagination>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<div ng-controller="modalsController">
+    <div class="modal fade" id="assignUserToTicket" role="dialog">
+        <div ng-include="'modals/assignUserToTicket.html'"></div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="panel panel-default" ng-controller="modalsController">
+    <div class="panel panel-heading" >
+        <a href="#/customers" style="color:black"> 
+            <i class="fa fa-backward"></i> Back </a> 
+        <div class="pull-right">
+           
+            Customer Details
+            
+        </div>
+    </div>
+    <div class="panel panel-body" ng-init="modalData.getCustomerDetails()">
+        <div class="col-xs-5 pull-left">
+
+            <img src="images/profile.png" class="img-responsive" alt="{{modalData.customerDetails.name}}" width="250" height="150">
+
+            <h3>{{modalData.specificCustomerDetails.name}}</h3>
+            <h5>{{modalData.specificCustomerDetails.mobile_1}}</h5>
+            <table class="table ">
+                <tbody >
+                    <tr>
+                        <td><b>Next Of kin</b></td><td>: <b>{{modalData.specificCustomerDetails.nextOfKin}}</b> </td>
+                    </tr>
+                    <tr>
+                        <td><b>Next Of kin Mobile</b></td><td>: <b>{{modalData.specificCustomerDetails.nextOfKinMobile_1}} </b></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-xs-7 pull-right">
+            <table class="table ">
+                <tbody >
+
+                    <tr>
+                        <td><b>Mobile 2</b></td><td>: {{modalData.specificCustomerDetails.mobile_2}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Address</b></td><td>: {{modalData.specificCustomerDetails.address}} </td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Email</b></td><td>: {{modalData.specificCustomerDetails.email}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Id No</b></td><td>: {{modalData.specificCustomerDetails.idNo}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Next Of Kin</b> </td><td>: {{modalData.specificCustomerDetails.nextOfKin}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Next Of Mobile</b></td><td>: {{modalData.specificCustomerDetails.nextOfKinMobile_1}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Total Assets</b></td><td>: {{modalData.specificCustomerDetails.totalAssets}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Current Assets</b></td><td>: {{modalData.specificCustomerDetails.insuror}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Status</b></td><td>: {{modalData.returnStatus(modalData.specificCustomerDetails.status)}} </td>
+                    </tr>
+                   
+                    <tr>
+                        <td><b>Date Created</b></td><td>: {{data.convertToHumanTime(modalData.specificCustomerDetails.dateCreated)}} </td>
+                    </tr>
+                     <tr>
+                        <td><b>Created By</b></td><td>: {{modalData.specificCustomerDetails.createdBy}} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Total Supported Tickets</b></td><td>: {{modalData.specificCustomerDetails.totalTickets}} </td>
+                    </tr>
+           
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

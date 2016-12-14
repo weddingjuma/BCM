@@ -1,0 +1,95 @@
+<div ng-controller="modalsController">
+    <div class="panel panel-default" ng-controller="ticketsController" ng-show="modalData.returnMenuFlag(49)">
+        <div class="panel-heading" ng-init="data.getAllVehiclesData('1')">
+            Vehicles
+
+            <spinner></spinner>
+        </div>
+        <div class="panel-body">
+            <div class="col-lg-12">
+
+                <ul class="nav nav-tabs">
+
+                    <li class='pull-right'>
+                        <input type="search" ng-change = "modalData.searchDataFxn(search,'regNo','regNo','vehicles')"
+                               class="form-control" placeholder='Search Vehicle' ng-model='search'/>
+                    </li>
+                    <li class='pull-right'>
+                        <button class="btn btn-primary" ng-show="modalData.returnMenuFlag(58)"
+                                data-toggle="modal" data-controls-modal="addVehicle" ng-click="data.generateRandomTicketCode()"
+                                data-backdrop="static" data-keyboard="false" data-target="#addVehicle"
+                                >Add Vehicle +
+                        </button>
+                    </li>
+                    <li class='pull-right'>
+                        <button class="btn btn-default" ng-click="data.getAllVehiclesData('2')">
+                            <i class="fa fa-refresh " style="color:black"></i>
+                        </button>
+                    </li>
+                </ul>
+
+            </div>
+            <div  class="col-lg-12 pre-scrollable"  ng-controller="modalsController">
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th ng-click="data.sortByColumnFxn('code')">action</th>
+                            <th ng-click="data.sortByColumnFxn('regNo')">Reg Number</th>
+                            <th ng-click="data.sortByColumnFxn('make')">Make</th>
+
+                            <th ng-click="data.sortByColumnFxn('engNo')">Engine No</th>
+                            <th ng-click="data.sortByColumnFxn('certNo')">Cert No</th>
+                            <th ng-click="data.sortByColumnFxn('code')">Status</th>
+                        </tr>    
+                    </thead>
+                    <tbody >
+                        <tr dir-paginate="vehicle in data.accountVehicles |  filterByRange:data.range : data.limit 
+                            |limitTo:data.limit| orderBy :data.sortByColumn| itemsPerPage: pageSize" 
+                            current-page="currentPage" pagination-id="dataPagination"
+                            class="{{modalData.returnRowClass($index,vehicle.status,0)}}" ng-click="modalData.makeRowActive($index)"
+                            >
+                           
+                            <td><div class="dropdown"  ng-controller="modalsController">
+                                    <a href="#/vehicles" data-toggle="dropdown" class="dropdown-toggle">Action<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" >
+                                        <li><a href="#/vehicles" 
+                                               ng-click="modalData.deactivateRecord(vehicle.id, 'TBL_VEHICLES', 2)">
+                                                <i class="fa fa-remove"></i> Delete</a></li>
+                                        <li><a href="#/vehicles" ng-click="modalData.editFunction(vehicle.id, 'TBL_VEHICLES', 3)"
+                                               data-toggle="modal" data-controls-modal="addVehicle"
+                                               data-backdrop="static" data-keyboard="false" data-target="#addVehicle"
+                                               ><i class="fa fa-edit"></i> Edit</a></li>
+                                        <li><a href="#/vehicles"
+                                               ng-click="modalData.deactivateRecord(vehicle.id, 'TBL_VEHICLES', 0)" 
+                                               ng-show="vehicle.status == 1">
+                                                 <i class="fa fa-lock"></i> Deactivate</a></li>
+                                        <li><a href="#/vehicles" 
+                                               ng-click="modalData.deactivateRecord(vehicle.id, 'TBL_VEHICLES', 1)"
+                                               ng-show="vehicle.status == 0"><i class="fa fa-check"></i> Activate</a></li>
+
+                                    </ul>
+                                </div></td>
+                            <td><a href="#/viewVehicleDetails" ng-click="modalData.getVehicleDetails(vehicle.id)">{{vehicle.regNo}}</a></td>
+                            <td>{{vehicle.make}}</td>
+                            
+                            <td>{{vehicle.engNo}}</td>
+                            <td>{{vehicle.certNo}}</td>
+                            <td>{{data.returnStatusWords(vehicle.status)}}</td>
+                            <td>{{vehicle.createdBy}}</td>
+
+
+                        </tr>
+                    </tbody>    
+                </table>
+                <pagination></pagination>
+            </div>
+
+        </div>
+    </div>   
+</div>
+<div ng-controller="modalsController">
+    <div class="modal fade" id="addVehicle" role="dialog">
+        <div ng-include="'modals/addVehicle.html'"></div>
+    </div>
+</div>

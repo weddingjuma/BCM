@@ -1,0 +1,107 @@
+
+<div class="modal-dialog modal-sm" ng-controller="modalsController">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Renew Cert</h4>
+        </div>
+        <div class="modal-body">
+            <div class="text-center">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2" 
+                     ><b>
+                        Name : {{data.currentClickedCert.name}} | Cert # : {{data.currentClickedCert.certNo}} |
+                        Reg Number : {{data.currentClickedCert.regNo}}</b><hr>
+                    <form novalidate="" name="addPayment" class="form-horizontal" >
+
+                        <div class="form-group" style="padding:0px;" ng-init="modalData.getGlobalData('TBL_PRICE_GROUPS')"
+                             ng-class="{'has-error' : addPayment.priceGroupId.$invalid && !addPayment.priceGroupId.$pristine }">
+
+                            <label for="code" class="control-label col-xs-2">Price Group</label>
+                            <div class="col-md-9">
+                                <select ng-change="modalData.getPaymentAmounts(data.addPayment.priceGroupId)"
+                                        class="form-control" placeholder="" name='priceGroup'  
+                                        required ng-model='data.addPayment.priceGroupId'>
+                                    <option value="{{payment.id}}" ng-repeat="payment in modalData.fetchCurrentData"> {{payment.priceGroupName}} </option>
+
+                                </select>
+
+
+                            </div>
+
+
+                            <input type="number" ng-hide="true"
+                                   class="form-control" placeholder="period paid for" name='period'  
+                                   ng-model='data.payments.period'>
+
+                        </div>
+                        <div class="form-group" style="padding:0px;">
+
+                            <label for="code" class="control-label col-xs-2">Min Amount</label>
+                            <div class="col-md-9">
+
+                                <input type="text" class="form-control " readonly=""   ng-model="modalData.paymentAmount.minAmount"  
+                                       placeholder="Min Amount">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;" 
+                             ng-class="{'has-error' : addPayment.receiptNo.$invalid && !addPayment.receiptNo.$pristine }">
+
+                            <label for="code" class="control-label col-xs-2">Receipt Number</label>
+                            <div class="col-md-9">
+
+                                <input type="text" class="form-control " required   ng-model="data.addPayment.receiptNo" name='receiptNo' 
+                                       placeholder="Receipt No">
+                                
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="padding:0px;" ng-init="modalData.getGlobalData('TBL_PRICE_GROUPS')"
+                             ng-class="{'has-error' : addPayment.amount.$invalid && !addPayment.amount.$pristine
+                                                 || data.addPayment.amount < modalData.paymentAmount.minAmount}">
+
+                            <label for="code" class="control-label col-xs-2">Amount Paid</label>
+                            <div class="col-md-9">
+                                <input type="number" class="form-control " ng-disabled="modalData.paymentAmount.minAmount < 1"
+                                       required   ng-model="data.addPayment.amount" name='amount' 
+                                       placeholder="Enter amount(numbers)">
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-init="modalData.getGlobalData('TBL_PRICE_GROUPS')" ng-controller="datePickerMax"
+                             ng-class="{'has-error' : addPayment.date.$invalid && !addPayment.date.$pristine}">
+
+                            <label for="code" class="control-label col-xs-2">Date</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control " 
+                                          ng-model="data.addPayment.date" name='date'  id="date"
+                                       placeholder="Select Date">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;" ng-init="modalData.getGlobalData('TBL_PRICE_GROUPS')"
+                             ng-class="{'has-error' : addPayment.amount.$invalid && !addPayment.amount.$pristine }">
+
+                            <label for="code" class="control-label col-xs-2"></label>
+                            <div class="col-md-9">
+                                <button class=" btn btn-success"  style='width:100%'
+                                        ng-click="modalData.certApprovalRenewal(data.addPayment, 1)"
+                                        ng-disabled="addPayment.$invalid || data.addPayment.amount < modalData.paymentAmount.minAmount"
+                                        >Save Payment</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

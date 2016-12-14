@@ -1,0 +1,85 @@
+<div class=' col-xs-2' ng-controller="modalsController" style="max-height: 650px;overflow: auto;">
+
+    <ul class="list-group">
+        <li class=" home-btn" >
+            <a href="#/" ><div class='sidelinks pull-left'><i class="fa fa-home" ></i> Home </div><spinner></spinner></a>
+        </li>
+
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(48)">
+           <a href="#/customers"><div class='sidelinks'><i class="fa fa-user" ></i> Customer</div></a>
+        </li>
+
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(49)">
+           <a href="#/vehicles"><div class='sidelinks'><i class="fa fa-taxi" ></i> Vehicles</div></a>
+        </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(5)">
+           <a href="#/insurance"><div class='sidelinks'><i class="fa fa-institution" ></i> Insurance</div></a>
+        </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(34)">
+           <a href="#/financier"> <div class='sidelinks'><i class="fa fa-money" ></i> Financier</div></a>
+        </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(40)">
+           <a href="#/cv"> <div class='sidelinks'><i class="fa fa-link" ></i> Link C-V</div></a>
+        </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(46)">
+            <a href="#/certificates"><div class='sidelinks'><i class="fa fa-paperclip" ></i> Certificates</div></a>
+        </li>
+        
+        </li>
+        <!--
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(39)">
+            <div class='sidelinks'><a href="#/approveCertificates"><i class="fa fa-ticket" ></i> Approve Certs</div></a>
+        </li>
+         <li class=" home-links" ng-show="modalData.returnMenuFlag(36)">
+             <div class='sidelinks'><a href="#/reprint"><i class="fa fa-print" ></i> Print Certificates</div></a>
+         </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(38)">
+             <div class='sidelinks'><a href="#/emailCert"><i class="fa fa-envelope" ></i> Email Certificates</div></a>
+         </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(17)">
+            <div class='sidelinks'><a href="#/payments"><i class="fa fa-folder" ></i> Payments</div></a>
+        </li>
+        -->
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(50)">
+            <a href="#/devices"><div class='sidelinks'><i class="fa fa-compass" ></i> Devices</div></a>
+        </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(51)">
+           <a href="#/company"> <div class='sidelinks'><i class="fa fa-key" ></i> Settings</div></a>
+        </li>
+
+        
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(16)">
+            <a href="#/tickets"><div class='sidelinks'><i class="fa fa-list" ></i> Tickets</div></a>
+        </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(41)">
+          <a href="#/calendar">  <div class='sidelinks'><i class="fa fa-calendar" ></i> Calendar</div></a>
+        </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(52)">
+           <a href="#/accounts"> <div class='sidelinks'><i class="fa fa-bank" ></i> Accounts</div></a>
+        </li>
+        <li class=" home-links" ng-show="modalData.returnMenuFlag(95)">
+            <a href="#/userDayOperations"><div class='sidelinks'><i class="fa fa-users" ></i> Operations</div></a>
+        </li>
+       
+
+
+
+    </ul>
+
+
+    <div class='col-xs-12'><hr></div>
+
+
+
+</div>
+
+
+
+<!--
+<div ng-controller="modalsController">
+    <div class="modal fade" id="23" role="dialog">
+        <div ng-include="'modals/addToDoList.html'"></div>
+    </div>
+</div>
+-->
+

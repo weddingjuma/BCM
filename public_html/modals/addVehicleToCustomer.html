@@ -1,0 +1,115 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData('cv')">&times;</button>
+            <h4 class="modal-title">Link Vehicle To Customer</h4>
+        </div>
+        <div class="modal-body">
+
+
+            <div class="text-left">
+                <div class="col-xs-10 col-xs-offset-1" ng-init="modalData.getAllCustomers('1')">
+
+                    <form novalidate="" name="globalSettings" class="form-horizontal" ng-controller="ticketsController">
+
+
+
+
+                        <div class="form-group" style="padding:0px;" ng-hide="true"
+                             ng-class="{ 'has-error' : globalSettings.customerSearch.$invalid && !globalSettings.customerSearch.$pristine }">
+                            <div class="col-md-10">Search Customer</div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" ng-click="data.getAllVehiclesData('1')"
+                                       ng-keyup="data.showList = true" ng-keypress="data.showExtraInfo = false"
+                                       placeholder="Customer Name" name='customerName' capitalize required ng-model='customerSearch'/>
+                            </div>
+                            <div class="col-md-10" ng-show="data.showList">
+                                <ul class="list-group">
+                                    <li class="list-group-item"  ng-repeat="customer in data.allCustomers|filter : customerSearch| limitTo: 10">
+                                        <a href="#/cv" class="" target="_self" ng-click="modalData.holdOnClickedClient(customer.id)">  {{customer.name}} - 
+                                            {{customer.mobile_1}} </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div ng-controller="TypeaheadCtrl">
+                            <div class='container-fluid typeahead-demo col-xs-10' ng-init="Typeahead.createArrayCustomers()">
+
+                                <label> Search Customer </label>
+                                <input type="text" ng-model="selected" typeahead-on-select="modalData.pickCustomer(selected)" typeahead-select-on-exact="true"
+                                       typeahead-focus-first="true" ng-click="data.getAllVehiclesData('1')"
+                                       uib-typeahead="state for state in Typeahead.returnAllCustomers() | filter:$viewValue | limitTo:15" class="form-control">
+
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-md-10" ng-show="data.showExtraInfo">
+                            <div class="clearfix col-md-10"></div>
+                            <div class="alert alert-success">
+                                <b>{{data.currentCustomerSearch.name}}</b><br>
+                                {{data.currentCustomerSearch.mobile}}<br>
+                                {{data.currentCustomerSearch.idNo}}
+                            </div>
+                        </div>
+
+
+
+                       <div ng-controller="TypeaheadCtrl" ng-init="data.getAllVehiclesData('1')">
+                            <div class='container-fluid typeahead-demo col-xs-10' ng-init="Typeahead.createArrayCustomers()">
+
+                                <label> Pick Unattached Vehicle </label>
+                                <input type="text" ng-model="selected" typeahead-on-select="modalData.pickVehicle(selected)" typeahead-select-on-exact="true"
+                                       typeahead-focus-first="true" 
+                                       uib-typeahead="state for state in Typeahead.returnAllUnlinkedVehicles() | filter:$viewValue | limitTo:15" class="form-control">
+
+                            </div>
+                        </div>
+                        
+                        
+                        
+
+
+                        <div class="col-md-10" ng-show="data.showExtraInfoVehicle">
+
+                            <div class="clearfix col-md-10"></div>
+                            <div class="alert {{data.showExtraInfoVehicleStyle}}">
+
+                                <b>{{data.currentCustomerSearch.regNo}}</b><br>
+                                {{data.currentCustomerSearch.make}}<br>
+                                {{data.currentCustomerSearch.Model}}
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+                        <div class="form-group" style="padding:0px;">
+
+                            <div class="col-md-10">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="data.updateVehicleToCustomer(data.currentCustomerSearch)"
+                                        ng-disabled=" data.currentCustomerSearch.id == '' || data.currentCustomerSearch.vehicleId == ''"
+                                        >Save</button>
+
+                            </div> 
+                        </div>    
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

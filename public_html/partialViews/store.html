@@ -1,0 +1,39 @@
+<h3>
+    Store <small>Shopped items</small>
+    <div class="pull-right"><button class="btn btn-primary" ng-click="modalData.getShoppedItems()"><i class="fa fa-refresh"></i></button></div>
+</h3>
+<hr>
+<div class="" ng-init="modalData.getShoppedItems()">
+    <table class="table table-striped table-row">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Customer Name</th>
+                <th>Mobile</th>
+                <th>type</th>
+                <th>Desc</th>
+                <th>Order Number</th>
+                <th>Date Booked</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="storeTickets in modalData.storeTickets">
+                <td>{{$index + 1}}</td>
+                <td>{{storeTickets.name}}</td>
+                <td>{{storeTickets.mobile}}</td>
+                <td>{{storeTickets.issue}}</td>
+                <td>{{storeTickets.desc}}</td>
+                <td>{{storeTickets.extraInfo}}</td>
+                <td>{{storeTickets.dateCreated}}</td>
+                <td>{{modalData.returnStatusStore(storeTickets.status)}}</td>
+                <td>
+                    <a href="#/accounts" 
+                       ng-click="modalData.deactivateRecord(storeTickets.id, 'TBL_SIMPLE_TICKETS', 1,1)"
+                       ng-hide="storeTickets.status == 1"> <i class="fa fa-money"></i>Mark As Paid</a>
+                </td>
+            </tr> 
+        </tbody>
+
+    </table>
+</div>

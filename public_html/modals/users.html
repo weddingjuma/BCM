@@ -1,0 +1,99 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Add User</h4>
+        </div>
+
+        <div class="text-center">
+            <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+
+                <form novalidate="" name="userSettings">
+
+                    <div ng-show='data.userSettings.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                        {{data.userSettings.responseMessage}}</div>   
+
+                    <div class="form-group" style="padding:10px;"  ng-class="{ 'has-error' : userSettings.code.$invalid && !userSettings.code.$pristine }">
+                        <label for="code" class="control-label col-xs-3">Code</label>
+                        <div class="col-md-9" >
+                            <input type="text" class="form-control" readonly  name='code'
+
+                                   ng-model='data.userSettings.code'/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : userSettings.username.$invalid && !userSettings.username.$pristine }">
+                        <label for="username" class="control-label col-xs-3">Username</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" ng-init="modalData.getGlobalData('TBL_USER_GROUPS')" ng-click="data.userSettings.code = data.getRandomCode()"
+                                   ng-pattern='/^[a-zA-Z0-9 ]*$/'
+                                   placeholder="Username" name='username' required ng-model='data.userSettings.username'/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : userSettings.password.$invalid && !userSettings.password.$pristine }">
+                        <label for="password" class="control-label col-xs-3">Password</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" placeholder="password" name='password'
+
+                                   required ng-model='data.userSettings.password'/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="padding:10px;"  ng-pattern='/^[a-zA-Z0-9 ]*$/'
+                         ng-class="{ 'has-error' : userSettings.fullnames.$invalid && !userSettings.fullnames.$pristine }">
+                        <label for="fullnames" class="control-label col-xs-3">Fullnames</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" placeholder="fullnames" name='fullnames' required ng-model='data.userSettings.fullnames'/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : userSettings.email.$invalid && !userSettings.email.$pristine }">
+                        <label for="fullnames" class="control-label col-xs-3">Email</label>
+                        <div class="col-md-9">
+                            <input type="email" class="form-control" placeholder="email" name='email' required ng-model='data.userSettings.email'/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : userSettings.groupid.$invalid && !userSettings.groupid.$pristine }">
+
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : userSettings.groupid.$invalid && !userSettings.groupid.$pristine }">
+                            <label for="financierId" class="control-label col-xs-3">Types</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name='groupid' required ng-model='data.userSettings.groupId' required>
+                                    <option disabled selected>--SELECT TYPE--</option>
+                                    <option ng-init="groups.groupId = groups.id" value="{{groups.groupId}}" ng-repeat="groups in modalData.fetchCurrentData">{{groups.groupName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : userSettings.areaCode.$invalid && !userSettings.areaCode.$pristine }">
+                            <label for="areaCode" class="control-label col-xs-3">Area</label>
+                            <div class="col-md-9">
+                                <select class="form-control" name='areaCode' required ng-model='data.userSettings.areaCode' required="">
+                                    <option disabled selected>--SELECT AREA--</option>
+                                    <option value="1">NAIROBI</option>
+                                    <option value="2">MOMBASA</option>
+                                    <option value="3">KISUMU</option>
+                                    <option value="4">ELDORET</option>
+                                    <option value="5">NAKURU</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12 " style="padding:10px;">
+                            <label for="button" class="control-label col-xs-3"></label>
+                            <div class="col-md-9">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.globalSettingsSave(data.userSettings, 'TBL_USERS')" ng-disabled="userSettings.$invalid || data.userSettings.signinDisabled"
+                                        >save </button>
+                            </div>
+                        </div>    
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,153 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" ng-controller="ticketsController">
+        <div class="modal-header" id='green'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Ticket - Existing</h4>
+        </div>
+        <div class="modal-body" ng-init="">
+            <notification></notification>
+            <div class="text-center" ng-show="data.linkAdd == 'active'">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+
+                    <form novalidate="" name="ticketSettings"  class="form-horizontal">
+
+                        <div ng-show='data.ticketSettings.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.ticketSettings.responseMessage}}</div>   
+
+                        <div class="form-group" style="padding:0px;"  ng-class="{
+                            'has-error' : ticketSettings.customerIdNo.$invalid && !ticketSettings.customerIdNo.$pristine || data.custError}">
+                            <label for="customerIdNo" class="control-label col-xs-2">Customer </label>
+                            <div class="col-md-10">
+
+                                <input type="text"  class="form-control" placeholder="Customer name" name='customerIdNo'
+                                       list="customers" 
+                                       required  ng-model='data.ticketSettings.customerIdNo'>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error' : ticketSettings.moduleType.$invalid && !ticketSettings.moduleType.$pristine }">
+                            <label for="moduleType" class="control-label col-xs-2">Module</label>
+                            <div class="col-md-10">
+                                <select  class="form-control" ng-click="data.validateCustomerDetails(data.ticketSettings.customerIdNo)"
+                                         placeholder="Module of the issue" name='moduleType' required ng-model='data.ticketSettings.moduleType'>
+                                    <option>Speed Governor</option>
+                                    <option>Tracker</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error' : ticketSettings.vehicleId.$invalid && !ticketSettings.vehicleId.$pristine }">
+                            <label for="vehicleId" class="control-label col-xs-2">Vehicle</label>
+                            <div class="col-md-10">
+                                <select  class="form-control"  name='vehicleId' required  ng-model='data.ticketSettings.vehicleId'>
+                                    <option ng-repeat="vehicle in data.customerVehicles" value="{{vehicle.id}}">{{vehicle.regNo}}</option>
+                                </select>
+
+
+                                <input hidden required  ng-model='data.ticketSettings.code'>
+                                <input required  hidden ng-model='data.ticketSettings.custId'>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : ticketSettings.type.$invalid && !ticketSettings.type.$pristine }">
+                            <label for="type" class="control-label col-xs-2">Query</label>
+                            <div class="col-md-10">
+                                <select  class="form-control" placeholder="issue type" ng-click="data.getcrmModule('TBL_CRM_MODULES')"
+                                         name='type' required ng-model='data.ticketSettings.type'>
+                                    <option>Compliment</option>
+                                    <option>Complain</option>
+                                    <option>Inquiry</option>
+                                    <option>Issue</option>
+                                    <option>Others</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-controller="datePicker"
+                             ng-class="{ 'has-error' : ticketSettings.priority.$invalid && !ticketSettings.priority.$pristine }">
+                            <label for="priority" class="control-label col-xs-2">Date Due</label>
+                            <div class="col-md-10">
+                                <input type="text"  class="form-control" placeholder="date"
+                                               name="date"    ng-model='data.ticketSettings.dateDue'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : ticketSettings.priority.$invalid && !ticketSettings.priority.$pristine }">
+                            <label for="priority" class="control-label col-xs-2">Priority</label>
+                            <div class="col-md-10">
+                                <select  class="form-control" placeholder="priority" ng-click="data.getReasons('TBL_REASONS')"
+                                         name='priority' required ng-model='data.ticketSettings.priority'>
+                                    <option>High</option>
+                                    <option>Medium</option>
+                                    <option>Low</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error' : ticketSettings.reasonId.$invalid && !ticketSettings.reasonId.$pristine }">
+                            <label for="reasonId" class="control-label col-xs-2">Reason</label>
+                            <div class="col-md-10">
+                                <select  class="form-control" placeholder="reason" name='reasonId' required ng-model='data.ticketSettings.reasonId'>
+                                    <option selected disabled="">Reason</option>
+                                    <option ng-repeat="reasons in data.reasons" value="{{reasons.id}}" >{{reasons.reason}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-controller="datePicker"  ng-class="{ 'has-error' : ticketSettings.crmModule.$invalid && !ticketSettings.crmModule.$pristine }">
+                            <label for="crmModule" class="control-label col-xs-2"> Category</label>
+                            <div class="col-md-10">
+                                <select  class="form-control"  
+                                         placeholder="crm Module" name='crmModule' required ng-model='data.ticketSettings.crmModule'>
+                                    <option selected disabled="">Category</option>
+                                   
+                                    <option ng-repeat="crmModule in data.crmModule" value="{{crmModule.id}}" >{{crmModule.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : ticketSettings.extras.$invalid && !ticketSettings.extras.$pristine }">
+                            <label for="extras" class="control-label col-xs-2">Details</label>
+                            <div class="col-md-10">
+                                <textarea class="form-control" cols="70" rows="5" id="comment" name="extras"
+                                          placeholder="maximum of 200 character" ng-model='data.ticketSettings.extras'
+                                          required>
+
+                                </textarea>
+                            </div>
+                            <small class="text-muted">Please enter details of the issue in less that 200 characters</small>
+                        </div>
+
+                        <div class="form-group col-sm-12 " style="padding:0px;">
+                            <label for="extras" class="control-label col-xs-2"></label>
+                            <div class="col-md-10">
+                                <button class=" btn " id="green" style='width:100%'
+                                        ng-click="modalData.globalSettingsSave(data.ticketSettings, 'TBL_TICKETS')"
+                                        ng-disabled="ticketSettings.$invalid || data.custError"
+                                        >save {{data.modalHeader|lowercase}}</button>
+                            </div>    
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>
+
+<div ng-controller="modalsController">
+    <div class="modal fade" id="addVehicle" role="dialog">
+        <div ng-include="'modals/addVehicle.html'"></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.combobox').combobox();
+    });
+</script>

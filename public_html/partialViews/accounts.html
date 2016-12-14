@@ -1,0 +1,47 @@
+<div ng-controller="modalsController" >
+    <div class='panel panel-default' id='supervixsor-panel'  
+         >
+        <div class="panel-heading" >
+            <i class="fa fa-bank"></i> Accounts Certificates <spinner></spinner>
+        </div>
+        <div class="panel-body" ng-show="modalData.returnMenuFlag(52)">
+            <div class="">
+                <ul class="nav nav-tabs" ng-init="activeLink = 'certApproval'">
+                    <li class='pull-left ' ng-class="{'active' : activeLink == 'certApproval'}" ng-show="modalData.returnMenuFlag(25)">
+                        <a href="#/accounts" ng-click="activeLink = 'certApproval'" >Cert Approval</a>
+                    </li>
+                    <li class='pull-left' ng-click="activeLink = 'payments'" ng-show="modalData.returnMenuFlag(25)"
+                        ng-class="{'active' : activeLink == 'payments'}">
+                        <a href="#/accounts" ng-click="activeLink = 'payments'">Payments</a>
+                    </li>
+                       <li class='pull-left' ng-click="activeLink = 'renewals'" ng-show="modalData.returnMenuFlag(25)"
+                        ng-class="{'active' : activeLink == 'renewals'}">
+                        <a href="#/accounts" ng-click="activeLink = 'renewals'">Renewals</a>
+                    </li>
+                     </li>
+                       <li class='pull-left' ng-click="activeLink = 'store'" ng-show="modalData.returnMenuFlag(25)"
+                        ng-class="{'active' : activeLink == 'store'}">
+                        <a href="#/accounts" ng-click="activeLink = 'store'">Store</a>
+                    </li>
+
+
+
+
+                </ul>
+                <div class="">
+                    <div ng-show="activeLink == 'certApproval'">
+                        <div ng-include="'partialViews/approveCerts.html'"></div>
+                    </div>
+                    <div ng-show="activeLink == 'store'">
+                        <div ng-include="'partialViews/store.html'"></div>
+                    </div>
+                    <div ng-show="activeLink == 'renewals'">
+                        <div ng-include="'partialViews/renewals.html'"></div>
+                    </div>
+                    <div ng-show="activeLink == 'payments'">
+                        <div ng-include="'partialViews/payments.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

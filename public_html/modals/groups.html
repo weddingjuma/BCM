@@ -1,0 +1,142 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">User Groups</h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs ">
+                <li ng-class="{'active' : modalData.gactiveLink == 'addGroup'}" >
+                    <a href="#/company" 
+                       ng-click="modalData.gactiveLink = 'addGroup'">Add Group+</a></li>
+                <li ng-class="{'active' : modalData.gactiveLink == 'viewGroup'}">
+                    <a href="#/company" ng-click="modalData.gactiveLink = 'viewGroup'">View</a>
+                </li>
+            </ul>
+            <notification></notification>
+            <div ng-if="modalData.gactiveLink == 'viewGroup'">
+                <table class="table table-responsive  table-striped" ng-show="modalData.hideTableTillResponse" ng-init="data.getGroups()">
+
+                    <thead>
+                        <tr>
+
+
+                            <th>Group Name</th>
+                            <th>Assignable</th><th>LogAnyTime</th><th>LoginOffOffice</th>
+                            <th>Status</th>
+
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="pricesGroup in data.groups">
+
+
+                            <td>{{pricesGroup.groupName}}</td>
+                            <td>{{pricesGroup.canBeAssignedTicket}}</td>
+                            <td>{{pricesGroup.canLogin}}</td>
+                            <td>{{pricesGroup.offOffice}}</td>
+                            <td>{{modalData.returnStatus(pricesGroup.status)}}</td>
+
+                            <td><div class="dropdown">
+                                    <a href="#/company" data-toggle="dropdown">Action
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#/company" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_USER_GROUPS', 2)">Delete</a></li>
+                                        <li><a href="#/company"
+                                               ng-click="modalData.editFunction(pricesGroup.id, 'TBL_USER_GROUPS', 3)"
+                                               >Edit</a></li>
+                                        <li><a href="#/company"
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_USER_GROUPS', 0)" ng-show="pricesGroup.status == 1">Deactivate</a></li>
+                                        <li><a href="#/company" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_USER_GROUPS', 1)"
+                                               ng-hide="pricesGroup.status == 1">Activate</a></li>
+                                        <li><a href="#/company" 
+                                               ng-click="modalData.printRecord(pricesGroup.id, 'TBL_USER_GROUPS', 1)"
+                                               >Reports</a></li>
+                                    </ul>
+                                </div></td>
+                        </tr>
+                    </tbody>    
+                </table>
+            </div>
+            <div class="text-center" ng-show="modalData.gactiveLink == 'addGroup'">
+                <div class="col-xs-12">
+
+                    <form novalidate="" name="company">
+
+                        <div ng-show='data.company.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.company.responseMessage}}</div>   
+
+                        <div class="form-group col-xs-12" style="padding:10px;"  ng-class="{ 'has-error' : company.code.$invalid && !company.code.$pristine }">
+                            <label for="code" class="control-label col-xs-4">Code</label>
+                            <div class="col-xs-8">
+                                <input type="text" readonly="" class="form-control" placeholder="{{data.modalHeader|lowercase}} code" name='code'
+
+                                       required  ng-model='data.company.code'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12" style="padding:10px;" ng-class="{ 'has-error' : company.groupName.$invalid && !company.groupName.$pristine }">
+                            <label for="groupName" class="control-label col-xs-4">Group Name</label>
+                            <div class="col-xs-8">
+                                <input type="text" class="form-control" placeholder="group Name" name='groupName' ng-click="modalData.generateGroupCode()"
+                                       capitalize required ng-model='data.company.groupName'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:10px;" ng-class="{ 'has-error' : company.canLogin.$invalid && !company.canLogin.$pristine }">
+                            <label for="groupName" class="control-label col-xs-4">Log In Anytime</label>
+                            <div class="col-xs-8">
+                                <select  class="form-control"  name='canLogin'  required ng-model='data.company.canLogin'>
+
+                                    <option value=1>YES</option>
+                                    <option value=0>NO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:10px;" ng-class="{ 'has-error' : company.canBeAssignedTicket.$invalid && !company.canBeAssignedTicket.$pristine }">
+                            <label for="canBeAssignedTicket" class="control-label col-xs-4">Can be assigned ticket</label>
+                            <div class="col-xs-8">
+                                <select  class="form-control"  name='canBeAssignedTicket'  required ng-model='data.company.canBeAssignedTicket'>
+
+                                    <option value=1>YES</option>
+                                    <option value=0>NO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12" style="padding:10px;" ng-class="{ 'has-error' : company.offOffice.$invalid && !company.offOffice.$pristine }">
+                            <label for="offOffice" class="control-label col-xs-4">Log in Off-Office</label>
+                            <div class="col-xs-8">
+                                <select  class="form-control"  name='offOffice'  required ng-model='data.company.offOffice'>
+
+                                    <option value="1">YES</option>
+                                    <option value="0">NO</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="form-group col-xs-12  " style="padding:10px;">
+                            <label for="extras" class="control-label col-xs-4"></label>
+                            <div class="col-xs-8">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.globalSettingsSave(data.company, 'TBL_USER_GROUPS')" ng-disabled="company.$invalid"
+                                        >save Group</button>
+                            </div>
+                        </div>    
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

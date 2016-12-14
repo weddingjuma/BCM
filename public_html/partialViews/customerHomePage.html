@@ -1,0 +1,151 @@
+<div class="" ng-controller="modalsController">
+    <div>
+        <ul class="nav nav-tabs" ng-init="activeLink = 'customers'">
+            <li class='pull-left ' ng-class="{'active' : activeLink == 'customers'}" >
+                <a href="#/customers" ng-click="activeLink = 'customers'" >Customers</a>
+            </li>
+            <li class='pull-left' ng-click="activeLink = 'search'" 
+                ng-class="{'active' : activeLink == 'search'}">
+                <a href="#/customers" ng-click="activeLink = 'search'">Search Fleet Customers</a>
+            </li>
+            <li class='pull-left' ng-click="activeLink = 'callInClients'" 
+                ng-class="{'active' : activeLink == 'callInClients'}">
+                <a href="#/customers" ng-click="activeLink = 'callInClients'">Call In Clients</a>
+            </li>
+            <li class='pull-right'>
+                <input type="search" ng-change = "modalData.searchDataFxn(search, 'name', 'mobile_1', 'customers')"
+                       class="form-control" placeholder='Search Customers' ng-model='search'/>
+            </li>
+            <li class='pull-right'>
+                <button class="btn btn-primary" ng-show="modalData.returnMenuFlag(23)"
+                        data-toggle="modal" data-controls-modal="addCustomer" ng-click="data.generateRandomTicketCode()"
+                        data-backdrop="static" data-keyboard="false" data-target="#addCustomer"
+                        >Add Customer +</button>
+            </li>
+            <li class='pull-right'>
+                <button class="btn btn-default" ng-click="modalData.getAllCustomers('2')">
+                    <i class="fa fa-refresh " style="color:black"></i>
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="panel panel-default" ng-init="modalData.getAllCustomers('1')">
+    </div>
+    <div class="panel-body  pre-scrollable"  ng-show="activeLink == 'customers'">
+        <div class="">
+            <table class="table table-responsive  table-striped">
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th ng-click="data.sortByColumnFxn('name')">Customer Name</th>
+                        <th ng-click="data.sortByColumnFxn('mobile_1')">mobile</th>
+                        <th ng-click="data.sortByColumnFxn('nextOfKin')">Next Of Kin</th>
+                        <th ng-click="data.sortByColumnFxn('email')">Email Add.</th>                          
+
+                        <th ></th>
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr dir-paginate="customer in modalData.allCustomers| limitTo:data.limit| orderBy :data.sortByColumn | itemsPerPage: pageSize" 
+                        current-page="currentPage" pagination-id="dataPagination">
+                        <td ng-show="modalData.returnMenuFlag(27)" nowrap>
+                            <div class="dropdown">
+                                <a href="#/customers" data-toggle="dropdown" >
+                                    Action<span class="caret"></a>
+                                <ul class="dropdown-menu pull-left">
+                                    <li><a href="#/customers" 
+                                           ng-click="modalData.deactivateRecord(customer.id, 'TBL_CUSTOMERS', 2)"><i class="fa fa-remove"></i> Delete</a></li>
+                                    <li><a href="#/customers" data-toggle="modal" data-controls-modal="addCustomer" 
+                                           data-backdrop="static" data-keyboard="false" data-target="#addCustomer"
+                                           ng-click="modalData.editFunction(customer.id, 'TBL_CUSTOMERS', 3)"
+                                           ><i class="fa fa-edit"></i> Edit</a></li>
+                                    <li><a href="#/customers"
+                                           ng-click="modalData.deactivateRecord(customer.id, 'TBL_CUSTOMERS', 0)" ng-show="customer.status == 1">
+                                            <i class="fa fa-lock"></i> Deactivate</a></li>
+                                    <li><a href="#/customers" 
+                                           ng-click="modalData.deactivateRecord(customer.id, 'TBL_CUSTOMERS', 1)"
+                                           ng-hide="customer.status == 1"><i class="fa fa-check"></i> Activate</a></li>
+
+                                </ul>
+                            </div></td>
+                        <td > <a href="#/customers" ng-click="modalData.getCustomerInfo(customer.id)">{{customer.name}}</a></td>
+                        <td >{{customer.mobile_1}}</td>
+                        <td>{{customer.nextOfKin}}</td>
+                        <td>{{customer.email}}</td>
+
+                    </tr>
+                </tbody>    
+            </table>
+
+
+            <pagination></pagination>
+
+        </div>
+    </div>
+
+    <div class="panel-body  pre-scrollable"  ng-show="activeLink == 'callInClients'">
+        <ul class="nav nav-tabs" ng-init="activeLink = 'customers'">
+            <li class='pull-right'>
+                <input type="search" 
+                       class="form-control" placeholder='Search Customers' ng-model='searchc'/>
+            </li>
+        </ul>
+        <div class="" ng-init="modalData.getTickets('2')">
+            <table class="table table-responsive  table-striped">
+
+                <thead ng-init="modalData.returnNewClients()">
+                    <tr>
+                        <th>Add Client</th>
+                        <th ng-click="data.sortByColumnFxn('name')">Customer Name</th>
+                        <th ng-click="data.sortByColumnFxn('mobile_1')">mobile</th>
+                        <th ng-click="data.sortByColumnFxn('nextOfKin')">Date Contacted</th>                         
+
+                        <th ></th>
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr dir-paginate="customers in modalData.newClient |filter : searchc| limitTo:data.limit| 
+                        orderBy :data.sortByColumn | itemsPerPage: pageSize" 
+                        current-page="currentPage" pagination-id="dataPagination">
+                        <td ng-show="modalData.returnMenuFlag(27)" nowrap>
+                            <div class="dropdown">
+                                <a href="#/customers" data-toggle="dropdown" >
+                                    Action<span class="caret"></a>
+                                <ul class="dropdown-menu pull-left">
+                                    
+                                    <li><a href="#/customers" data-toggle="modal" data-controls-modal="addCustomer" 
+                                           data-backdrop="static" data-keyboard="false" data-target="#addCustomer"
+                                           ng-click="modalData.addCustomer(customers.names,customers.mobile_1s)"
+                                           ><i class="fa fa-edit"></i> Add Customer</a></li>                                  
+                                </ul>
+                            </div></td>
+                        <td> {{customers.names}}</td>
+                        <td >{{customers.mobile_1s}}</td>
+                        <td>{{data.convertToHumanTime(customers.dateCreated)}}</td>
+
+
+                    </tr>
+                </tbody>    
+            </table>
+
+
+            <pagination></pagination>
+
+        </div>
+    </div>
+
+
+
+
+    <div  ng-show="activeLink == 'search'">
+        <div ng-include="'partialViews/fleetCLients.html'"></div>
+    </div>
+</div>
+
+
+<div ng-controller="modalsController">
+    <div class="modal fade" id="addCustomer" role="dialog">
+        <div ng-include="'modals/createNewTicketCustomer.html'"></div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<div ng-show="activeLink == 'machineIps'">
+    <table class="table " ng-init="modalData.getAllAccounts()">
+
+        <thead>
+            <tr>
+                <th></th>
+                <th>Machine IP</th>
+                <th>Mac Address</th>
+                <th>Number Of Trials</th>
+                <th>Status</th>
+                <td><button class="btn btn-default"  ng-click="modalData.getAllAccounts()">
+                        <i class="fa fa-refresh " style="color:black"></i>
+                    </button>
+                </td>
+            </tr>    
+        </thead>
+        <tbody>
+            <tr ng-repeat="machineIps in modalData.machineIps"
+                class="{{modalData.returnRowClass($index, machineIps.status, 0)}}" ng-click="modalData.makeRowActive($index)"
+                >
+                <td nowrap><div class="dropdown">
+                        <a href="#/company" data-toggle="dropdown">Action
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/company" 
+                                   ng-click="modalData.deactivateRecord(machineIps.id, 'TBL_ALLOWED_MACHINES', 2)">
+                                    <i class="fa fa-remove"></i> Delete</a></li>                        
+                            <li><a href="#/company"
+                                   ng-click="modalData.deactivateRecord(machineIps.id, 'TBL_ALLOWED_MACHINES', 0)" ng-show="machineIps.status == 1">
+                                    <i class="fa fa-lock"></i> Block</a></li>
+                            <li><a href="#/company" 
+                                   ng-click="modalData.deactivateRecord(machineIps.id, 'TBL_ALLOWED_MACHINES', 1)"
+                                   ng-hide="machineIps.status == 1">
+                                    <i class="fa fa-check"></i> Allow</a></li>
+
+                        </ul>
+                    </div></td>
+                <td>{{machineIps.machineIp}}</td>
+                <td>{{machineIps.macAddress}}</td>
+                <td>{{machineIps.numberOfTrials}}</td>
+                <td>{{modalData.returnMachineStatus(machineIps.status)}}</td>
+
+            </tr>
+        </tbody>    
+    </table>
+
+
+</div>

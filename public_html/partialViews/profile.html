@@ -1,0 +1,51 @@
+<div class="panel panel-default" ng-controller="modalsController">
+    <div class="panel-heading" >
+        My Profile
+
+
+    </div>
+    <div class="panel-body" ng-controller="ticketsController">
+        <div class="panel panel-default col-lg-4 pull-left" >
+            <div class="panel-heading">
+                My Account Details
+
+
+            </div>
+            <div class="panel-body" ng-init="data.getUserDetails()">
+                <form novalidate="" name="globalSettings">
+                    <input class="form-control" readonly ng-model="data.userDetails.username">
+                    <input class="form-control" readonly ng-model="data.userDetails.groupId">
+                    <input class="form-control" ng-model="data.userDetails.fullnames"> 
+                    <input ng-hide="true" class="form-control" type="password" ng-model="data.userDetails.password">
+                    <small>Please log out and log in changes to take place,Default passcode : 12345</small>
+                    <button class="form-control btn btn-success"
+                            ng-click="data.saveUpdate(data.userDetails, data.id, 'TBL_USERS')"
+                            >Save</button>
+                </form>
+            </div> 
+
+
+        </div>
+        <div class="panel panel-default col-lg-7 pull-right" >
+            <div class="panel-heading" >
+                My Recent Logs
+
+
+            </div>
+            <div class="panel-body pre-scrollable" ng-init="modalData.getGlobalData('tbl_logs')">
+
+                <table class="table table-striped">
+                    <tr>
+                        <td>#</td> <td>Action</td> <td>Time and date</td> <td></td>
+                    </tr>
+                    <tr ng-repeat="logs in modalData.fetchCurrentData">
+                        <td>{{$index + 1}}</td> <td>{{logs.action}}</td> <td nowrap>{{ data.convertToHumanTime(logs.dateCreated)}}</td> <td></td>
+                    </tr>
+                </table>
+            </div> 
+
+
+        </div>
+
+
+    </div>

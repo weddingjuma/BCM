@@ -1,0 +1,87 @@
+<div class="panel panel-default" ng-controller="modalsController" ng-show="modalData.returnMenuFlag(34)">
+    <div class="panel-heading" ng-init="modalData.getAllFinancierNew('1')">
+        Financiers  <spinner></spinner>
+    </div>
+    <div class="panel-body" ng-controller="ticketsController">
+        <div class="pull-right">
+            <ul class="nav nav-tabs" >
+
+                <li class='pull-right'>
+                    <input type="search" 
+                           class="form-control" placeholder='Search Insuror' ng-model='search'/>
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-primary" ng-show="modalData.returnMenuFlag(61)"
+                            data-toggle="modal" data-controls-modal="addInsuror" ng-click="data.generateRandomTicketCode()"
+                            data-backdrop="static" data-keyboard="false" data-target="#addInsuror"
+                            >Add Financier +</button>
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-default" ng-click="modalData.getAllFinancierNew('2')">
+                        <i class="fa fa-refresh " style="color:black"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="pre-scrollable col-md-12" >
+            <table class="table table-responsive  ">
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Company Name</th>
+                        <th>Region Name</th>
+                        <th>Contact Person</th>
+                        <th>Email/Mobile</th>
+                        <th>Created On</th>
+
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr dir-paginate="pricesGroup in modalData.financiers |filter : search |itemsPerPage: pageSize" 
+                                current-page="currentPage" pagination-id="dataPagination"
+                        class="{{modalData.returnRowClass($index, pricesGroup.status, 0)}}" ng-click="modalData.makeRowActive($index)">
+
+                        <td ng-show="modalData.returnMenuFlag(62)" nowrap>
+                            <div class="dropdown">
+                                <a href="#/financier" data-toggle="dropdown">Action
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#/financier" 
+                                           ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_FINANCIER', 2)">
+                                            <i class="fa fa-remove" ></i> Delete</a></li>
+                                    <li><a href="#/financier" ng-click="modalData.editFunction(pricesGroup.id, 'TBL_FINANCIER', 3)"
+                                           data-toggle="modal" data-controls-modal="addInsuror" 
+                                           data-backdrop="static" data-keyboard="false" data-target="#addInsuror"
+                                           ><i class="fa fa-edit" ></i> Edit</a></li>
+                                    <li><a href="#/financier"
+                                           ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_FINANCIER', 0)" ng-show="pricesGroup.status == 1">
+                                            <i class="fa fa-lock" ></i> Deactivate</a></li>
+                                    <li><a href="#/financier" 
+                                           ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_FINANCIER', 1)"
+                                           ng-hide="pricesGroup.status == 1">
+                                            <i class="fa fa-check" ></i> Activate</a></li>
+
+                                </ul>
+                            </div>
+                        </td>
+                        <td>{{pricesGroup.financierName}}</td>
+                        <td>{{pricesGroup.region}}</td>
+                        <td>{{pricesGroup.contactName}}</td>
+                        <td>{{pricesGroup.email}}/{{pricesGroup.mobile}}</td>
+                        <td>{{data.convertToHumanTime(pricesGroup.dateCreated)}}</td>
+                        <td>{{modalData.getUserName(pricesGroup.createdBy)}}</td>
+                        <td ng-hide="modalData.hideCode" >{{pricesGroup.extras}}</td>
+
+                    </tr>
+                </tbody>    
+            </table>
+             <pagination></pagination>
+        </div>
+
+        <div ng-controller="modalsController">
+            <div class="modal fade" id="addInsuror" role="dialog">
+                <div ng-include="'modals/financier.html'"></div>
+            </div>
+        </div>

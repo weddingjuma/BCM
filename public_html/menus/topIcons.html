@@ -1,0 +1,52 @@
+<div class='col-lg-12  upper-menu text-center' 
+     ng-controller='modalsController'>
+    <div ng-controller="ticketsController" ng-if="modalData.returnMenuFlag(35)" 
+         ng-init='data.getUserTicketReport()'>
+        <div id='orange' class='main-pg-panels  text-center col-md-2 '>
+            <div class='row col-lg-12 col-sm-12'>
+                Total Portfolio Assets
+            </div>
+            <div class='row bigger-fonts col-lg-12 col-sm-12' >
+                {{data.portfolioData.length}}
+            </div>
+        </div>
+        <div id='green' class='main-pg-panels text-center col-md-2 '>
+            <div class='row col-lg-12 col-sm-12'>
+                Active Portfolio Assets
+            </div>
+            <div class='row bigger-fonts col-lg-12 col-sm-12' ng-init='data.totalAssets()'>
+                {{data.allAssetsactive}}
+            </div>
+        </div>
+        <div id='blue' class='main-pg-panels  text-center col-md-2 '>
+            <div class='row col-lg-12 col-sm-12'>
+                Inactive Portfolio Assets
+            </div>
+            <div class='row bigger-fonts col-lg-12 col-sm-12' >
+                {{data.allAssetsInactive}}
+            </div>
+        </div>
+        <div id='gray' class='main-pg-panels text-center col-md-2 '>
+            <div class='col-lg-12' style='background-color:#383838;'>
+
+                <div class='pull-left  tickets'>Day</div> 
+                <div class='pull-left  tickets'>Month</div> 
+                <div class='pull-left  tickets'>Year</div>
+            </div>
+            <div class='row bigger-fonts col-lg-12 col-sm-12' >
+                Loading
+            </div>
+        </div>
+        <div id='purple' class='main-pg-panels text-center col-md-2 '>
+            <div class='row col-lg-12 col-sm-12'>
+                All Open Tickets
+            </div>
+            <div class='row bigger-fonts col-lg-12 col-sm-12' >
+               {{data.totalTickets}}
+            </div>
+        </div>
+
+        <!--Your files go here or application logic--->
+
+    </div>
+</div>

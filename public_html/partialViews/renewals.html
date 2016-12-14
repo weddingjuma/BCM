@@ -1,0 +1,255 @@
+<div  class="col-md-12" >
+    <div class="clearfix col-lg-12">
+        &nbsp;
+    </div>
+    <ul class="nav nav-tabs"ng-init="actLink = 'all'">
+
+        <li class='pull-left ' ng-class="{'active' : actLink == 'all'}"  ng-show="modalData.returnMenuFlag(45)">
+            <a href="" ng-click="actLink = 'all'" >All</a>
+        </li>
+        <li class='pull-left ' ng-class="{'active' : actLink == 'expiry'}" ng-show="modalData.returnMenuFlag(47)">
+            <a href="" ng-click="actLink = 'expiry'" >Due Expiry</a>
+        </li>
+        <li class='pull-left ' ng-class="{'active' : actLink == 'expired'}">
+            <a href="" ng-click="actLink = 'expired'" >Expired</a>
+        </li>
+        <li class='pull-left ' ng-class="{'active' : actLink == 'old'}">
+            <a href="" ng-click="actLink = 'old'" >Old Certificates</a>
+        </li>
+
+        <li class='pull-right'>
+            <input type="search" ng-change = "modalData.searchDataFxn(filterCerts,'regNo','certNo','certs')"
+                   class="form-control" placeholder='Search Certficate' ng-model='filterCerts'/>
+        </li>
+
+        <li class='pull-right'>
+            <button class="btn btn-default" ng-click="modalData.getApproveCertificates(2)">
+                <i class="fa fa-refresh " style="color:black"></i>
+            </button>
+        </li>
+    </ul>
+
+    <div class="pre-scrollable" ng-if="actLink == 'all'">
+        <div class="btn btn-info col-lg-12  col-md-12 col-xs-12">All Certificates</div>
+        <table class="table table-responsive  " ng-init="modalData.getApproveCertificates(1)">
+
+            <thead>
+                <tr>
+
+                    <th>Certificate No</th>
+                    <th>Customer Name</th>
+                    <th>Vehicle</th>
+                    <th>Device</th>
+                    <th>Date Created</th>
+                    <th>Valid From</th>
+                    <th>Expiry Date</th>
+                    <th></th>
+                </tr>    
+            </thead>
+            <tbody>
+                <tr dir-paginate="certs in modalData.approveCerts|filter : {approved:1,status:1}|limitTo:30 |itemsPerPage: pageSize"
+                    class="{{modalData.returnRowClass($index)}}" ng-click="modalData.makeRowActive($index)"
+                    current-page="currentPage" pagination-id="dataPagination">
+
+
+                    <td>{{certs.certNo}}</td>
+                    <td>{{certs.name}}</td>
+                    <td>{{certs.regNo}}</td>
+                    <td>{{certs.deviceTypeName}}</td>
+                    <td>{{data.convertToHumanTime(certs.dateCreated)}}</td>
+                    <td>{{data.convertToHumanTime(certs.validBeginOn)}}</td>
+                    <td>{{data.convertToHumanTime(certs.validEndOn)}}</td>
+
+                    <td>                         
+                        <div class="btn  btn-sm btn-primary" ng-disabled="certs.generated == 0 || modalData.activateForSmsSending(certs.validEndOn)"
+                             data-toggle="modal" data-controls-modal="composeSMS" 
+                             data-backdrop="static" data-keyboard="false" data-target="#composeSMS"
+                             ng-click="modalData.smsClientExpiry(certs)">
+                            SMS Expiry
+                        </div>
+                        
+                        <div class="btn  btn-sm btn-primary" 
+                             data-toggle="modal" data-controls-modal="certApprovalRenewal" 
+                             data-backdrop="static" data-keyboard="false" data-target="#certApprovalRenewal"
+                             ng-click="modalData.certId(certs.id)">
+                            Renew
+                        </div>
+
+                    </td>
+                </tr>
+            </tbody>    
+        </table>
+
+        <pagination></pagination>
+    </div>
+    <div class="pre-scrollable" ng-if="actLink == 'expired'">
+        <div class="btn btn-danger col-lg-12 col-md-12 col-xs-12">Expired-(As per Today)</div>
+        <table class="table table-responsive  " ng-init="modalData.getApproveCertificates(1)">
+
+            <thead>
+                <tr>
+
+                    <th>Certificate No</th>
+                    <th>Customer Name</th>
+                    <th>Vehicle</th>
+                      <th>Device</th>
+                    <th>Date Created</th>
+                    <th>Valid From</th>
+                    <th>Expiry Date</th>
+                    <th></th>
+                </tr>    
+            </thead>
+            <tbody>
+                <tr dir-paginate="certs in modalData.approveCerts|filterExpiredCertsAll:200|limitTo:30 |itemsPerPage: pageSize"
+                    class="{{modalData.returnRowClass($index)}}" ng-click="modalData.makeRowActive($index)"
+                    current-page="currentPage" pagination-id="dataPagination">
+
+
+                    <td>{{certs.certNo}}</td>
+                    <td>{{certs.name}}</td>
+                    <td>{{certs.regNo}}</td> <td>{{certs.deviceTypeName}}</td>
+                    <td>{{data.convertToHumanTime(certs.dateCreated)}}</td>
+                    <td>{{data.convertToHumanTime(certs.validBeginOn)}}</td>
+                    <td>{{data.convertToHumanTime(certs.validEndOn)}}</td>
+
+                    <td>                         
+                        <div class="btn  btn-sm btn-primary" ng-disabled="certs.generated == 0 || modalData.activateForSmsSending(certs.validEndOn)"
+                             data-toggle="modal" data-controls-modal="composeSMS" 
+                             data-backdrop="static" data-keyboard="false" data-target="#composeSMS"
+                             ng-click="modalData.smsClientExpiry(certs)">
+                            SMS Expiry
+                        </div>
+                        <div
+
+                            data-toggle="modal" data-controls-modal="commentOnHold" 
+                            data-backdrop="static" data-keyboard="false" data-target="#commentOnHold"
+                            class="btn btn-sm btn-success" ng-show="certs.paidFor == 1 && certs.approved == 0 || certs.approved == 2" 
+                            ng-click="modalData.certificateUpdates(certs, 1)">
+                            Re-Approve
+                        </div>
+                        <div class="btn  btn-sm btn-primary" 
+                             data-toggle="modal" data-controls-modal="certApprovalRenewal" 
+                             data-backdrop="static" data-keyboard="false" data-target="#certApprovalRenewal"
+                             ng-click="modalData.certId(certs.id)">
+                            Renew
+                        </div>
+
+                    </td>
+                </tr>
+            </tbody>    
+        </table>
+
+        <pagination></pagination>
+    </div>
+    <div class="pre-scrollable" ng-if="actLink == 'expiry'">
+        <div class="btn btn-warning col-lg-12  col-md-12 col-xs-12" >Due Expiry (60 Days)</div>
+        <table class="table table-responsive  " ng-init="modalData.getApproveCertificates(1)">
+
+            <thead>
+                <tr>
+
+                    <th>Certificate No</th>
+                    <th>Customer Name</th>
+                    <th>Vehicle</th>
+                    <th>Device</th>
+                    <th>Date Created</th>
+                    <th>Valid From</th>
+                    <th>Expiry Date</th>
+                    <th></th>
+                </tr>    
+            </thead>
+            <tbody>
+                <tr dir-paginate="certs in modalData.approveCerts|filterExpiredCerts:60|limitTo:30| itemsPerPage: pageSize"
+                    class="{{modalData.returnRowClass($index)}}" ng-click="modalData.makeRowActive($index)"
+                    current-page="currentPage" pagination-id="dataPagination">
+
+
+                    <td>{{certs.certNo}}</td>
+                    <td>{{certs.name}}</td>
+                    <td>{{certs.regNo}}</td> <td>{{certs.deviceTypeName}}</td>
+                    <td>{{data.convertToHumanTime(certs.dateCreated)}}</td>
+                    <td>{{data.convertToHumanTime(certs.validBeginOn)}}</td>
+                    <td>{{data.convertToHumanTime(certs.validEndOn)}}</td>
+
+                    <td>                         
+                        <div class="btn  btn-sm btn-primary" ng-disabled=" modalData.activateForSmsSending(certs.validEndOn)"
+                             data-toggle="modal" data-controls-modal="composeSMS" 
+                             data-backdrop="static" data-keyboard="false" data-target="#composeSMS"
+                             ng-click="modalData.smsClientExpiry(certs)">
+                            SMS Expiry
+                        </div>
+                        <div
+
+                            data-toggle="modal" data-controls-modal="commentOnHold" 
+                            data-backdrop="static" data-keyboard="false" data-target="#commentOnHold"
+                            class="btn btn-sm btn-success" ng-show="certs.paidFor == 1 && certs.approved == 0 || certs.approved == 2" 
+                            ng-click="modalData.certificateUpdates(certs, 1)">
+                            Re-Approve
+                        </div>
+                        <div class="btn  btn-sm btn-primary" 
+                             data-toggle="modal" data-controls-modal="certApprovalRenewal" 
+                             data-backdrop="static" data-keyboard="false" data-target="#certApprovalRenewal"
+                             ng-click="modalData.certId(certs.id)">
+                            Renew
+                        </div>
+
+                    </td>
+                </tr>
+            </tbody>    
+        </table>
+
+        <pagination></pagination>
+    </div>
+    <div class="pre-scrollable" ng-if="actLink == 'old'">
+        <div class="btn btn-danger col-lg-12 col-md-12">Old Archived Certificates</div>
+        <table class="table table-responsive  " ng-init="modalData.getApproveCertificates(1)">
+
+            <thead>
+                <tr>
+
+                    <th>Certificate No</th>
+                    <th>Customer Name</th>
+                    <th>Vehicle</th>
+                      <th>Device</th>
+                    <th>Date Created</th>
+                    <th>Valid From</th>
+                    <th>Expiry Date</th>
+                    <th></th>
+                </tr>    
+            </thead>
+            <tbody>
+                <tr dir-paginate="certs in modalData.approveCerts|filter : {status:0}|limitTo:30| orderBy :data.sortByColumn| itemsPerPage: pageSize"
+                    class="{{modalData.returnRowClass($index)}}" ng-click="modalData.makeRowActive($index)"
+                    current-page="currentPage" pagination-id="dataPagination">
+
+
+                    <td>{{certs.certNo}}</td>
+                    <td>{{certs.name}}</td>
+                    <td>{{certs.regNo}}</td>
+                     <td>{{certs.deviceTypeName}}</td>
+                    <td>{{data.convertToHumanTime(certs.dateCreated)}}</td>
+                    <td>{{data.convertToHumanTime(certs.validBeginOn)}}</td>
+                    <td>{{data.convertToHumanTime(certs.validEndOn)}}</td>
+
+                    <td>                         
+                        {{data.returnStatusWords(certs.status)}} 
+
+                    </td>
+                </tr>
+            </tbody>    
+        </table>
+
+        <pagination></pagination>
+    </div>
+</div>
+<div ng-controller="modalsController">
+    <div class="modal fade" id="composeSMS" role="dialog">
+        <div ng-include="'modals/composeSMS.html'"></div>
+    </div>
+</div>
+
+<div ng-controller="modalsController"  class="modal fade" id="certApprovalRenewal" role="dialog">
+    <div >
+        <div ng-include="'modals/certApprovalRenewal.html'"></div>
+    </div>
+</div>

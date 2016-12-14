@@ -1,0 +1,37 @@
+<div class="panel panel-green" ng-controller="TypeaheadCtrl">
+    <div  class="panel panel-heading">
+        Governor Certificates
+    </div>
+    <div class="panel panel-body">
+        <div class="" >
+            <ul class="nav nav-tabs" ng-init="activeLink = 'newCerts'">
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'oldCerts'}">
+                    <a href="" ng-click="activeLink = 'oldCerts'" >Old Certs/Expiry</a>
+                </li>
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'newCerts'}"  ng-show="modalData.returnMenuFlag(45)">
+                    <a href="" ng-click="activeLink = 'newCerts'" >New Certificates</a>
+                </li>
+
+                <li ng-hide="true" class='pull-left ' ng-class="{'active' : activeLink == 'vCerts'}"  ng-show="false">
+                    <a href="" ng-click="activeLink = 'vCerts'" >View Generated</a>
+                </li>
+            </ul>
+        </div>
+        <div ng-show="activeLink == 'oldCerts'">
+            <div ng-include="'partialViews/searchOldCerts.html'">
+
+            </div>
+        </div>
+        <div ng-show="activeLink == 'newCerts'">
+            <div ng-include="'partialViews/cNewGovernorCert.html'">
+
+            </div>
+        </div>
+        <div ng-show="activeLink == 'vCerts'">
+            <div ng-include="'partialViews/vCerts.html'">
+
+            </div>
+        </div>
+
+    </div>
+</div>

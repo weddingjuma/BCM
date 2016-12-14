@@ -1,0 +1,90 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Add Insurance Firm</h4>
+        </div>
+        <div class="modal-body">
+            <div class="text-center">
+                <div class="col-lg-8 col-md-8 col-lg-8 col-lg-offset-2 col-md-offset-2">
+
+                    <form novalidate="" name="globalSettings">
+
+                        <div ng-show='data.globalSettings.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.globalSettings.responseMessage}}</div>   
+
+                        <div class="form-group" style="padding:10px;"  ng-class="{ 'has-error' : globalSettings.code.$invalid && !globalSettings.code.$pristine }">
+                            <label for="code" class="control-label col-md-4 col-lg-4">Code</label>
+                            <div class="col-md-8 col-lg-8 ">
+                                <input type="text" readonly class="form-control" placeholder="{{data.modalHeader|lowercase}} code" name='code'
+
+                                       required  ng-model='data.globalSettings.code'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : globalSettings.insuranceName.$invalid && !globalSettings.insuranceName.$pristine }">
+                            <label for="name" class="control-label col-md-4 col-lg-4">Name</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="text" class="form-control" ng-click="modalData.getRandomCode()" 
+                                       capitalize placeholder="insurance Name" name='insuranceName' required ng-model='data.globalSettings.insuranceName'/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : globalSettings.region.$invalid && !globalSettings.region.$pristine }">
+                            <label for="region" class="control-label col-md-4 col-lg-4">Region</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="text" class="form-control" placeholder="region Name" name='region' required ng-model='data.globalSettings.region'/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : globalSettings.contactName.$invalid && !globalSettings.contactName.$pristine }">
+                            <label for="contactName" class="control-label col-md-4 col-lg-4"> person</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="text" class="form-control" placeholder="Contact Name" name='contactName' 
+                                       capitalize required ng-model='data.globalSettings.contactName'/>
+                            </div>
+                        </div>
+                          <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : globalSettings.email.$invalid && !globalSettings.email.$pristine }">
+                            <label for="email" class="control-label col-md-4 col-lg-4"> Email</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="email" class="form-control" placeholder="Contact Name" name='email' 
+                                        required ng-model='data.globalSettings.email'/>
+                            </div>
+                        </div>
+                        
+                          <div class="form-group" style="padding:10px;" ng-class="{ 'has-error' : globalSettings.mobile.$invalid && !globalSettings.mobile.$pristine }">
+                            <label for="mobile" class="control-label col-md-4 col-lg-4"> Mobile</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="number" class="form-control" placeholder="Contact Mobile" name='mobile' 
+                                        required ng-model='data.globalSettings.mobile'/>
+                            </div>
+                        </div>
+                        
+                       
+
+                        <div class="form-group" ng-hide="modalData.hideCode" style="padding:10px;" ng-class="{ 'has-error' : globalSettings.extras.$invalid && !globalSettings.extras.$pristine }">
+                            <label for="extras" class="control-label col-md-4 col-lg-4">Extras</label>
+                            <div class="col-md-8 col-lg-8">
+                                <input type="text" class="form-control" placeholder="extras" name='extras' ng-model='data.globalSettings.extras'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-12 " style="padding:10px;">
+                            <label for="extras" class="control-label col-md-4 col-lg-4"></label>
+                            <div class="col-md-8 col-lg-8">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.globalSettingsSave(data.globalSettings, 'TBL_INSURANCES')" ng-disabled="globalSettings.$invalid || data.globalSettings.signinDisabled"
+                                        >save {{data.modalHeader|lowercase}}</button>
+                            </div>
+                        </div>    
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

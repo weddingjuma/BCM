@@ -1,0 +1,25 @@
+<div class='login '>
+    
+    <form novalidate="" name="loginData">
+      
+        <div ng-show='data.loginData.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>{{data.loginData.responseMessage}}</div>   
+   
+        <div class="input-group col-xs-12" style="padding:10px;"  ng-class="{ 'has-error' : loginData.username.$invalid && !loginData.username.$pristine }">
+        <span class="input-group-addon"><i class='fa fa-user'></i></span>
+        <input type="text" class="form-control" placeholder="Username" name='username'
+              
+               required  ng-model='data.loginData.username'/>
+    </div>
+
+    <div class="input-group col-xs-12" style="padding:10px;" ng-class="{ 'has-error' : loginData.password.$invalid && !loginData.password.$pristine }">
+        <span class="input-group-addon"><i class='fa fa-lock'></i></span>
+        <input type="password" class="form-control" placeholder="Password" name='password' required ng-model='data.loginData.password'/>
+    </div>
+
+    <div class="input-group col-xs-12 " style="padding:10px;">
+        <button class=" btn btn-primary col-xs-12 " style='width:100%'
+                ng-click='data.login(data.loginData)' ng-disabled="loginData.$invalid || data.loginData.signinDisabled"
+                >{{data.loginData.signName}}</button>
+    </div>    
+    </form>
+</div>

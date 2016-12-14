@@ -1,0 +1,72 @@
+<div class="panel panel-default">
+    <div class="panel panel-heading">
+        Ticket Reports <button ng-click="modalData.exportToExcel('Ticket By Date and User', 'ticketByDate')" class="pull-right btn btn-success btn-sm">Excel</button>
+    </div>
+    <div class="panel panel-body" id="ticketByDate">
+        <div class="col-xs-12 btn-default" style="margin:2px !important" ng-controller="datePickerMax">
+            <div class="col-xs-3" >
+                <input type="text" class="form-control" id="daterange" readonly=""  placeholder="Date Range" name="daterange"  >  
+            </div>
+            <div class="col-xs-3" >
+
+                <select type="text" class="form-control" name='customerSearch'  ng-init="data.assignedTo='00'"
+                        required ng-model='data.assignedTo'>
+                    <option value="00">All</option>
+                    <option ng-repeat="user in modalData.fetchCurrentData|filter : {canBeAssignedTicket : 1}"  value = "{{user.id}}"> {{user.fullnames}} </option>
+                </select>
+
+            </div>
+            <div class="col-xs-3" ng-init="data.issue=''" ng-click="data.getReasons('TBL_REASONS')">
+                <select  class="form-control"    name='issue' required ng-model='data.issue' >
+                    <option selected value="00">All</option>
+                    <option value="SMS TICKET">SMS TICKET</option>
+                    <option ng-repeat="reasons in data.reasons">{{reasons.reason}}</option>
+                </select>
+            </div>
+            <div class="col-xs-1" >
+                <input type="button" value="search" ng-click="data.getTicketReport(data.issue, data.assignedTo)" class="btn btn-primary">   
+            </div>
+            <div class="btn btn-warning pull-right" >
+                {{data.ticketReports.length}} Tickets
+            </div>
+        </div>
+         <table ng-hide="true" ><tr style="background-color: grey;"><td></td><td></td><td> <h3>Ticket By Date and User</h3></td><td></td><td></td><td></td>
+                        <td></td><td></td><td></td><td></td><td></td></tr></table>
+        <table class="table table-responsive ">
+
+            <thead>
+                <tr><th></th>
+                    <th>#</th>
+                    <th>Issue</th>
+                    <th>Customer Name</th>
+                    <th>Desc</th>
+                    <th>Reg No</th>
+                    <th>Date Created</th>
+                    <th>Status</th>
+                    <th>Assigned To</th>
+                </tr>    
+            </thead>
+            <tbody>
+                <tr dir-paginate="tickets in data.ticketReports| filter :search | itemsPerPage: 25" 
+                    current-page="currentPage" pagination-id="dataPagination"
+                    >
+                    <td>{{$index+1}}</td>
+                    <td>{{tickets.id}}</td>
+                    <td>{{tickets.issue}}</td>
+                    <td>{{tickets.name}}</td>
+                    <td>{{tickets.desc}}</td>
+                    <td>{{tickets.regNo}}</td>
+                    <td>{{data.convertToHumanTime(tickets.dateCreated)}}</td>
+
+                    <td>{{data.returnTicketStatus(tickets.closedFlag)}}</td>
+                    <td>{{tickets.assignedTo}}</td>
+
+                </tr>
+            </tbody>    
+        </table>
+
+        <pagination></pagination>
+
+    </div>
+
+</div>

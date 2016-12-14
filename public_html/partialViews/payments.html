@@ -1,0 +1,266 @@
+<div class="" ng-controller="modalsController" ng-cloak ng-show="modalData.returnMenuFlag(17)">
+    <div class="" ng-controller="ticketsController" ng-init="data.getAllTickets()">
+        <div  >
+            <ul class="nav nav-tabs">
+                <!--
+                <li class="{{modalData.returnActiveLink('account')}}"  ng-show="modalData.returnMenuFlag(69)">
+                    <a href="#/accounts"  target="_self" ng-click="modalData.makeLinkActive('account')">New Payment</a>
+                </li>
+                -->
+                <li   class="{{modalData.returnActiveLink('vehicles')}}" ng-show="modalData.returnMenuFlag(43)">
+                    <a target="_self" href="#/accounts"  ng-click="modalData.makeLinkActive('vehicles')">Reports
+                    </a>
+
+                </li>
+                <li  class="{{modalData.returnActiveLink('payments')}}">
+                    <a href="#/accounts"  target="_self" ng-click="modalData.makeLinkActive('payments')">Balances</a></li>
+
+
+                <li class='pull-right'>
+                    <input type="search" ng-model="search"
+                           class="form-control" placeholder='Search Payments' ng-model='search'/>
+                </li>
+                <li class='pull-right' ng-show="modalData.returnMenuFlag(3)">
+                    <button class="btn btn-primary"
+                            data-toggle="modal" data-controls-modal="prices" ng-click="data.generateRandomTicketCode()"
+                            data-backdrop="static" data-keyboard="false" data-target="#prices"
+                            >Add Payment Modes +
+                    </button>
+                </li>
+                <li class='pull-right'>
+                    <button class="btn btn-default" ng-click="data.getAllPayments('tbl_payments')"><i class="fa fa-refresh " style="color:black"></i></button>
+                </li>
+            </ul>
+        </div>
+        <div class="panel panel-default" ng-controller="ticketsController">
+        
+         <!--   <div class="panel-heading">
+                New Payment
+
+
+            </div>
+         -->
+            <div class="panel-body">
+             <!--   <div ng-show="modalData.activeLink == 'account'"  style="overflow: auto;max-height: 550px" >
+                    <div class="pull-right col-md-12" style="overflow: auto;min-height: 600px" ng-show="modalData.returnMenuFlag(69)" ng-controller='ticketsController'>
+                        <div class="col-lg-8 col-md-8 col-lg-offset-1 col-md-offset-1" >
+
+                            <div class="pull-right col-lg-12">New Payment  | Customer  : {{modalData.customerDetails.name}} <hr></div>
+
+                            <form novalidate="" name="payments" class="form-horizontal">
+
+                                <div ng-show='data.payments.responseStatus' ng-class="{
+                            'has-error' : true }" class='text-center alert btn-sm  alert-danger'>
+                                    {{data.payments.responseMessage}}</div>   
+
+                                <div class="form-group" style="padding:0px;"  ng-class="{        'has-error' : payments.code.$invalid && !payments.code.$pristine }">
+                                    <label for="code" class="control-label col-xs-3">Code</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="vehicle code" name='code'
+                                               readonly="" capitalize
+                                               ng-model='data.payments.code'/>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="padding:0px;"  ng-class="{        'has-error' : 
+                                        payments.idNo.$invalid && !payments.idNo.$pristine || data.custError}">
+                                    <label for="idNo" class="control-label col-xs-3">Customer Id </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="customer id number" name='idNo'
+                                               capitalize  ng-click="data.genPaymentCode()"
+                                               required  ng-model='data.payments.idNo'/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="padding:0px;"  ng-class="{        'has-error' : payments.receiptNo.$invalid && !payments.receiptNo.$pristine }">
+                                    <label for="code" class="control-label col-xs-3">Receipt/Txn No.</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="Receipt /transaction" name='receiptNo'
+                                               capitalize  
+                                               ng-click="modalData.searchCustomer(data.payments.idNo)" required  ng-model='data.payments.receiptNo'/>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error' : payments.vehicleId.$invalid && !payments.vehicleId.$pristine }">
+                                    <label for="vehicleId" class="control-label col-xs-3">Vehicle</label>
+
+                                    <div class="col-md-9">
+                                        <select type="text" class="form-control" name='vehicleId' capitalize required ng-model='data.payments.vehicleId'>
+                                            <option ng-repeat="vehicle in modalData.vehicleDetails"
+                                                    value="{{vehicle.id}}">{{vehicle.regNo}}</option>
+                                        </select>
+                                    </div>
+
+
+
+                                </div>
+
+
+                                <div class="form-group" style="padding:0px;" ng-controller="datePicker"
+                                     ng-class="{ 'has-error' : payments.bankName.$invalid && !payments.date.$pristine }">
+                                    <label for="date" class="control-label col-xs-3">Date </label>
+
+
+                                    <div class="col-md-9">
+                                        <input type="text" id="date" class="form-control" placeholder="date"
+                                               name="date"   required ng-model='data.payments.date'/>
+
+                                    </div>
+                                </div>
+                                <div class="form-group" style="padding:0px;" ng-class="{   'has-error' : payments.amountPaid.$invalid && !payments.amountPaid.$pristine }">
+                                    <label for="amountPaid" class="control-label col-xs-3">Amount received</label>
+                                    <div class="col-md-9">
+                                        <input type="number" class="form-control"
+                                               ng-keyup='modalData.calculateBalance(data.payments.priceGroupId)'
+                                               ng-click="modalData.priceGroups('TBL_PRICE_GROUPS')"
+                                               placeholder="amount received" name='amountPaid'  required ng-model='data.payments.amountPaid'/>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="padding:0px;" ng-class="{   
+                            'has-error' : payments.actualCommission.$invalid && !payments.actualCommission.$pristine || data.payments.actualCommission > data.payments.amountPaid
+                        }">
+                                    <label for="actualCommission" class="control-label col-xs-3">Commission</label>
+                                    <div class="col-md-9">
+                                        <input type="number" class="form-control" 
+                                               placeholder="amount received" name='amountPaid'  required ng-model='data.payments.actualCommission'/>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error' : payments.mode.$invalid && !payments.mode.$pristine }">
+                                    <label for="priceGroup" class="control-label col-xs-3">Group</label>
+                                    <div class="col-md-9">
+                                        <select type="text" ng-click="modalData.getGlobalData('TBL_PAYMENT_MODES')"
+                                                class="form-control" placeholder="" name='priceGroup' ng-change="modalData.calculateBalance(data.payments.priceGroupId)" 
+                                                capitalize required ng-model='data.payments.priceGroupId'>
+                                            <option value="{{payment.id}}" ng-repeat="payment in modalData.separateData"> {{payment.priceGroupName}} </option>
+
+                                        </select>
+                                    </div>
+
+
+                                    <input type="number" ng-hide="true"
+                                           class="form-control" placeholder="period paid for" name='period'  
+                                           ng-model='data.payments.period'>
+
+                                </div>
+                                <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error' : payments.dealerId.$invalid &&  !payments.dealerId.$pristine }" ng-init="data.getReasons ('TBL_DEAlERSHIP')">
+                                    <label for="dealerId" class="control-label col-xs-3">Dealership</label>
+                                    <div class="col-md-9">
+                                        <select type="text" 
+
+                                                class="form-control" placeholder="" name='dealerId'  
+                                                capitalize required ng-model='data.payments.dealerId'>
+                                            <option selected disabled > --SELECT DEALER-- </option>
+                                            <option value="{{dealers.id}}" ng-repeat="dealers in data.reasons"> {{dealers.dealerName}} </option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="padding:0px;" ng-class="{'has-error': payments.mode.$invalid && !payments.mode.$pristine }">
+                                    <label for="mode" class="control-label col-xs-3">mode</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" type="text"  placeholder="mode" name='mode' required ng-model='data.payments.modeId'/>
+                                        <option value="{{mode.id}}" ng-repeat="mode in modalData.fetchCurrentData">{{mode.modeName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="form-group" style="padding:0px;">
+                                    <label for="balance" class="control-label col-xs-3">Balance</label>
+                                    <div class="col-md-9">
+
+                                        <input type="text" readonly="" class="form-control" placeholder="balance calculated on a year basis" name='balance' 
+                                               capitalize  ng-model='data.payments.balance'/>
+
+                                    </div>
+                                </div>
+                                <div class="form-group" style="padding:0px;" >
+                                    <label for="extras" class="control-label col-xs-3">Other</label>
+                                    <div class="col-md-9">
+
+
+                                        <input type="text" class="form-control" placeholder="Other particulars"
+                                               name='extras' capitalize  ng-model='data.payments.extras'/>
+
+
+                                    </div>
+                                </div>
+                                <input type="text" hidden  ng-model="data.payments.custId">
+
+                                <div class="form-group" style="padding:0px;">
+                                    <label for="extras" class="control-label col-md-3"></label>
+                                    <div class="col-md-9">
+
+                                        <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+
+                                                ng-click="modalData.globalSettingsSave(data.payments, 'TBL_PAYMENTS')"  
+                                                >Save</button>
+
+                                    </div> 
+                                </div>    
+                            </form>
+                        </div>
+
+
+
+
+                    </div>
+                </div>-->
+                <div ng-show="modalData.activeLink == 'vehicles'" ng-init="data.getAllPayments('tbl_payments')" style="overflow: auto;max-height: 550px">
+                    <div class="pull-right col-md-12 ">
+
+                        <div class="pull-right col-md-12" style="max-height: 250px;overflow:auto;">
+                            <table class="table ">
+                                <tr>
+                                    <td>Number #</td>
+                                    <td>Customer Name</td>
+                                    <td>Plate No</td>
+                                    <td>Amount Paid</td>
+                                   
+                                    <td>Date Paid</td>
+                                    <td>Paid To</td>
+                                    <td>status</td>
+                                </tr>
+                                <tr dir-paginate="payments in data.allPaymentsData| filter :search| itemsPerPage: pageSize" 
+                                    current-page="currentPage" pagination-id="dataPagination" 
+                                    class="{{modalData.returnRowClass($index,payments.status,0)}}" ng-click="modalData.makeRowActive($index)">
+                                    <td>{{payments.id}}</td>
+                                    <td>{{payments.customerName}}</td>
+                                    <td>{{payments.regNo}}</td>
+                                    <td>{{payments.amount}}</td>
+                                    <td>{{data.convertToHumanTime(payments.dateCreated)}}</td>
+                                    <td>{{payments.receivedBy}}</td>
+                                    <td>{{modalData.returnStatus(payments.status)}} </td>
+
+                                    <td  ng-show="modalData.returnMenuFlag(71)"><a href="#/accounts" target="_self" ng-click="data.getPaymentsInfo(payments.id)">More</a></td>
+
+                                </tr>
+                            </table>
+                            <pagination></pagination>
+
+                        </div> 
+
+                        <div ng-show='data.currentPaymentsInfo.status' >
+                            <div ng-show="modalData.returnMenuFlag(71)" ng-include="'partialViews/paymentsReceipt.html'">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="prices" role="dialog">
+            <div ng-include="'modals/prices.html'"></div>
+        </div>
+    </div>
+</div>
+

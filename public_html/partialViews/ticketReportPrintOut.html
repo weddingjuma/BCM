@@ -1,0 +1,122 @@
+<div class="pull-right col-md-12">
+
+    <div class="panel {{data.returnTicketColor(data.currentTicketInfo.ticketStatus)}}">
+        <div class="panel-heading" >
+
+            <h4><small>Ticket No # {{data.currentTicketInfo.id}} : {{data.currentTicketInfo.reason}}</small> 
+
+
+            </h4>
+        </div>
+        <div class="panel-body"  id="exportTable" ng-show="data.currentTicketInfo.id > 0">
+            <table class="table table-striped table-bordered"  >
+                <tr>
+                    <td><b>Customer Name</b> </td><td><b>On Vehicle</b></td><td></td><td></td>
+
+                </tr>
+                <tr>
+                    <td>{{data.currentTicketInfo.customerName}}</td><td>{{data.currentTicketInfo.vehicle}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td><b>Reason</b></td><td><b>Description</b></td><td><b>Type</b></td><td></td>
+
+                </tr>
+                <tr>
+                    <td>
+                        {{data.currentTicketInfo.reason}}<br>
+                        {{data.currentTicketInfo.extras}}
+                    </td>
+                    <td>{{data.currentTicketInfo.extras}}</td><td>{{data.currentTicketInfo.type}}</td><td></td>
+
+                </tr>
+                <tr>
+                    <td><b>Comment</b></td>
+                    <td><b>Status</b></td>
+                    <td><b>Time Open</b></td><td></td>
+                </tr>
+                <tr>
+                    <td>{{data.currentTicketInfo.comment}}</td>
+                    <td>{{data.returnTicketStatus(data.currentTicketInfo.ticketStatus)}}</td>
+                    <td>{{data.currentTicketInfo.timeOpen}} Hrs</td><td></td>
+                </tr>
+                <tr>
+                    <td nowrap><b>Location</b> </td>
+                    <td><b>Devices</b>
+
+                    </td>                                      
+                    <td><b>Escalation Status</b></td> <td><b>Priority</b></td>
+                </tr>
+                <tr>
+                    <td nowrap>
+
+                        {{data.currentTicketInfo.location}} 
+
+                    </td>
+                    <td>
+                        <ul  class='list-group'>
+                            <li class="list-group-item">
+                                {{data.currentTicketInfo.device}}
+
+                            </li>
+                              <li class="list-group-item">
+                                {{data.currentTicketInfo.device1}}
+
+                            </li>
+
+                        </ul>
+                    </td>
+                    <td>{{data.escalationStatus(data.currentTicketInfo.EscalatedStatus)}}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>Date Created</b></td>
+                    <td><b>Date Due</b></td>
+                    <td><b>Date Closed</b></td>
+                    <td><b>Escalated</b></td>
+                </tr>
+                <tr>
+                    <td>{{data.convertToHumanTime(data.currentTicketInfo.dateCreated)}}</td>
+                    <td>{{data.currentTicketInfo.dateDue}}
+
+                    </td>
+                    <td>{{data.convertToHumanTime(data.currentTicketInfo.dateClosed)}}</td>
+                    <td>{{data.convertToHumanTime(data.currentTicketInfo.dateEscalated)}}</td>
+                </tr>
+                <tr>
+                    <td><b>Creator</b></td>
+                    <td ng-click=modalData.getGlobalData('TBL_USERS')><b>Assignee</b></td>
+                    <td><b>Assigned By</b></td>
+                    <td><b>Escalated To</b></td>
+                </tr>
+                <tr>
+                    <td>{{data.currentTicketInfo.createdBy}}</td>
+                    <td>{{data.currentTicketInfo.assignee}}
+                    </td>
+                    <td>{{data.currentTicketInfo.assignedBy}}</td>
+                    <td>{{data.currentTicketInfo.escalatedTo}}</td>
+                </tr>
+                <tr>
+                    <td><b>Extra Info</b></td><td><b>Route</b></td><td>
+                        <b>Total Fare</b></td><td></td>
+                </tr>
+                <tr>
+                    <td>Merged With  #{{data.currentTicketInfo.mergeId}}</td>
+                    <td>{{data.currentTicketInfo.route}}</td>
+                    <td>{{data.currentTicketInfo.totalFare}}</td>
+                    <td></td>
+                </tr>
+
+
+            </table>
+        </div>
+
+
+
+    </div>
+
+
+

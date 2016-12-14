@@ -1,0 +1,209 @@
+<div ng-controller='modalsController'> 
+    <div class="well col-xs-6 pull-left">
+        <div ng-controller="ticketsController" ng-init="data.getTodolist()" ng-show="modalData.returnMenuFlag(37)">
+            <div class="">
+                <ul class="nav nav-tabs">
+                    <li class='pull-left active'>
+                        <a href="#/"  >To-Do</a>
+                    </li>
+
+                    <li class='pull-right'>
+                        <input type="text"  class="darkTable input-group" style="color: #999999 !important;border: #999999 !important;" placeholder='Search To Do ' ng-model='search'/>
+                    </li>
+                    <li class="pull-right">
+                        <button  ng-click="data.returnFilter('0')">All To-Do</button>
+                        <button  ng-click="data.returnFilter('1')">My To-Do</button>
+                        <button  ng-click="data.getTodolist()">
+                            <i class="fa fa-refresh " style="color:black"></i></button>
+
+
+                    </li>
+                </ul>
+
+            </div>
+
+
+            <div class="pre-scrollable">
+
+                <div style="overflow-x: auto;overflow-y: auto;max-width:100% ">
+
+                    <table class='table' ng-init="modalData.getAllUsers('TBL_USERS')">
+                        <tr>
+                            <td></td>
+                            <th ng-click="data.sortByColumnFxn('todo')">To-Do</th>
+                            <th ng-click="data.sortByColumnFxn('status')">Status</th>
+                            <th ng-click="data.sortByColumnFxn('owner')">Assigned To</th>
+                            <th ng-click="data.sortByColumnFxn('createdBy')">Creator</th>
+
+
+                            <th class="pull-right"><button  data-toggle="modal" data-controls-modal="addToDo" 
+                                                            data-backdrop="static" data-keyboard="false" data-target="#addToDo">
+                                    <i class="fa fa-plus " style="color:black"></i>Add ToDO</button>
+
+
+                            </th>
+
+                        </tr>
+                        <tr ng-repeat="toDolist in data.todoListdata|filter:search| filter :{owner: data.filterTicket} | orderBy :data.sortByColumn" 
+                            class="{{modalData.returnRowClasstodo(toDolist.id, toDolist.status)}}" ng-click="modalData.makeRowActive(toDolist.id)"
+                            >
+                            <td>{{$index + 1}}</td>
+                            <td class='' nowrap >{{toDolist.todo}} </td>
+                            <td class='' nowrap>{{data.returnToDoStatus(toDolist.status)}}</td>
+                            <td class='' nowrap >{{toDolist.owner}} </td>
+                            <td class='' nowrap >{{toDolist.createdBy}} </td>
+                            <td class='' nowrap >{{toDolist.feedback}} </td>
+                            <td>
+                                <div class="pull-right dropdown">
+                                   
+                                    <a href="#/todo"  target="_self" ng-hide="toDolist.status == 0"
+                                       data-toggle="modal" data-controls-modal="closeTodo" 
+                                       data-backdrop="static" data-keyboard="false" data-target="#closeTodo"
+                                       ng-click="data.updateToId(toDolist.id)">
+                                        <i class="fa fa-check"></i>
+                                    </a>   
+
+
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+                <!--   <pagination></pagination>-->
+            </div>
+        </div>
+    </div>
+    <div class="well col-xs-6 pull-right">
+        <div class="panel">
+            <div class="panel panel-default" ng-controller="modalsController" >
+                <div class="panel-heading" ng-init="modalData.getApproveCertificates()">
+                    <div>  SMS | {{data.showDiv}}
+                        <div class="pull-right">
+                            <button  data-toggle="modal" data-controls-modal="composeSMS" ng-show="modalData.returnMenuFlag(1100)"
+                                     data-backdrop="static" data-keyboard="false" data-target="#composeSMS">Create SMS</button>
+                            <button  data-toggle="modal" data-controls-modal="addNumberToContacts" 
+                                     data-backdrop="static" data-keyboard="false" data-target="#addNumberToContacts">Add Contact</button>
+                        </div>
+                        <div class="pull-right">
+                            <input type="text" ng-model="search" class="darkTable input-group" style="color: #999999 !important;border: #999999 !important;"  placeholder='Search SMS ' ng-model='search'/>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" >
+                    <div class="col-xs-3  pull-left well">
+                        <a href="#/" ng-click="data.showDiv = 'inbox'">Inbox ({{data.inboxSMS.length}})</a><br>
+                        <a href="#/" ng-init="data.getSentSMS()" ng-click="data.showDiv = 'sent'">Sent ({{data.sentSMS.length}})</a><br>
+                        <!-- <a href="#/" ng-click="data.showDiv = 'draft'">Draft</a><br>-->
+                        <a href="#/" ng-click="data.showDiv = 'outbox'">Outbox({{modalData.fetchCurrentData.length}})</a>
+                    </div>
+                    <div class="col-xs-9  pull-right pre-scrollable" ng-show="data.showDiv == 'inbox'">
+                        <table class="table" ng-init="data.getInboxSMS()">
+                            <thead>
+                                <tr><th>Sender</th><th>Message</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="inboxSMS in data.inboxSMS|filter :  search  |itemsPerPage: pageSize" 
+                                    class="{{modalData.returnRowClass(inboxSMS.Id, inboxSMS.status)}}" ng-click="modalData.makeRowActive(inboxSMS.Id)"
+                                    current-page="currentPage" pagination-id="dataPagination">
+                                    <td><a href="#/" data-toggle="modal" data-controls-modal="composeSMS" 
+                                           data-backdrop="static" data-keyboard="false" data-target="#composeSMS"
+                                           ng-click="data.setReplynumber(inboxSMS.MessageFrom)"
+                                           >{{inboxSMS.MessageFrom}}</a></td><td>{{inboxSMS.MessageText}} @ {{inboxSMS.SendTime}}</td><td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <pagination></pagination>
+                    </div>
+                    <div class="col-xs-9  pull-right pre-scrollable" ng-show="data.showDiv == 'sent'">
+                        <table class="table" ng-init="data.getInboxSMS()">
+                            <thead>
+                                <tr><th>Receiver</th><th>Message</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="sentSMS in data.sentSMS|filter :  search| itemsPerPage: pageSize" 
+                                    class="{{modalData.returnRowClass(sentSMS.Id, sentSMS.status)}}" ng-click="modalData.makeRowActive(sentSMS.Id)"
+                                    current-page="currentPage" pagination-id="dataPagination">
+                                    <td><a href="#/" data-toggle="modal" data-controls-modal="composeSMS" 
+                                           data-backdrop="static" data-keyboard="false" data-target="#composeSMS"
+                                           ng-click="data.setReplynumber(sentSMS.MessageTo)">{{sentSMS.MessageTo}}</a></td><td>{{sentSMS.MessageText}} @ {{sentSMS.SendTime}}</td><td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <pagination ></pagination>
+                    </div>
+                    <div class="col-xs-9  pull-right pre-scrollable" ng-if="data.showDiv == 'outbox'">
+                        <table class="table"  ng-init="modalData.getGlobalData('MessageOut')">
+                            <thead>
+                                <tr><th>Receiver</th><th>Message</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="sentSMS in modalData.fetchCurrentData|filter :  search| itemsPerPage: pageSize" 
+                                    class="{{modalData.returnRowClass(sentSMS.Id, sentSMS.status)}}" ng-click="modalData.makeRowActive(sentSMS.Id)"
+                                    current-page="currentPage" pagination-id="dataPagination">
+                                    <td><a href="#/" data-toggle="modal" data-controls-modal="composeSMS" 
+                                           data-backdrop="static" data-keyboard="false" data-target="#composeSMS"
+                                           ng-click="data.setReplynumber(sentSMS.MessageTo)">{{sentSMS.MessageTo}}</a></td><td>{{sentSMS.MessageText}}
+                                        @ {{sentSMS.SendTime}}</td><td>pending</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <pagination ></pagination>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right" ng-init="data.balance.ussdCode ='*144#'">
+                <button ng-click="data.saveUssdCode(data.balance)" class='btn btn-success'  ng-show="modalData.returnMenuFlag(1099)">
+                    Check Balance</button>
+                <button  data-toggle="modal" data-controls-modal="buySmsBundles" class='btn btn-primary'  ng-show="modalData.returnMenuFlag(1098)"
+                         data-backdrop="static" data-keyboard="false" data-target="#buySmsBundles">
+                    Buy SMS Bundles</button>
+              
+                <button  data-toggle="modal" data-controls-modal="sendAirtime" class='btn btn-info'  ng-show="modalData.returnMenuFlag(1097)"
+                         data-backdrop="static" data-keyboard="false" data-target="#sendAirtime">
+                    Buy For another #</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="addToDo" role="dialog">
+            <div ng-include="'modals/addToDo.html'"></div>
+        </div>
+    </div>
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="sendAirtime" role="dialog">
+            <div ng-include="'modals/sendAirtime.html'"></div>
+        </div>
+    </div>
+     <div ng-controller="modalsController">
+        <div class="modal fade" id="buyInternet" role="dialog">
+            <div ng-include="'modals/buyInternet.html'"></div>
+        </div>
+    </div>
+        <div ng-controller="modalsController">
+        <div class="modal fade" id="buySmsBundles" role="dialog">
+            <div ng-include="'modals/buySmsBundles.html'"></div>
+        </div>
+    </div>
+    
+    
+    
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="closeTodo" role="dialog">
+            <div ng-include="'modals/closeTodo.html'"></div>
+        </div>
+    </div>
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="composeSMS" role="dialog">
+            <div ng-include="'modals/composeSMS.html'"></div>
+        </div>
+    </div>
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="addNumberToContacts" role="dialog">
+            <div ng-include="'modals/addNumberToContacts.html'"></div>
+        </div>
+    </div>

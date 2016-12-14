@@ -1,0 +1,139 @@
+<div class='main-div' ng-controller="modalsController">
+    <div>
+        <div class="col-md-8 col-lg-8 col-sm-8">
+            <div class="input-group" ng-controller="ticketsController">
+
+                <input type="text" class="form-control " ng-model="modalData.searchText" capitalize
+                       placeholder="Search {{modalData.showDivSearch}}">
+                <div class="input-group-btn ">
+                    <button type="button" class="btn btn-primary dropdown-toggle"
+                            data-toggle="dropdown">
+                        Search <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/" ng-click="modalData.showClickedDivision('portfolio')">Portfolio</a></li>
+                        <li><a href="#/" ng-click="modalData.showClickedDivision('customers')">Customers</a></li>
+                        <li><a href="#/" ng-click="modalData.showSearchVehicles('vehicles',modalData.searchText)">Vehicles</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-4 col-sm-4 pull-right">
+            <div class="dropdown col-md-8 col-lg-8 col-sm-8 btn btn-primary form-control text-right" style="border:0px;">
+                <a href="#" style="color:white;text-decoration: none" data-toggle="dropdown">Quick Operation Launcher
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu pull-right" ng-controller="ticketsController">
+                    <li>
+                        <a href="#" data-toggle="modal" data-controls-modal="createTickets" ng-click="data.generateRandomTicketCode()"
+                           data-backdrop="static" data-keyboard="false" data-target="#createTickets">Create Ticket</a>
+                    </li>
+                    <li><a href="#" >Add New Vehicle</a></li>
+                    
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+    <hr>
+
+
+    <div class='' id='supervixsor-panel' ng-if="modalData.showDivSearch=='portfolio'" ng-controller="ticketsController"
+         ng-show="modalData.returnMenuFlag(28)">
+        <table class="table table-responsive  table-striped">
+
+            <thead>
+                <tr>
+                    <th></th>
+                    <th ng-click="data.sortByColumnFxn('accountID')">Account</th>
+                    <th ng-click="data.sortByColumnFxn('description')">Description</th>
+                    <th ng-click="data.sortByColumnFxn('counter')">Total Assets</th>
+                    <th>Inactive Assets</th>
+
+                    <th>Action</th>
+                </tr>    
+            </thead>
+            <tbody>
+                <tr dir-paginate="accounts in data.portfolioData|filter : {accountID:modalData.searchText} | orderBy :data.sortByColumn| itemsPerPage: pageSize" 
+                    current-page="currentPage" pagination-id="dataPagination"
+                    style="max-height:6px !important">
+                    <td>{{$index + 1}}</td>
+                    <td><a href="#/" ng-click="data.customerResults(accounts.accountID, accounts.description)"
+                           data-toggle="modal" data-controls-modal="customers" data-backdrop="static" data-keyboard="false" data-target="#customers"
+                           >{{accounts.accountID}}</a></td>
+                    <td>{{accounts.description}}</td>
+                    <td>{{accounts.counter}}</td>
+                    <td></td>
+
+                    <td><div class="dropdown">
+                            <a href="#" data-toggle="dropdown">Action
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" ng-click="data.fetchAssets(accounts.accountID, accounts.description)" 
+                                       data-toggle="modal" data-controls-modal="assetsModal" data-backdrop="static" data-keyboard="false" data-target="#assetsModal">View</a>
+                                </li>
+                                <li><a href="#">Report</a></li>
+                                <li><a href="#">Extras</a></li>
+                            </ul>
+                        </div></td>
+                </tr>
+            </tbody>    
+        </table>
+
+            <div class="text-right pull-right">
+              <dir-pagination-controls boundary-links="true" pagination-id="dataPagination" on-page-change="pageChangeHandler(newPageNumber)" 
+                                       template-url="partialViews/dirPagination.tpl.html">
+                
+              </dir-pagination-controls>
+            </div>
+        
+
+    </div>
+      <div ng-if="modalData.showDivSearch=='customers'">
+          <div ng-include="'partialViews/customers.html'">
+          </div>
+      </div>
+      <div ng-if="modalData.showDivSearch=='users'">
+          <div ng-include="'partialViews/users.html'">
+          </div>
+      </div>
+
+      <div ng-if="modalData.showDivSearch=='vehicles'">
+          <div ng-include="'partialViews/searchVehicles.html'">
+          </div>
+      </div>
+    <div ng-if="modalData.showDivSearch=='devices'">
+          <div ng-include="'partialViews/devices.html'">
+          </div>
+      </div>
+      
+     
+
+</div>
+<div ng-controller="modalsController">
+    <div class="modal fade" id="assetsModal" role="dialog"  >
+        <div ng-include="'modals/assetsModal.html'">
+        </div>
+    </div>
+    <div id="addNewVehicle" class="modal fade" role="dialog">
+        <div ng-include="'modals/newVehicle.html'">
+        </div>
+    </div>
+    <!--
+        <div id="addNewEscalateIssue" class="modal fade" role="dialog">
+            <div ng-include="'modals/escalateIssue.html'">
+            </div>
+        </div>
+    -->
+    <div id="customers" class="modal fade" role="dialog">
+        <div ng-include="'modals/customerModal.html'">
+        </div>
+    </div>
+    <div id="createTicket" class="modal fade" role="dialog">
+        <div ng-include="'modals/createTicket.html'">
+        </div>
+    </div>
+
+
+</div>

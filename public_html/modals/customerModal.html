@@ -1,0 +1,78 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.pickRandomColorPicked}}'>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title ">{{data.assetAccount}} : {{data.assetDescription}}, Customers </h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs ">
+                <li class="active">
+                    <a href="#/" 
+                       ng-dblclick="modalData.getGlobalData('TBL_CUSTOMERS')"
+                       ng-click="data.makeActive('view', 'TBL_CUSTOMERS')">View</a>
+                </li>
+                <li class='pull-right'>
+
+
+                    <input type="search"
+                           class="form-control" placeholder='Search {{data.assetAccount}}' ng-model='search'/>
+
+                </li>
+            </ul>
+           
+            <div ng-show="true">
+                <table class="table table-responsive  table-striped" ng-show="modalData.hideTableTillResponse ">
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th ng-hide="modalData.hideCode">Bank Code</th>
+                            <th>Customer Name</th>
+                             <th>Account ID</th>
+                            <th>Contact</th>
+                            <th>Mail</th>
+                            <th>Created By</th>
+                            <th ng-hide="modalData.hideCode">Extras</th>
+                        </tr>    
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="pricesGroup in modalData.customersData | limitTo : 1000| filter : search ">
+                            <td><input type='checkbox'></td> 
+                            <td  ng-hide="modalData.hideCode">{{pricesGroup.code}}</td>
+                            <td >{{pricesGroup.name}}</td>
+                            <td >{{pricesGroup.accountId}}</td>
+                            <td >{{pricesGroup.mobile_1}}</td>
+                            <td >{{pricesGroup.email}}</td>
+
+                            <td>{{modalData.getUserName(pricesGroup.createdBy)}}</td>
+                            <td ng-hide="modalData.hideCode"> {{pricesGroup.extras}}</td>
+                            <td><div class="dropdown">
+                                    <a href="#/" data-toggle="dropdown"><i class="fa fa-sliders"></i>
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu pull-left">
+                                        <li><a href="#/" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_CUSTOMERS', 2)">Delete</a></li>
+                                        <li><a href="#/"
+                                               ng-click="modalData.editFunction(pricesGroup.id, 'TBL_CUSTOMERS', 3)"
+                                               >Edit</a></li>
+                                        <li><a href="#/"
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_CUSTOMERS', 0)" ng-show="pricesGroup.status == 1">Deactivate</a></li>
+                                        <li><a href="#/" 
+                                               ng-click="modalData.deactivateRecord(pricesGroup.id, 'TBL_CUSTOMERS', 1)"
+                                               ng-hide="pricesGroup.status == 1">Activate</a></li>
+                                        <li><a href="#/customerReports?id={{pricesGroup.id}}"  ng-click="modalData.closeModal(pricesGroup.id, pricesGroup.name)"
+                                               
+                                               >Reports</a></li>
+                                    </ul>
+                                </div></td>
+                        </tr>
+                    </tbody>    
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+</div>

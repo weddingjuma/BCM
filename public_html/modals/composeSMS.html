@@ -1,0 +1,60 @@
+
+<div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Compose SMS</h4>
+        </div>
+        <div class="modal-body">
+
+
+
+            <div class="text-center" ng-controller="modalsController">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2" ng-controller="ticketsController"  ng-init="data.getContacts(0)">
+
+                    <form novalidate="" name="composeSMS" ng-controller="TypeaheadCtrl" ng-keyup="data.sendSMS.MessageTo = data.selected">
+                        <input type="text" ng-model="data.selected" typeahead-on-select="data.createnumber(data.selected)" typeahead-select-on-exact="true"
+                               typeahead-focus-first="true" ng-class="{ 'has-error' : composeSMS.MessageTo.$invalid && !composeSMS.MessageTo.$pristine }"
+                               uib-typeahead="state for state in data.returnArrayContacts() | filter:$viewValue | limitTo:15" class="form-control">
+
+
+                        <input type="text" class="form-control " required  ng-hide="true"
+                               ng-class="{ 'has-error' : composeSMS.MessageTo.$invalid && !composeSMS.MessageTo.$pristine }"
+                               ng-model="data.sendSMS.MessageTo" name='MessageTo' maxlength="10"
+                               ng-pattern="/[0]{1}[7]{1}[0-9]{8}/"
+                               placeholder="Enter Receiver">
+
+
+
+                        <textarea class="form-control " style="padding:5px;margin:5px;" required   ng-model="data.sendSMS.MessageText" name='MessageText'
+                                  ng-keyup="data.messageLength(data.sendSMS.MessageText)"
+                                  placeholder="Message">
+
+                        </textarea>
+                        <small>{{data.charLength}} / {{data.numberOfSMS}}</small>
+
+
+
+                        <div class="form-group" style="padding:4px;">
+
+                            <div class="col-md-12">
+                                <button class=" btn btn-success"  style='width:100%' data-dismiss="modal"
+                                        ng-click="data.sendSMS(data.sendSMS)"
+                                        ng-disabled="composeSMS.$invalid"
+                                        >Send Message</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

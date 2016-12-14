@@ -1,0 +1,45 @@
+<div ng-controller="modalsController">
+
+    <div class='container-fluid typeahead-demo' ng-init="Typeahead.createArrayCustomers()">
+
+        <label> {{Typeahead.test}}</label>
+        <input type="text" ng-model="selected" typeahead-on-select="Typeahead.onSelected(selected)" typeahead-select-on-exact="true"
+               typeahead-focus-first="true"
+               uib-typeahead="state for state in Typeahead.returnArrayCustomers() | filter:$viewValue | limitTo:15" class="form-control">
+
+    </div>
+    <div class="pre-scrollable" >
+        <div class=" col-lg-10 col-lg-offset-1">
+            <table class="table table-condensed">
+                <tr ng-repeat="governors in governorData.governorInstallations">
+                    <td>
+                        <h3>{{governors.CustomerName}}</h3>
+                        <h5>{{governors.RegistrationNumber}}    </h5>
+                    </td>
+                    <td nowrap>
+                        <ul class="list-group">
+                            <li class="governorList"><div class=" col-xs-5 pull-left"> Chassis Number      </div> <div class="col-xs-5 pull-right">{{governors.ChassisNumber}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Make            </div> <div class="col-xs-5 pull-right">{{governors.Make}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Model            </div> <div class="col-xs-5 pull-right">{{governors.Model}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Customer Phone                  </div> <div class="col-xs-5 pull-right">{{governors.CustomerPhone}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Certificate Number      </div> <div class="col-xs-5 pull-right">{{governors.CertificateNumber}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Serial Number            </div> <div class="col-xs-5 pull-right">{{governors.SerialNumber}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Chassis Number      </div> <div class="col-xs-5 pull-right">{{governors.ChassisNumber}}</div></li>
+
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Date Submitted      </div> <div class="col-xs-5 pull-right">{{governors.DateSubmitted}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Date Installed                     </div> <div class="col-xs-5 pull-right">{{governors.DateInstalled}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Unique Cert Code                  </div> <div class="col-xs-5  pull-right" >{{governors.UniqueCertCode}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> Fitting Center                  </div> <div class="col-xs-5 pull-right">{{governors.Fitting_Center}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> installer name            </div> <div class="col-xs-5 pull-right">{{governors.installername}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> confirm date                  </div> <div class="col-xs-5 pull-right">{{governors.confirmdate}}</div></li>
+                            <li class="governorList"><div class="col-xs-5 pull-left"> county name            </div> <div class="col-xs-5 pull-right">{{governors.countyname}}</div></li>
+
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+

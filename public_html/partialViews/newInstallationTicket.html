@@ -1,0 +1,187 @@
+<div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+    <div class="pull-right col-lg-12">New Installation Ticket<hr></div>
+    <form novalidate="" name="vehicleSettings" class="form-horizontal" ng-hide="modalData.showTicketCreation">
+
+        <div ng-show='data.vehicleSettings.responseStatus' ng-class="{
+                            'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+            {{data.vehicleSettings.responseMessage}}</div>   
+
+        <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error'  : vehicleSettings.code.$invalid && !vehicleSettings.code.$pristine }">
+            <label for="accountID" class="control-label col-xs-3">Code</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="vehicle code" name='code'
+                       readonly="" ng-model='data.vehicleSettings.code'/>
+
+            </div>
+        </div>
+
+        <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.regNo.$invalid && !vehicleSettings.regNo.$pristine }">
+            <label for="regNo" class="control-label col-xs-3">Reg No.</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="reg number" ng-click="modalData.getGlobalData('TBL_VEHICLE_MODELS')"
+                       ng-keyup="modalData.checkForVehicles(data.vehicleSettings.regNo)" name='regNo' capitalize required ng-model='data.vehicleSettings.regNo'/>
+            </div>
+        </div>
+        <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.color.$invalid && !vehicleSettings.color.$pristine }">
+            <label for="color" class="control-label col-xs-3">Color</label>
+            <div class="col-md-9">
+                <input type="text" list="color" class="form-control" placeholder="color" name='color' 
+                       capitalize required ng-model='data.vehicleSettings.color'/>
+                <datalist id="color">
+                    <option value="White">
+                    <option value="Silvery grey">
+                    <option value="Black">
+                    <option value="Blue">
+                    <option value="Jungle green">
+                    <option value="Yellow">
+                    <option value="Red">
+                    <option value="navy Blue">
+                    <option value="Maroon">
+                </datalist>
+            </div>
+        </div>
+        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : vehicleSettings.model.$invalid && !vehicleSettings.model.$pristine }">
+
+            <label for="model" class="control-label col-xs-3">Model</label>
+            <div class="col-md-9">
+
+                <input type="text" class="form-control" list="models" placeholder="model" name='model' capitalize required ng-model='data.vehicleSettings.model'/>
+                <datalist id="models" class="col-md-9">
+                    <option value="{{model.model}}" ng-repeat="model in modalData.fetchCurrentData">{{groups.model}}</option>
+                </datalist>
+            </div>
+        </div>
+        <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.make.$invalid && !vehicleSettings.make.$pristine }">
+            <label for="make" class="control-label col-xs-3">Make</label>
+            <div class="col-md-9">
+
+                <input type="text" class="form-control" placeholder="make" name='make' capitalize required ng-model='data.vehicleSettings.make'/>
+
+            </div>
+        </div>
+        <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.engNo.$invalid && !vehicleSettings.engNo.$pristine }">
+            <label for="EngNo" class="control-label col-xs-3">Eng. No</label>
+            <div class="col-md-9">
+
+
+                <input type="text" class="form-control" placeholder="engNo" name='engNo' capitalize required ng-model='data.vehicleSettings.engNo'/>
+
+
+            </div>
+        </div>
+        <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.chassisNo.$invalid && !vehicleSettings.chassisNo.$pristine }">
+            <label for="chassisNo" class="control-label col-xs-3">Chassis No.</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="chassis No" name='chassisNo' capitalize required ng-model='data.vehicleSettings.chassisNo'/>
+            </div>
+        </div>
+        <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.insurors.$invalid && !vehicleSettings.insurors.$pristine }">
+            <label for="insurors" class="control-label col-xs-3">Insuror</label>
+            <div class="col-md-9" ng-init="modalData.getAllInsurors()">
+
+                <select class="form-control" ng-change='modalData.insurorChange(insuror.id)'
+                        name='insurors'  ng-model='data.vehicleSettings.insurorId'>
+                    <option selected disabled>--SELECT INSURER--</option>
+                    <option value="{{insuror.id}}" ng-repeat="insuror in modalData.insurors">{{insuror.insuranceName}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" style="padding:0px;" ng-class="{
+                            'has-error'
+                            : vehicleSettings.financierId.$invalid && !vehicleSettings.financierId.$pristine }" ng-init="modalData.getAllFinanciers()">
+            <label for="financierId" class="control-label col-xs-3">Financier</label>
+            <div class="col-md-9">
+                <select class="form-control" 
+                        name='financierId'  ng-model='data.vehicleSettings.financierId'>
+                    <option selected disabled>--SELECT FINANCIER--</option>
+                    <option value="{{financier.id}}" ng-repeat="financier in modalData.financiers">{{financier.financierName}}</option>
+                </select>
+            </div>
+        </div>
+
+
+
+        <div class="form-group" ng-hide="modalData.hideCode" ng-show='data.vehicleSettings.financierId>0' style="padding:0px;" ng-class="{
+                            'has-error' : vehicleSettings.extras.$invalid && !vehicleSettings.extras.$pristine }">
+            <label for="accountID" class="control-label col-xs-3">Policy #</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="extras" name='extras' capitalize ng-model='data.vehicleSettings.extras'/>
+            </div>
+        </div>
+
+        <div class="form-group" style="padding:0px;">
+            <label for="extras" class="control-label col-md-3"></label>
+            <div class="col-md-9">
+
+                <button class=" btn " id='{{data.pickRandomColorPicked}}' style='width:100%' 
+                        ng-disabled="vehicleSettings.$invalid || data.globalSettings.signinDisabled"
+                        ng-click="modalData.globalSettingsSave(data.vehicleSettings, 'TBL_VEHICLES')" 
+                        >Next</button>
+
+
+            </div> 
+        </div>    
+    </form>
+
+    <div ng-show="modalData.showTicketCreation">
+           <form novalidate="" class="" name="saveTickets" ng-hide="modalData.recheckTrueS">
+                        
+                            <div class="form-group col-lg-12" style="padding:4px;" ng-class="{ 'has-error' : globalSettings.saveTickets.$invalid && !saveTickets.vehicleId.$pristine
+                                                    || modalData.noVehicle
+                        }">
+                                <label for="bankName" class="control-label col-lg-2 col-lg-offset-2">vehicle Reg</label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name='vehicleId' readonly='' capitalize ng-model='data.saveTickets.vehicleId'>
+                                        
+                                </div>
+                            </div>                    
+                            <div class="form-group" style="padding:0px;" ng-controller="datePicker"
+                                 ng-class="{ 'has-error' : saveTickets.bankName.$invalid && !saveTickets.date.$pristine }">
+                                <label for="date" class="control-label col-xs-2 col-lg-offset-2">Date </label>
+
+
+                                <div class="col-md-6">
+                                    <input type="text" id="date" class="form-control" placeholder="date"
+                                           name="date"    ng-model='data.saveTickets.date'/>
+
+                                </div>
+                            </div>
+                       
+
+                        <div class="form-group col-lg-12" style="padding:4px;" ng-class="{ 'has-error' : saveTickets.desc.$invalid && !saveTickets.desc.$pristine }">
+                            <label for="desc" class="control-label col-lg-2 col-lg-offset-2">Desc</label>
+                            <div class="col-md-6">
+                                <textarea type="text" class="form-control" placeholder="desc" name='desc'  required ng-model='data.saveTickets.desc'></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-12" style="padding:4px;">
+                            <label for="extras" class="control-label col-lg-2 col-lg-offset-2"></label>
+                            <div class="col-md-6">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.saveTicket(data.saveTickets, 'TBL_SIMPLE_TICKETS')"
+                                        ng-disabled="saveTickets.$invalid"
+                                        >Save Ticket</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+        
+        
+    </div>
+
+
+</div>

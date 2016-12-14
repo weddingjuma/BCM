@@ -1,0 +1,266 @@
+<div class="modal-dialog" ng-controller="ticketsController">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Settings <button>Load Settings</button></h4>
+        </div>
+        <div class="modal-body" style="margin-bottom: 1000px;">
+            <div class="text-center">
+                <div class="col-xs-12 col-xs-12">
+
+                    <form novalidate="" name="globalSettings">
+
+                        <div ng-show='data.globalSettings.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.globalSettings.responseMessage}}</div>   
+
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-hide="true"  ng-class="{ 'has-error' : globalSettings.code.$invalid && !globalSettings.code.$pristine }">
+                            <label for="code" class="control-label col-xs-4 pull-left">Code</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" readonly class="form-control" placeholder="{{data.modalHeader|lowercase}} code" name='code'
+                                       hidden=""
+                                       required  ng-model='data.globalSettings.code'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.defaultSaveFolder.$invalid && !globalSettings.defaultSaveFolder.$pristine }">
+                            <label for="defaultSaveFolder" class="control-label col-xs-4 pull-left">Default Save Folder</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" capitalize placeholder="default Save Folder" name='defaultSaveFolder' required ng-model='data.globalSettings.defaultSaveFolder'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.maxCertifcateReprint.$invalid && !globalSettings.maxCertifcateReprint.$pristine }">
+                            <label for="maxCertifcateReprint" class="control-label col-xs-4 pull-left">Max Cert Reprint</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="Number" class="form-control" placeholder="max Certifcate Reprint" name='maxCertifcateReprint' required ng-model='data.globalSettings.maxCertifcateReprint'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.certificateTotalLength.$invalid && !globalSettings.certificateTotalLength.$pristine }">
+                            <label for="certificateTotalLength" class="control-label col-xs-4 pull-left">Cert Number Length</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="Number" class="form-control" placeholder="certificate Total Length" name='certificateTotalLength' 
+                                       required ng-model='data.globalSettings.certificateTotalLength'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.certPrefix.$invalid && !globalSettings.certPrefix.$pristine }">
+                            <label for="certPrefix" class="control-label col-xs-4 pull-left">Cert Number Prefix</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="certificate Prefix" name='certPrefix' 
+                                       ng-model='data.globalSettings.certPrefix'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.certSuffix.$invalid && !globalSettings.certSuffix.$pristine }">
+                            <label for="certSuffix" class="control-label col-xs-4 pull-left">Cert Number Suffix</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="certificate suffix" name='certSuffix' 
+                                       ng-model='data.globalSettings.certSuffix'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.director1.$invalid && !globalSettings.director1.$pristine }">
+                            <label for="director1" class="control-label col-xs-4 pull-left">Approved By</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="Director" name='director1' 
+                                       ng-model='data.globalSettings.director1'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.creditedBy.$invalid && !globalSettings.creditedBy.$pristine }">
+                            <label for="creditedBy" class="control-label col-xs-4 pull-left">Credited By</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="Credited By" name='creditedBy' 
+                                       ng-model='data.globalSettings.creditedBy'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.reprintLetter.$invalid && !globalSettings.reprintLetter.$pristine }">
+                            <label for="reprintLetter" class="control-label col-xs-4 pull-left">Copy Symbol</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="copy certificate symbole" name='reprintLetter' 
+                                       ng-model='data.globalSettings.reprintLetter'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.originalLetter.$invalid && !globalSettings.originalLetter.$pristine }">
+                            <label for="originalLetter" class="control-label col-xs-4 pull-left">Original Symbol</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="Original symbol" name='originalLetter' 
+                                       ng-model='data.globalSettings.originalLetter'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.renewalLetter.$invalid && !globalSettings.renewalLetter.$pristine }">
+                            <label for="renewalLetter" class="control-label col-xs-4 pull-left">Renewal Symbol</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="renewal symbol" name='renewalLetter' 
+                                       ng-model='data.globalSettings.renewalLetter'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.protocol.$invalid && !globalSettings.protocol.$pristine }">
+                            <label for="protocol" class="control-label col-xs-4 pull-left">SMTP Protocol</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="protocol" name='protocol' 
+                                       ng-model='data.globalSettings.protocol'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.smtp_host.$invalid && !globalSettings.smtp_host.$pristine }">
+                            <label for="smtp_host" class="control-label col-xs-4 pull-left">SMTP Host</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="smtp_host" name='smtp_host' 
+                                       ng-model='data.globalSettings.smtp_host'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.smtp_user.$invalid && !globalSettings.smtp_user.$pristine }">
+                            <label for="smtp_user" class="control-label col-xs-4 pull-left">SMTP User</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="smtp user" name='smtp_user' 
+                                       ng-model='data.globalSettings.smtp_user'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.smtp_pass.$invalid && !globalSettings.smtp_pass.$pristine }">
+                            <label for="smtp_pass" class="control-label col-xs-4 pull-left">SMTP Password</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="Username" name='smtp_pass' 
+                                       ng-model='data.globalSettings.smtp_pass'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.smtp_port.$invalid && !globalSettings.smtp_port.$pristine }">
+                            <label for="smtp_port" class="control-label col-xs-4 pull-left">SMTP Port</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="smtp port" name='smtp_port' 
+                                       ng-model='data.globalSettings.smtp_port'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.fleetUsername.$invalid && !globalSettings.fleetUsername.$pristine }">
+                            <label for="username" class="control-label col-xs-4 pull-left">MS03 Username</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="Username" name='username' 
+                                       ng-model='data.globalSettings.fleetUsername'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" 
+                             ng-class="{ 'has-error' : globalSettings.password.$invalid && !globalSettings.password.$pristine }">
+                            <label for="password" class="control-label col-xs-4 pull-left">MS03 Password</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="Password" name='password' 
+                                       ng-model='data.globalSettings.fleetPassword'/>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.machineAllowed.$invalid && !globalSettings.machineAllowed.$pristine }">
+                            <label for="machineAllowed" class="control-label col-xs-4 pull-left">Any Machine Log in</label>
+                            <div class="col-xs-8  pull-right">
+                                <select class="form-control" name='machineAllowed' 
+                                        required ng-model='data.globalSettings.machineAllowed'>
+                                    <option value="0">Yes</option>
+                                    <option value="1">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.sendCopyToCC.$invalid && !globalSettings.sendCopyToCC.$pristine }">
+                            <label for="sendCopyToCC" class="control-label col-xs-4 pull-left">Send Cert-mail To CC</label>
+                            <div class="col-xs-8  pull-right">
+                                <select class="form-control" name='machineAllowed' 
+                                        required ng-model='data.globalSettings.sendCopyToCC'>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.sendCopyToSystem.$invalid && !globalSettings.sendCopyToSystem.$pristine }">
+                            <label for="sendCopyToSystem" class="control-label col-xs-4 pull-left">Email To System</label>
+                            <div class="col-xs-8  pull-right">
+                                <select class="form-control" name='sendCopyToSystem' 
+                                        required ng-model='data.globalSettings.sendCopyToSystem'>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.sendCopyToClient.$invalid && !globalSettings.sendCopyToClient.$pristine }">
+                            <label for="sendCopyToClient" class="control-label col-xs-4 pull-left">Send Cert.E-mail To Client</label>
+                            <div class="col-xs-8  pull-right">
+                                <select class="form-control" name='machineAllowed' 
+                                        required ng-model='data.globalSettings.sendCopyToClient'>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
+                         <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.broadcastMsg.$invalid && !globalSettings.broadcastMsg.$pristine }">
+                            <label for="broadcastMsg" class="control-label col-xs-4 pull-left">Broadcast Ticket Msg</label>
+                            <div class="col-xs-8  pull-right">
+                                <select class="form-control" name='broadcastMsg' 
+                                        required ng-model='data.globalSettings.broadcastMsg'>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.renewalLetter.$invalid && !globalSettings.systemEmail.$pristine }">
+                            <label for="systemEmail" class=" col-xs-4 pull-left">System Email</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="email" class="form-control" placeholder="Mails to be sent here by default" name='systemEmail' 
+                                       ng-model='data.globalSettings.systemEmail'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.renewalLetter.$invalid && !globalSettings.renewalLetter.$pristine }">
+                            <label for="renewalLetter" class="control-label col-xs-4 pull-left">CC Email</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="email" class="form-control" placeholder="Email to be sent to CC" name='ccEmail' 
+                                       ng-model='data.globalSettings.ccEmail'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.smsModule.$invalid && !globalSettings.smsModule.$pristine }">
+                            <label for="smsModule" class="control-label col-xs-4 pull-left">SMS Module</label>
+                            <div class="col-xs-8  pull-right">
+                                <select class="form-control" name='smsModule' 
+                                        required ng-model='data.globalSettings.smsModule'>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.smsFrom.$invalid && !globalSettings.smsFrom.$pristine }">
+                            <label for="smsFrom" class="control-label col-xs-4 pull-left">SMS From</label>
+                            <div class="col-xs-8  pull-right">
+                                <input type="text" class="form-control" placeholder="SMS From" name='smsFrom' 
+                                       ng-model='data.globalSettings.smsFrom'/>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12" style="padding:2px;" ng-class="{ 'has-error' : globalSettings.smsFooter.$invalid && !globalSettings.smsFooter.$pristine }">
+                            <label for="smsFooter" class="control-label col-xs-4 pull-left">SMS Footer</label>
+                            <div class="col-xs-8  pull-right">
+                                <textarea class="form-control" placeholder="SMS Footer" name='smsFooter' 
+                                          ng-model='data.globalSettings.smsFooter'></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-xs-12 " style="padding:2px;">
+                            <label for="extras" class="control-label col-xs-4 pull-left"></label>
+                            <div class="col-xs-4 pull-left">
+                                <button type="button" class="btn btn-danger col-xs-12" data-dismiss="modal">Cancel</button>
+                            </div>
+                            <div class="col-xs-4 pull-left">
+
+                                <button class=" btn col-xs-12" id="{{data.modalHeaderColor}}" data-dismiss="modal"
+                                        ng-click="data.saveUpdate(data.globalSettings, '1', 'TBL_SETTINGS')" ng-disabled="globalSettings.$invalid || data.globalSettings.signinDisabled"
+                                        >save settings</button>
+                            </div>
+                        </div>    
+                    </form>
+                    <div class="col-xs-12">
+
+                        <hr>
+                        System Settings
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+</div>

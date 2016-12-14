@@ -1,0 +1,124 @@
+<div ng-controller="modalsController" >
+    <div class='panel panel-default' id='supervixsor-panel'  
+         >
+        <div class="panel-heading" >
+            <i class="fa fa-users"></i>User Day Operations <spinner></spinner>
+        </div>
+        <div class="panel-body">
+            <div class="">
+                <ul class="nav nav-tabs" ng-init="activeLink = 'shifts'">
+                    <li class='pull-left ' ng-class="{'active' : activeLink == 'shifts'}" ng-show="modalData.returnMenuFlag(32)">
+                        <a href="#/userDayOperations" ng-click="activeLink = 'shifts'" >Shifts</a>
+                    </li>
+                    <li class='pull-left'   ng-show="modalData.returnMenuFlag(1095)"
+                        ng-class="{'active' : activeLink == 'dailyTickets'}">
+                        <a href="#/userDayOperations" ng-click="activeLink = 'dailyTickets'">Daily Tickets</a>
+                    </li>
+                    <li class='pull-left' ng-show="modalData.returnMenuFlag(1096)"
+                        ng-class="{'active' : activeLink == 'uLogs'}">
+                        <a href="#/userDayOperations" ng-click="activeLink = 'uLogs'">User Logs</a>
+                    </li>
+                    <li class='pull-left' ng-show="modalData.returnMenuFlag(1096)"
+                        ng-class="{'active' : activeLink == 'onlineUsers'}">
+                        <a href="#/userDayOperations" ng-click="activeLink = 'onlineUsers'">
+                            Online Users</a>
+                    </li>
+
+
+
+
+                </ul>
+                <div class="">
+                    <div class="clearfix">&nbsp;</div>
+                    <div ng-show="activeLink == 'shifts'" ng-init="modalData.getGlobalData('TBL_SHIFTS')">
+                        <ul class="nav nav-tabs" ng-init="aLink = 'cshifts'">
+                            <li class='pull-left ' ng-class="{'active' : aLink == 'cshifts'}" >
+                                <a href="#/userDayOperations" ng-click="aLink = 'cshifts'" >Current Shifts</a>
+                            </li>
+                            <li class='pull-left'  ng-show="modalData.returnMenuFlag(32)"
+                                ng-class="{'active' : aLink == 'ushifts'}">
+                                <a href="#/userDayOperations" ng-click="aLink = 'ushifts'">User Shifts</a>
+                            </li>
+                        </ul>
+                        <div ng-show="aLink == 'cshifts'" class="pre-scrollable">
+                            <H2>Current Shifts</h2>
+                            <hr>
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Shift name</th>
+                                        <th>Starts</th>
+                                        <th>Ends</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="shift in modalData.fetchCurrentData">
+                                        <td>{{shift.shiftName}}</td> <td>{{shift.startTime}}</td>
+                                        <td>{{shift.endTime}}</td> <td>{{modalData.returnStatus(shift.status)}}</td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <div ng-show="aLink == 'ushifts'">
+                            <div ng-include="'partialViews/manageShifts.html'"></div>
+                        </div>
+                    </div>
+                    <div ng-show="activeLink == 'uLogs'" class="pre-scrollable" ng-init="modalData.getUserLogs()" ng-controller="ticketsController">
+                        <h5>User Login History</h5><hr>
+                        <div class="pull-right">
+                            <ul class="nav nav-tabs" >
+
+                                <li class='pull-right'>
+                                    <input type="search" 
+                                           class="form-control" placeholder='Search logs' ng-model='searchLogDatas'/>
+                                </li>
+                                <li class='pull-right'>
+                                    <button class="btn btn-default" ng-click="modalData.getUserLogs()">
+                                        <i class="fa fa-refresh " style="color:black"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <table class="table table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Shift name</th>
+                                    <th>Starts</th>
+                                    <th>Ends</th>
+                                    <th>Logged In</th>
+                                    <th>End Of Day/Out</th>
+                                    <th>Logged in Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="logs in modalData.userLogs | filter : searchLogDatas| itemsPerPage: pageSize| limitTo:30" 
+                                    current-page="currentPage" pagination-id="dataPagination">
+                                    <td>{{logs.username}}</td> 
+                                    <td>{{logs.shiftName}}</td> 
+                                    <td>{{logs.startOfShift}}</td>
+                                    <td>{{logs.endOfShift}}</td>
+                                    <td>{{logs.timeLoggedIn}}</td>
+                                    <td>{{logs.endOfDay}}</td>
+                                    <td>{{logs.loggedHours}}</td>
+
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <pagination></pagination>
+
+
+                    </div>
+                    <div ng-show="activeLink == 'dailyTickets'">
+                        <div ng-include="'partialViews/dailyUserTickets.html'"></div>  
+                    </div>
+                    <div ng-show="activeLink == 'onlineUsers'">
+                        <div ng-include="'partialViews/onlineUsers.html'"></div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

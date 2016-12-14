@@ -1,0 +1,116 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Add Device</h4>
+        </div>
+        <div class="modal-body">
+            <ul class="nav nav-tabs ">
+                <li  ng-class="{'active' : true}">
+                    <a href="#/devices" >Add Tracker/Governor+</a></li>
+
+            </ul>
+            <div class="text-center">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2">
+
+                    <form novalidate="" name="globalSettings"  class="form-horizontal">
+                        <hr>
+                        <div ng-show='data.globalSettings.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.globalSettings.responseMessage}}</div>   
+
+                        <div class="form-group" style="padding:0px;"  ng-class="{ 'has-error' : globalSettings.code.$invalid && !globalSettings.code.$pristine }">
+                            <label for="code" class="control-label col-xs-2">Code</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" placeholder="{{data.modalHeader|lowercase}} code" name='code'
+                                       capitalize readonly
+                                       required  ng-model='data.globalSettings.code'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.model.$invalid && !globalSettings.model.$pristine }">
+                            <label for="model" class="control-label col-xs-2">Model</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" capitalize placeholder="Model Name" name='model'
+                                       ng-click="modalData.getRandomCode()"
+                                       required ng-model='data.globalSettings.model'/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.deviceType.$invalid && !globalSettings.deviceType.$pristine }">
+                            <label for="financierId" class="control-label col-xs-2">Types</label>
+                            <div class="col-md-10">
+                                <select class="form-control" name='deviceType'  ng-model='data.globalSettings.type'>
+                                    <option disabled selected>--SELECT TYPE--</option>
+                                    <option>GOVERNOR</option>
+                                    <option>TRACKER</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div ng-if="modalData.hidePieces(data.globalSettings.id)">
+                            <div class="form-group" ng-if="data.globalSettings.type == 'GOVERNOR'"
+                                 style="padding:0px;" ng-class="{ 'has-error' : globalSettings.type.$invalid && !globalSettings.type.$pristine }">
+                                <label for="type" class="control-label col-xs-2">Pieces </label>
+                                <div class="col-md-10">
+
+                                    <input type="number" class="form-control"  required placeholder="from" name='from'  ng-model='data.globalSettings.from'/>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.imei.$invalid && !globalSettings.imei.$pristine }">
+                            <label for="deviceName" class="control-label col-xs-2">IMEI</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" 
+                                       capitalize placeholder="imei" name='imei'   ng-model='data.globalSettings.imei'/>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' : globalSettings.serialNumber.$invalid && !globalSettings.serialNumber.$pristine }">
+                            <label for="serialNumber" class="control-label col-xs-2">serial</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" capitalize readonly
+
+                                       placeholder="SYSTEM GENERATED" name='serialNumber'  ng-model='data.globalSettings.serialNumber'/>
+                            </div>
+                        </div>
+
+                        <div ng-if="modalData.hidePieces(data.globalSettings.id)">
+                            <div class="form-group  " style="padding:0px;">
+                                <label for="extras" class="control-label col-xs-2"></label>
+                                <div class="col-md-10">
+                                    <button class=" btn btn-success"  style='width:100%'
+                                            ng-click="modalData.saveDevice(data.globalSettings)"
+                                            ng-disabled="globalSettings.$invalid"
+                                            >save Device</button>
+                                </div>
+                            </div>  
+                        </div>
+                        <div ng-if="!modalData.hidePieces(data.globalSettings.id)">
+                            <div class="form-group  " style="padding:0px;">
+                                <label for="extras" class="control-label col-xs-2"></label>
+                                <div class="col-md-10">
+                                    <button class=" btn btn-success"  style='width:100%'
+                                            ng-click="modalData.globalSettingsSave(data.globalSettings, 'TBL_DEVICES')"
+                                            ng-disabled="globalSettings.$invalid"
+                                            >Update Date</button>
+                                </div>
+                            </div>  
+                        </div>
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

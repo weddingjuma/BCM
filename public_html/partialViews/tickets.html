@@ -1,0 +1,396 @@
+<div class="panel panel-default" ng-controller="modalsController" ng-show="modalData.returnMenuFlag(16)">
+    <div class="panel-heading" >
+        Tickets  <spinner></spinner>
+    </div>
+    <div class="panel-body">
+        <div class="">
+            <ul class="nav nav-tabs" ng-init="activeLink = 'ticket'">
+
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'ticket'}"  ng-show="modalData.returnMenuFlag(45)">
+                    <a href="" ng-click="activeLink = 'ticket'" >New Ticket</a>
+                </li>
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'assign'}" ng-show="modalData.returnMenuFlag(47)">
+                    <a href="" ng-click="activeLink = 'assign'" >Assigning</a>
+                </li>
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'users'}">
+                    <a href="" ng-click="activeLink = 'users'" >Tickets</a>
+                </li>
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'reports'}"  ng-show="modalData.returnMenuFlag(44)">
+                    <a href="" ng-click="activeLink = 'reports'" >User Summary</a>
+                </li>
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'mainreports'}">
+                    <a href="" ng-click="activeLink = 'mainreports'" >Reports</a>
+                </li>
+                <li class='pull-left ' ng-class="{'active' : activeLink == 'dSearch'}" ng-show="modalData.returnMenuFlag(45)">
+                    <a href="" ng-click="activeLink = 'dSearch'" >In-Depth Search</a>
+                </li>
+
+                <!--   <li class='pull-left' ng-click="activeLink='rights'" ng-class="{'active' : activeLink=='rights'}">
+                       <a href="">User Rights</a>
+                   </li>
+                -->
+
+
+                <li class='pull-right'>
+                    <input type="search" ng-change = "modalData.searchDataFxn(searches, 'regNo', 'name', 'tickets')"
+                           class="form-control" placeholder='Search Tickets' ng-model='searches'/>
+                </li>
+                <li class='pull-right'  ng-hide="activeLink != 'users'">
+                    <button class="btn btn-success" ng-click="modalData.exportToExcel('Tickets','tableExcelTickets')" 
+                            >Excel</button>
+                </li>
+                <li class='pull-right' ng-show="modalData.returnMenuFlag(45)">
+                    <button class="btn btn-primary" ng-click="activeLink = 'ticket'"
+                            >Add ticket +</button>
+                </li>
+                <li class='pull-right'>
+                    <div class="dropdown " >
+
+                        <button  class="btn btn-primary" ng-disabled="activeLink != 'users'" data-toggle="dropdown">Filter
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <a href="#/tickets" target="_self"
+                                   ng-click="modalData.myTickets(1)">My Tickets 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#/tickets" target="_self"
+                                   ng-click="modalData.filterTickets(1)">Closed Tickets 
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#/tickets" target="_self" 
+                                   ng-click="modalData.filterTickets(0)">Open Tickets 
+                                </a></li>
+                            <li><a href="#/tickets"  target="_self"
+                                   ng-click="modalData.filterTickets(2)"
+                                   >Suspended Tickets</a></li>
+
+                            <li><a href="#/tickets"   target="_self"
+                                   ng-click="modalData.filterTickets(3)"
+                                   >Escalated Tickets</a></li>
+                            <li><a href="#/tickets"  target="_self"
+                                   ng-click="modalData.filterTickets('')"
+                                   >All Tickets</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class='pull-right'>
+                    <button class="btn btn-default"  ng-click="modalData.getTickets('2')">
+                        <i class="fa fa-refresh " style="color:black"></i>
+                    </button>
+                </li>
+
+            </ul>
+        </div>
+
+        <div  class="pre-scrollable col-md-12" ng-controller="ticketsController" >
+            <div ng-show="modalData.returnMenuFlag(29)">
+                <div ng-if="activeLink == 'users'"  ng-keydown="modalData.scroll()" >
+                    <div id="tableExcelTickets">
+                    <table ng-hide="true" ><tr style="background-color: grey;"><td></td><td></td><td> <h3>Tickets</h3></td><td></td><td></td>
+                    <td></td><td></td><td></td><td></td><td></td></tr></table>
+                    <table class="table table-responsive "  ng-init="modalData.getTickets('1')">
+
+                        <thead>
+                            <tr><th></th>
+                                <th>#</th>
+                                <th>Issue Name</th>
+                                <th>Customer Name</th>
+                                <th>Reg No.</th>
+                                <th>Desc</th>
+                                <th>Type</th>
+                                <th>Date Created</th>
+                                <th>Status</th>
+                                <th>Assigned To</th>
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="tickets in modalData.tickets| 
+                                filter:{closedFlag:modalData.ticketStatus}| filter:{assignedToId:modalData.myIdFilter} |limitTo : 30|
+                                orderBy :-data.convertToHumanTime(tickets.dateCreated)| itemsPerPage: 30" 
+                                current-page="currentPage" pagination-id="dataPagination"
+                                class="{{modalData.returnRowClass(tickets.id, tickets.closedFlag, 1)}}" 
+                                ng-click="modalData.makeRowActive(tickets.id)">
+                                <td nowrap><div class="dropdown" ng-if="modalData.actionMenu==1">
+                                        <a href="#/tickets" data-toggle="dropdown" >Action
+                                            <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#/tickets" ng-show="modalData.returnMenuFlag(72)"
+                                                   ng-click="modalData.deactivateRecord(tickets.id, 'TBL_SIMPLE_TICKETS', 2)">
+                                                    <i class="fa fa-remove"></i>  Delete</a></li>
+
+                                            <li ng-show="modalData.returnMenuFlag(47)">
+                                                <a href="#/tickets"  
+                                                   data-toggle="modal" data-controls-modal="assignUserToTic" data-backdrop="static" 
+                                                   data-keyboard="false" data-target="#assignUserToTic"
+                                                   ng-click="modalData.assignUser(tickets.id)">
+                                                    <i class="fa fa-user"></i> Assign</a>
+                                            </li>
+
+                                            <li><a href="#/tickets" 
+                                                   data-toggle="modal" data-controls-modal="addUser" data-backdrop="static" data-keyboard="false" data-target="#addUser"
+                                                   ng-click="modalData.editTicket(tickets.id)"
+                                                   ><i class="fa fa-edit"></i> Edit</a>
+                                            </li>
+                                            <li><a href="#/tickets" ng-show="modalData.returnMenuFlag(1103)"
+                                                   ng-click="modalData.deactivateRecord(tickets.id, 'TBL_SIMPLE_TICKETS', 0)" ng-show="tickets.status == 1">
+                                                    <i class="fa fa-lock"></i> Deactivate</a></li>
+                                            <li><a href="#/tickets" ng-show="modalData.returnMenuFlag(1103)"
+                                                   ng-click="modalData.deactivateRecord(tickets.id, 'TBL_SIMPLE_TICKETS', 1)"
+                                                   ng-hide="tickets.status == 1">
+                                                    <i class="fa fa-check"></i> Activate</a>
+                                            </li>
+                                            <li><a href="#/tickets" data-toggle="modal" data-controls-modal="ticketLogs" data-backdrop="static" 
+                                                   data-keyboard="false" data-target="#ticketLogs"
+                                                   ng-click="modalData.getTicketLogs(tickets.id)">
+                                                    <i class="fa fa-list"></i> Logs</a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>{{tickets.id}}</td>
+                                <td>{{tickets.issue}}</td>
+                                <td>{{tickets.name}}</td>
+                                <td>{{tickets.regNo}}</td>
+                                <td>{{tickets.desc}}</td>
+                                <td>{{tickets.type}}</td>
+                                <td>{{data.convertToHumanTime(tickets.dateCreated)}}</td>
+
+                                <td>{{data.returnTicketStatus(tickets.closedFlag)}}</td>
+                                <td>{{tickets.assignedTo}}</td>
+
+                            </tr>
+                        </tbody>    
+                    </table>
+                </div>
+                    <div ng-if="activeLink == 'users'">
+                        <pagination></pagination>
+                    </div>
+                    <div class="col-lg-12" ng-show="modalData.showExtraTicketInfo" >
+
+                        <div class="panel-heading col-lg-12" style="color:black !important;">
+                            <div class="panel-heading"><b>  Ticket # {{modalData.clickedTicket.id}} {{modalData.clickedTicket.issue}}</b>
+
+                                <div class="pull-right col-lg-3">
+                                    <div class="dropdown pull-right" ng-show="modalData.returnMenuFlag(77)">
+
+                                        <button  class="btn btn-primary" data-toggle="dropdown" ng-disabled="modalData.returnDisabledClass(modalData.clickedTicket.id)"
+                                                 style="height: 30px;">Ticket Action
+                                            <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li ng-show="modalData.clickedTicket.closedFlag == 0">
+                                                <a href="#/tickets" target="_self" ng-show="modalData.returnMenuFlag(78) && modalData.clickedTicket.assignedTo!=='NONE'"
+                                                   
+                                                   data-toggle="modal" data-controls-modal="giveFeedBack" data-backdrop="static" data-keyboard="false" data-target="#giveFeedBack"
+                                                   ng-click="modalData.showPopFeedBack(1, modalData.clickedTicket.id, modalData.clickedTicket.dateDue)">Close Ticket 
+                                                </a>
+                                            </li>
+                                            <li  ng-show="modalData.clickedTicket.closedFlag != 0">
+                                                <a href="#/tickets" target="_self" ng-show="modalData.returnMenuFlag(73)"
+                                                   data-toggle="modal" data-controls-modal="giveFeedBack" data-backdrop="static" data-keyboard="false" data-target="#giveFeedBack"
+                                                   ng-click="modalData.showPopFeedBack(0, modalData.clickedTicket.id)">Open Ticket 
+                                                </a>
+                                            </li>
+                                            <ul ng-show="modalData.clickedTicket.closedFlag == 0">
+                                                <li ng-show="modalData.returnMenuFlag(75)">
+                                                    <a href="#/tickets"  target="_self" 
+                                                       data-toggle="modal" data-controls-modal="giveFeedBack" data-backdrop="static" data-keyboard="false" data-target="#giveFeedBack"
+                                                       ng-click="modalData.showPopFeedBack(2, modalData.clickedTicket.id)"
+                                                       >Suspend Ticket</a>
+                                                </li>
+
+                                                <li ng-show="modalData.returnMenuFlag(76)">
+                                                    <a href="#/tickets"   target="_self"
+                                                       data-toggle="modal" data-controls-modal="giveFeedBack" data-backdrop="static" data-keyboard="false" data-target="#giveFeedBack"
+                                                       ng-click="modalData.showPopFeedBack(3, modalData.clickedTicket.id)"
+                                                       >Escalate Ticket</a>
+                                                </li>
+                                                <!-- <li ng-show="modalData.returnMenuFlag(76)">
+                                                    <a href="#/tickets"  ng-click="modalData.installationDocument(3, modalData.clickedTicket.id)"
+                                                       >Ins Document</a>
+                                                </li>-->
+                                                <li><a href="#/allTickets"  target="_self"
+                                                       data-toggle="modal" data-controls-modal="mergeTickets" ng-hide="data.currentTicketInfo.mergeStatus"
+                                                       data-backdrop="static" data-keyboard="false" data-target="#mergeTickets"
+                                                       ng-click="data.mergeTicket(modalData.clickedTicket.id, modalData.clickedTicket.issue, modalData.clickedTicket.regNo)"
+                                                       >Merge Ticket</a></li>
+                                            </ul>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="well">
+                            <table class="table table-striped border-bottom table-bordered">
+                                <tr>
+                                    <td><b>Customer Name</b></td><td>{{modalData.clickedTicket.name}}</td> 
+                                    <td><b>Vehicle Registration</b></td><td>{{modalData.clickedTicket.regNo}}</td>
+                                </tr>
+                                <!--  <tr>
+                                      <td><b>Type</b></td><td>{{modalData.clickedTicket.type}}</td> 
+                                      <td><b>Module</b></td><td>{{modalData.clickedTicket.module}}</td>
+                                  </tr>
+                                -->
+                                <tr>
+                                    <td><b>Issue</b></td><td>{{modalData.clickedTicket.issue}}</td> 
+                                    <td><b>Description</b></td><td>{{modalData.clickedTicket.desc}}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Date Created</b></td><td>{{data.convertToHumanTime(modalData.clickedTicket.dateCreated)}}</td> 
+                                    <td><b>Status</b></td><td>{{data.returnTicketStatus(modalData.clickedTicket.closedFlag)}}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Date Closed</b></td><td>{{data.convertToHumanTime(modalData.clickedTicket.dateClosed)}}</td> 
+                                    <td><b>Hours Open</b></td><td>{{modalData.clickedTicket.hoursOpen}} Hrs</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Created By</b></td><td>{{modalData.clickedTicket.createdBy}}</td> 
+                                    <td><b>Assigned To</b></td><td>{{modalData.clickedTicket.assignedTo}}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Action Date</b></td><td>{{data.convertToHumanTime(modalData.clickedTicket.dateDue)}}</td> 
+                                    <td><b>Location</b></td><td><a href="#/tickets">{{modalData.clickedTicket.location}}</a></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Technical Feedback</b></td><td>{{modalData.clickedTicket.technicalFeedBack}}</td> 
+                                    <td><b>Resolution Feedback</b></td><td>{{modalData.clickedTicket.resolutionFeedBack}}</td>
+
+                                </tr>
+
+                            </table> 
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div ng-show="activeLink == 'ticket'"  ng-show="modalData.returnMenuFlag(45)">
+
+
+                <div ng-include="'partialViews/fullCustomerTicket.html'"></div>
+
+            </div>
+            <div ng-if="activeLink == 'assign'"  ng-show="modalData.returnMenuFlag(47)">
+                <div ng-include="'partialViews/assigningResources.html'"></div>
+            </div>
+            <div ng-if="activeLink == 'dSearch'"  ng-show="modalData.returnMenuFlag(47)">
+                <div ng-include="'partialViews/dSearch.html'"></div>
+            </div>
+            <div ng-show="activeLink == 'mainreports'"  ng-show="modalData.returnMenuFlag(47)">
+                <div ng-include="'partialViews/userTicketsReports.html'"></div>
+            </div>
+            <div ng-show="modalData.returnMenuFlag(44)">
+                <div ng-if="activeLink == 'reports'" ng-controller="ticketsController">
+                    <div class=" col-md-12" ng-init = 'data.getUserTicketReport()'  >
+                        <small>NB : Information is for the current month</small> 
+
+                        <button ng-click="modalData.exportToExcel('Monthly Ticket Summary', 'monthlyTicketSummary')" class="pull-right btn btn-success">Excel</button>
+                        <div class="pull-right">
+
+                            <input type="search"   class="form-control" placeholder='Search User' ng-model='searchUser'/>
+
+                        </div>
+                        <hr>
+                        <div class="" style="min-height: 250px;overflow:auto;" id="monthlyTicketSummary">
+                            <table ng-hide="true" ><tr style="background-color: grey;"><td></td><td> <h3>Monthly Ticket Summary</h3></td><td></td><td></td><td></td>
+                                    <td></td><td></td><td></td><td></td><td></td></tr></table>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th >Number #</th>
+                                        <th ng-click="data.sortByColumnFxn('fullnames')">Full Names</th>
+                                        <th ng-click="data.sortByColumnFxn('total')">Total Tickets</th>
+                                        <th ng-click="data.sortByColumnFxn('closed')">Total Closed</th>
+                                        <th ng-click="data.sortByColumnFxn('open')">Total Open</th>
+                                        <th ng-click="data.sortByColumnFxn('escalated')">escalated</th>
+                                        <th ng-click="data.sortByColumnFxn('suspended')">Suspended</th>
+                                        <th ng-click="data.sortByColumnFxn('merged')">All Tickets</th>
+                                        <th>Work Load</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr  dir-paginate="tickets in data.userTicketsReports|filter : {fullnames : searchUser} |
+                                         itemsPerPage: pageSize|limitTo:30 |orderBy :data.sortByColumn"
+                                         current-page="currentPage" pagination-id="userTicketsPagination"
+                                         class="{{modalData.returnRowClass($index, tickets.status, 0)}}" ng-click="modalData.makeRowActive($index)"
+
+
+                                         >
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{tickets.fullnames}}</td>
+                                        <td>{{tickets.total}}</td>
+                                        <td>{{tickets.closed}}</td>
+                                        <td>{{tickets.open}}</td>
+                                        <td>{{tickets.escalated}}</td>
+                                        <td>{{tickets.suspended}}</td>
+                                        <td>{{tickets.allTickets}}</td>
+                                        <td>{{data.cutNumber(((tickets.total / tickets.allTickets) * 100), 2)}}% </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                        </div> 
+                        <div class="text-right pull-right">
+                            <dir-pagination-controls boundary-links="true" pagination-id="userTicketsPagination" on-page-change="pageChangeHandler(newPageNumber)" 
+                                                     template-url="partialViews/dirPagination.tpl.html">
+
+                            </dir-pagination-controls>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-toolbar pull-right" ng-show="modalData.returnMenuFlag(42)">
+
+        <div class="btn-group">
+            <button class="btn btn-success" ng-click="data.printSchedule(0)" >Print Today's Schedule</button>
+            <button class="btn btn-success" ng-click="data.printSchedule(1)">Print Tomorrow's Schedule</button>
+            <button class="btn btn-success" ng-click="data.printSchedule(2)">Print Week's Schedule</button>
+
+        </div>
+    </div>
+
+
+
+
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="assignUser" role="dialog" ng-if="activeLink == 'assign'">
+            <div ng-include="'modals/assignUser.html'"></div>
+        </div>
+    </div>
+
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="addUser" role="dialog">
+            <div ng-include="'modals/ticket.html'"></div>
+        </div>
+    </div>
+    <div ng-controller="modalsController" >
+        <div class="modal fade" id="assignUserToTic" role="dialog">
+            <div ng-include="'modals/assignUserToTicket.html'"></div>
+        </div>
+    </div>
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="ticketLogs" role="dialog">
+            <div ng-include="'modals/ticketLogs.html'"></div>
+        </div>
+    </div>
+    <div id="mergeTickets" class="modal fade" role="dialog">
+        <div ng-include="'modals/mergeTickets.html'">
+        </div>
+    </div>
+
+    <div id="giveFeedBack" class="modal fade" role="dialog">
+        <div ng-include="'modals/giveFeedBack.html'">
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,72 @@
+<div>
+
+    <div class='container-fluid typeahead-demo' ng-init="Typeahead.createArrayCustomers()">
+
+        <label> {{Typeahead.test}}</label>
+        <input type="text" ng-model="selected" typeahead-on-select="Typeahead.pickGovernorCVehicle(selected)" typeahead-select-on-exact="true"
+               typeahead-focus-first="true"
+               uib-typeahead="state for state in Typeahead.returnArrayCustomersJoinVehicles() | filter:$viewValue | limitTo:15" class="form-control">
+
+    </div>
+    <div class="clearfix">&nbsp;</div>
+    <div class=" container col-xs-10 col-xs-offset-1" ng-controller="datePickerMax">
+        <div class="pull-left col-xs-7 ">
+
+            <table ng-repeat="governorData in governorData.customerJoinVehicles" class="table">
+                <tr>
+                    <td>Reg no : {{governorData.regNo}}</td> 
+                </tr>
+                <tr>
+                    <td>Customer Name : {{governorData.name}}</td> 
+                </tr>
+                <tr>
+                    <td>Engine No# : {{governorData.engNo}}</td> 
+                </tr>
+                <tr>
+                    <td>Chassis No : {{governorData.chassisNo}}</td> 
+                </tr>
+                <tr>
+                    <td>Model : {{governorData.model}}</td> 
+                </tr>
+                <tr>
+                    <td>Current Expiry : {{governorData.validityEndOn}}</td> 
+                </tr>
+
+            </table>
+        </div>
+        <div class="pull-right col-xs-5" ng-init="governorData.custId = '00'">
+            <select  class="form-control" style="margin: 5px;"   placeholder="Ticket Number" ng-model="data.ticketId"
+                     name="deviceImei"   required >
+                <option SELECTED disabled="">--SELECT TICKET--</option>
+                <option value="{{ticket.id}}" ng-repeat="ticket in modalData.closedTickets| filter : {custId : governorData.custId} | filter : {ticketUsed:0}">{{ticket.id}}</option>
+
+            </select>
+
+
+
+            <input type="text" class="form-control" style="margin: 5px;" id="date"  placeholder="date" 
+                   name="date"   required />
+
+            <select class="form-control" id="selectButton"  style="margin: 5px;" ng-model="data.type" ng-init="data.type = 1">
+                <option  disabled="">--SELECT TYPE--</option>
+                <option selected value="1">INSTALLATION</option>
+
+
+            </select>
+            <select class="form-control" id="selectButton"  style="margin: 5px;" ng-model="data.governorType" ng-init="data.governorType = 1">
+                <option selected="" value="1">CRUZ</option>
+                <option  value="0" >Techto</option>
+
+
+            </select>
+
+
+
+            <button class="btn btn-primary col-xs-12"  style="margin: 5px;" ng-disabled="data.simSerialNo == ''"
+                    ng-click="Typeahead.printGovernorCertificate(data.type, data.ticketId, data.governorType)"
+                    >Create Certificate</button>
+        </div>
+    </div>
+
+
+</div>

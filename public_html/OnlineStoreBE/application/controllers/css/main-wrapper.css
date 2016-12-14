@@ -1,0 +1,21 @@
+
+
+.table {
+    border-bottom:1px #cccccc solid;
+
+}
+.checkboxDiv{
+    border:1px black solid;
+    max-height:10px;
+    max-width: 7%;
+    padding-left:3px;
+    margin: 0px;
+    display: inline-table;
+}
+u{
+ 
+    font-family: sans-serif;
+    float: right;
+    border-bottom: 1px dashed #000;
+    text-decoration: none;
+}

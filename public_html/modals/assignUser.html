@@ -1,0 +1,143 @@
+<div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header" id='{{data.modalHeaderColor}}'>
+            <button type="button" class="close" data-dismiss="modal" ng-click="modalData.clearAllFormData(1)">&times;</button>
+            <h4 class="modal-title">Assign User Resources</h4>
+        </div>
+        <div class="modal-body">
+
+            <notification></notification>
+
+            <div class="text-center">
+                <div class="col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-2"
+                     ng-init="modalData.getGlobalData('TBL_USERS')">
+
+                    <form novalidate="" name="assignUserResources" class="form-horizontal" >
+
+                        <div ng-show='data.assignUser.responseStatus' ng-class="{ 'has-error' : true}" class='text-center alert btn-sm  alert-danger'>
+                            {{data.assignUser.responseMessage}}</div>   
+
+                        <!--
+                                                <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' :
+                                                            assignUserResources.deviceId.$invalid && !assignUserResources.deviceId.$pristine || modalData.deviceExists
+                                                    }">
+                        
+                                                    <label for="code" class="control-label col-xs-2">Device IMEI</label>
+                                                    <div class="col-md-9"  ng-init="modalData.delayDeviceCall('TBL_DEVICES', '1')">
+                                                        <input type="text" class="form-control" name='deviceId'  list="deviceImei" ng-change="modalData.validateImei(data.device)"
+                                                               required ng-model='data.device'>
+                                                        <datalist id="deviceImei">
+                                                            <option value="-SELECT DEVICE OR TYPE DEVICE IMEI-" >
+                                                            <option value="{{device.imei}}" ng-repeat="device in
+                                                                        modalData.devices | filterData :search:'imei':'serialNumber'">
+                        
+                                                        </datalist>
+                        
+                                                    </div>
+                                                </div>
+                        <div class="form-group" style="padding:0px;" ng-class="{ 'has-error' :
+                                    assignUserResources.dataLineId.$invalid && !assignUserResources.dataLineId.$pristine
+                                    || modalData.datalineExists }">
+
+                            <label for="code" class="control-label col-xs-2">Data Line</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name='dataLineId' list="simNumber"
+                                       ng-change="modalData.validateDataLine(data.dataLineId)"
+                                       ng-model='data.dataLineId'>
+                                <datalist id="simNumber" ng-init="modalData.delayDatalineCall('TBL_DATALINES', '1')">
+                                    <option value="-SELECT SIM CARD NUMBER OR TYPE-" >
+                                    <option value="{{device.simNumber}}" ng-repeat='device in modalData.datalinesData
+                                                | filter : {status:1}'>
+
+                                </datalist>
+
+                            </div>
+                        </div>
+                        -->
+                        <div ng-controller="TypeaheadCtrl"  ng-init="modalData.delayDeviceCall('TBL_DEVICES', '1')">
+                            <div class='container-fluid typeahead-demo' >
+
+                                <label> Type </label>
+                                <select class="form-control" ng-model="data.deviceType" ng-change="modalData.filterDeviceType()">
+                                    <option value="governor">Governor</option>
+                                    <option selected value="tracker">Tracker</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div ng-controller="TypeaheadCtrl"  ng-if="data.deviceType == 'governor'">
+                            <div class='container-fluid typeahead-demo' ng-class="{ 'has-error' :
+                                 assignUserResources.deviceId.$invalid && !assignUserResources.deviceId.$pristine || modalData.deviceExists
+                                 }">
+
+                                <label> Governor IMEI</label>
+                                <input type="text" ng-model="data.deviceId" typeahead-on-select="modalData.validateImei(data.deviceId)" typeahead-select-on-exact="true"
+                                       typeahead-focus-first="true"
+                                       uib-typeahead="state for state in Typeahead.returnDevicesGovernor() | filter:$viewValue | limitTo:15" class="form-control">
+
+                            </div>
+                        </div>
+                        <div ng-controller="TypeaheadCtrl" ng-if="data.deviceType == 'tracker'">
+                            <div class='container-fluid typeahead-demo' ng-class="{ 'has-error' :
+                                 assignUserResources.deviceId.$invalid && !assignUserResources.deviceId.$pristine || modalData.deviceExists
+                                 }">
+
+                                <label> Tracker IMEI</label>
+                                <input type="text" ng-model="data.deviceId" typeahead-on-select="modalData.validateImei(data.deviceId)" typeahead-select-on-exact="true"
+                                       typeahead-focus-first="true"
+                                       uib-typeahead="state for state in Typeahead.returnDevices() | filter:$viewValue | limitTo:15" class="form-control">
+
+                            </div>
+                        </div>
+
+                        <div ng-controller="TypeaheadCtrl" ng-init="modalData.delayDatalineCall('TBL_DATALINES', '1')">
+                            <div class='container-fluid typeahead-demo' ng-class="{ 'has-error' :
+                                    assignUserResources.dataLineId.$invalid && !assignUserResources.dataLineId.$pristine
+                                                || modalData.datalineExists }">
+
+                                <label> Data Line</label>
+                                <input type="text" ng-model="data.dataLineId" typeahead-on-select="modalData.validateDataLine(data.dataLineId)" typeahead-select-on-exact="true"
+                                       typeahead-focus-first="true"
+                                       uib-typeahead="state for state in Typeahead.returnDatalines() | filter:$viewValue | limitTo:15" class="form-control">
+
+                            </div>
+                        </div>
+
+                        <div class="" style="padding:0px;" ng-class="{ 'has-error' :
+                                    assignUser.customerSearch.$invalid && !assignUser.customerSearch.$pristine }">
+                            <div class="container-fluid typeahead-demo">
+                                <label>User</label>
+
+                                <select type="text" class="form-control" name='customerSearch' 
+                                        required ng-model='data.assignUserResources.userId'>
+                                    <option ng-repeat="user in modalData.fetchCurrentData| filter : {canBeAssignedTicket : 1}"  value = "{{user.id}}"> {{user.fullnames}} </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="form-group" style="padding:0px;">
+
+                            <label for="code" class="control-label col-xs-2"></label>
+                            <div class="col-md-9">
+                                <button class=" btn " id="{{data.modalHeaderColor}}" style='width:100%'
+                                        ng-click="modalData.globalSettingsSave(data.assignUserResources, 'TBL_ASSIGNED_DEVICES')"
+                                        ng-disabled="assignUser.$invalid || modalData.datalineExists || modalData.deviceExists"
+                                        >Save</button>
+
+                            </div> 
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!--   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+
+</div>

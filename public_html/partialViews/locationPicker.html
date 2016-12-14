@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+    <head lang="en">
+        <meta charset="UTF-8">
+        <!-- Bootstrap stuff -->
+
+
+        <title>Simple example</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+            .pac-container {
+                z-index: 99999;
+            }
+        </style>
+
+    <div id="us6-dialog" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-horizontal" style="width: 100%">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Location:</label>
+
+                            <div class="col-sm-7" ng-hide="modalData.disablelocation">
+                                <input type="text" class="form-control"  id="us3-address" ng-model="location" />
+                                <span class="form-control"  id="us3-written" ng-model="location"></span>
+                            </div>
+                            
+                            <div class="col-sm-3">
+                             <button type="button" id="pickLocation" class="btn btn-primary" data-dismiss="modal" ng-click="modalData.assignClickedLocation(location)">Pick</button>
+                            </div>
+                        </div>
+                        <div id="us3" style="width: 100%; height: 500px;"></div>
+                        
+                        <div class="col-lg-12 col-xs-12 col-md-12 btn label-info" id="loader"></div>
+                        <div class="clearfix">&nbsp;</div>
+                        <div class="m-t-small">
+                            <label class="p-r-small col-sm-1 control-label">Lat.:</label>
+
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" style="width: 110px" id="us3-lat" />
+                            </div>
+                            <label class="p-r-small col-sm-2 control-label">Long.:</label>
+
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" style="width: 110px" id="us3-lon" />
+                            </div>
+                            <div class="col-sm-3">
+                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        
+                        <script>
+                           
+                        </script>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</body>
+
+</html>

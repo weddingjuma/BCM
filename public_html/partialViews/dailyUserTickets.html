@@ -1,0 +1,149 @@
+<div class="panel panel-default" ng-controller="ticketsController">
+
+
+    <div class="">
+        <ul class="nav nav-tabs" ng-init="dailyTickets = 'dailyTkts'">
+            <li class='pull-left ' ng-class="{'active' : dailyTickets == 'dailyTkts'}">
+                <a href="" ng-click="dailyTickets = 'dailyTkts'" >Tickets</a>
+            </li>
+            <li class='pull-left ' ng-class="{'active' : dailyTickets == 'dailyCerts'}"  ng-show="modalData.returnMenuFlag(45)">
+                <a href="" ng-click="dailyTickets = 'dailyCerts'" >Certificates</a>
+            </li>
+            <li class='pull-left ' ng-class="{'active' : dailyTickets == 'myWork'}"  ng-show="modalData.returnMenuFlag(45)">
+                <a href="" ng-click="dailyTickets = 'myWork'" >My Work</a>
+            </li>
+            <li class='pull-right'>
+                <input type="search" 
+                       class="form-control btn-primary" placeholder='Search Tickets' ng-model='searchCerts'/>
+            </li>
+
+
+        </ul>
+    </div> 
+    <div ng-show="dailyTickets == 'dailyTkts'">
+        <div class="panel panel-heading">
+            User Daily Tickets  <button ng-click="modalData.exportToExcel('User Daily Ticket', 'userDailyTickets')" class="pull-right btn btn-success btn-sm">Excel</button>
+        </div>
+        <div class="panel panel-body" ng-init="data.getUserDailyTickets(0)" id="userDailyTickets">
+
+            <div class="col-md-12"  ng-controller="datePickerMax">
+                <form novalidate="">  
+
+
+                    <div class = "input-group">
+                        <span class = "input-group-addon ">Date</span>
+                        <input type="text" id="date" class="form-control" placeholder="date" 
+                               name="date"    />
+                        <span class = "btn btn-primary input-group-addon" ng-click="data.getUserDailyTickets(1)">Search</span>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="col-md-12" ng-controller="modalsController"  style="max-height: 300px;overflow: auto">
+                <table ng-hide="true" ><tr style="background-color: grey;"><td></td><td> <h3>All Users Tickets</h3></td><td></td><td></td><td></td>
+                        <td></td><td></td><td></td><td></td><td></td></tr></table>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>  #</th>
+                            <th ng-click="data.sortByColumnFxn('fullnames')">Full Names</th>
+                            <th ng-click="data.sortByColumnFxn('total')">Total Tickets</th>
+                            <th ng-click="data.sortByColumnFxn('closed')">Total Closed</th>
+                            <th ng-click="data.sortByColumnFxn('open')">Total Open</th>
+                            <th ng-click="data.sortByColumnFxn('escalated')">escalated</th>
+                            <th ng-click="data.sortByColumnFxn('suspended')">Suspended</th>
+                            <th ng-click="data.sortByColumnFxn('merged')">All Tickets</th>
+                            <th>Work Load</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr  dir-paginate="tickets in data.userDailyTickets|filter :searchCerts| orderBy :data.sortByColumn| itemsPerPage: 100 | limitTo:30"
+
+                             class="{{modalData.returnRowClass($index, tickets.status, 0)}}" ng-click="modalData.makeRowActive($index)"
+                             current-page="currentPage" pagination-id="dataPagination"
+
+                             >
+                            <td>{{$index + 1}}</td>
+                            <td>{{tickets.fullnames}}</td>
+                            <td>{{tickets.total}}</td>
+                            <td>{{tickets.closed}}</td>
+                            <td>{{tickets.open}}</td>
+                            <td>{{tickets.escalated}}</td>
+                            <td>{{tickets.suspended}}</td>
+                            <td>{{tickets.allTickets}}</td>
+                            <td>{{data.cutNumberTotals(tickets.total, tickets.allTickets, 2)}}% </td>
+                            <td>{{tickets.dateAndTime}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination></pagination>
+
+            </div> 
+        </div>
+    </div>
+    <div ng-show="dailyTickets == 'myWork'">
+        <div ng-include="'partialViews/userEndOfDayReport.html'"></div>
+    </div>
+
+
+
+
+    <div ng-show="dailyTickets == 'dailyCerts'">
+
+        User Daily Certificate <button ng-click="modalData.exportToExcel('User Daily Certificates', 'userCertificates')" class="pull-right btn btn-success btn-sm">Excel</button>
+
+        <div class="panel panel-body" ng-init="data.getUserDailyTickets(0)" id="userCertificates">
+
+            <div class="col-md-12"  ng-controller="datePickerMax">
+                <form novalidate="">  
+
+
+                    <div class = "input-group">
+                        <span class = "input-group-addon">Date</span>
+                        <input type="text" id="dateCert" class="form-control" placeholder="date" 
+                               name="date" />
+                        <span class = "btn btn-primary input-group-addon" ng-click="data.getUserDailyCerts(1)">Search</span>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="col-md-12" ng-controller="modalsController"  style="max-height: 300px;overflow: auto">
+                <table ng-hide="true" ><tr style="background-color: grey;"><td></td><td> <h3>Users Daily Certificate </h3></td><td></td><td></td><td></td>
+                        <td></td><td></td><td></td><td></td><td></td></tr></table>
+                <table class="table  table-bordered " >
+                    <tr ng-init="data.getUserDailyCerts()">
+                        <th></th>
+                        <th ng-click="data.sortByColumnFxn('fullnames')">Full Names</th>
+                        <th ng-click="data.sortByColumnFxn('totalRenewal')">Total Certs</th>
+                        <th ng-click="data.sortByColumnFxn('totalRenewal')">Total Installation</th>
+                        <th ng-click="data.sortByColumnFxn('totalRenewal')">Total Renewal</th>
+                        <th ng-click="data.sortByColumnFxn('escalated')">All Certs</th>
+                        <th ng-click="data.sortByColumnFxn('escalated')">Percent</th>
+                        <th>Date</th>
+                    </tr>
+                    <tr  dir-paginate="tickets in data.userDailyCerts|filter :searchCerts| orderBy :data.sortByColumn| itemsPerPage: 100| limitTo:30"
+                         current-page="currentPage" pagination-id="dataPagination"
+                         class="{{modalData.returnRowClass($index, tickets.status, 0)}}" ng-click="modalData.makeRowActive($index)"
+
+
+                         >
+                        <td>{{$index + 1}}</td>
+                        <td>{{tickets.fullnames}}</td>
+                        <td>{{tickets.totalCerts}}</td>
+
+                        <td>{{tickets.totalInst}}</td>
+                        <td>{{tickets.totalRenewal}}</td>
+                        <td>{{tickets.allCerts}}</td>
+                        <td>{{data.cutNumberTotals(tickets.totalInst, tickets.allCerts, 2)}}%</td>
+                        <td>{{tickets.dateCertTime}}</td>
+                    </tr>
+                </table>
+                <pagination></pagination>
+            </div>
+        </div>
+    </div>

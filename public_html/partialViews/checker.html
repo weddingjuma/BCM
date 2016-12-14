@@ -1,0 +1,148 @@
+<div style='padding-top: 100px;' ng-controller='modalsController' ng-init="data.getAllVehiclesJoinCustomer()">
+  <!--  <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in modalData.fetchCurrentData" md-item-text="item.areaName">
+        <span md-highlight-text="searchText">{{item.areaName}} - {{item.id}}</span>
+    </md-autocomplete>
+  -->
+
+
+
+<form name="autocompleteForm" ng-controller="ticketsController">
+  <md-autocomplete required md-input-name="autocomplete" ng-model='areaCode' md-selected-item="item.areaName"  placeholder='search'
+                   md-search-text-change ="modalData.getAllVehiclesJoinCustomerKeyUp(customerSearch)"
+                   md-selected-item-change ="modalData.getAllCustomerVehicleDtls(item.id)"
+                   md-search-text="searchText" md-items="item in modalData.vehicleJoinCustomers | filter : searchText |limitTo:10" md-item-text="item.name">
+    <md-item-template>
+      <span md-highlight-text="searchText">{{item.name}} - {{item.mobile_1}}</span>
+    </md-item-template>
+    <div ng-messages="autocompleteForm.autocomplete.$error">
+      <div ng-message="required">This field is required</div>
+    </div>
+  </md-autocomplete>
+</form>
+  {{areaCode}} 
+</div>
+
+<!--
+<div class="panel panel-default" ng-controller="modalsController">
+    <div class="panel-heading" >
+        <b> Certificates </b>
+
+
+    </div>
+    <div class="panel-body" ng-controller="ticketsController" ng-init="data.getAllVehiclesJoinCustomer()">
+
+        <div class="col-md-12">
+            <input type="text" class="form-control" ng-keyup ="modalData.getAllVehiclesJoinCustomerKeyUp(customerSearch)"
+                   ng-click="data.showList = true" ng-keypress="data.showExtraInfo = false" 
+                   placeholder="Customer Name" or vehicle name='customerName' capitalize required ng-model='customerSearch'/>
+        </div>
+        <div class="col-md-12" ng-show="data.showList">
+            <ul class="list-group">
+                <li class="list-group-item"  ng-repeat="customer in modalData.vehicleJoinCustomers| limitTo: 10 ">
+                    <a href="#/certificates" class="" target="_self" ng-click="modalData.getAllCustomerVehicleDtls(customer.id)">  {{customer.name}} - {{customer.mobile_1}}  </a>
+                    <span class="pull-right">{{customer.regNo}}-{{customer.model}}</span></li>
+            </ul>
+        </div>
+        
+        
+        
+        
+        
+        <div class="row col-lg-12 text-center" ng-hide="data.showList">
+            <div class="clearfix col-md-10"></div>
+            <div class="clearfix col-md-10"></div>
+            <form novalidate="" name="certificate">
+                <div class="pull-right" style="margin-bottom: 10px;margin-top: 8px;"  ng-controller="datePicker">
+
+                    <input type="text" class="btn darkTable" style="color:black !important;" id="date"  placeholder="date" ng-model="data.date"
+                           name="date"   required />
+
+                    <select class=" btn darkTable" id="selectButton" style="color:black !important;" ng-model="data.type" ng-init="data.type = 1">
+                        <option  disabled="">--SELECT TYPE--</option>
+                        <option selected value="1">INSTALLATION</option>
+                        <option value="0">RENEWAL</option>
+
+                    </select>
+                    <select class=" btn darkTable" id="selectButton" style="color:black !important;" ng-model="data.duration" ng-init="data.duration = 0">
+                        <option  disabled="">--SELECT YEARS--</option>
+                        <option selected value="0">0 year</option>
+                        <option value="1">1 year</option>
+                        <option value="2">2 years</option>
+                        <option value="3">3 years</option>
+                        <option value="4">4 years</option>
+                        <option value="5">5 years</option>
+                        <option value="6">6 years</option>
+                        <option value="7">7 years</option>
+                        <option value="8">8 years</option>
+                    </select>
+
+                    <select class=" btn darkTable" id="selectButton" style="color:black !important;" ng-model="data.month" ng-init="data.month = 0.0">
+
+                        <option selected="" value="0.0">0 Month</option>
+                        <option value="0.0833">1 Month</option>
+                        <option value="0.167">2 Months</option>
+                        <option value="0.25">3 Months</option>
+                        <option value="0.333">4 Months</option>
+                        <option value="0.417">5 Months</option>
+                        <option value="0.5">6 Months</option>
+                        <option value="0.583">7 Months</option>
+                    </select>
+
+
+
+
+
+                    <button class="btn btn-primary" ng-disabled="data.date == ''"
+                            ng-click="modalData.printCertificate(data.duration, modalData.customerCert.id, data.month, data.date,data.type)"
+                            >Print To Certificate</button>
+                </div>
+            </form>
+            <div class="clearfix col-md-10"></div>
+            <table class="table darkTable table-striped">
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">Customer Name</td><td  class="text-left  darkTable">{{modalData.customerCert.name}}</td>
+                </tr>
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">Mobile</td><td  class="text-left  darkTable">{{modalData.customerCert.mobile_1}}</td>
+                </tr>
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">ID Number</td><td  class="text-left  darkTable">{{modalData.customerCert.idNo}}</td>
+                </tr>
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">Plate Number</td><td  class="text-left  darkTable">{{modalData.customerCert.regNo}}</td>
+                </tr>
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">Model</td><td  class="text-left  darkTable">{{modalData.customerCert.model}}</td>
+                </tr>
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">Make</td><td  class="text-left  darkTable">{{modalData.customerCert.make}}</td>
+                </tr>
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">Chassis Number</td><td  class="text-left  darkTable">{{modalData.customerCert.chassisNo}}</td>
+                </tr>
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">Engine Number</td><td  class="text-left  darkTable">{{modalData.customerCert.engNo}}</td>
+                </tr>
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">Current Expiry</td><td  class="text-left  darkTable">{{modalData.customerCert.validityEndOn}}</td>
+                </tr>
+                <tr class=" darkTable">
+                    <td class="text-left  darkTable">Policy Number</td><td  class="text-left  darkTable">{{modalData.customerCert.extras}}</td>
+                </tr>
+
+            </table>
+        </div>
+
+    </div>
+</div>   
+
+
+    <div ng-controller="modalsController">
+        <div class="modal fade" id="confirmEmail" role="dialog">
+            <div ng-include="'modals/confirmEmail.html'"></div>
+        </div>
+    </div>
+
+-->
+
+

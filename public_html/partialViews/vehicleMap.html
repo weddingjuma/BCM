@@ -1,0 +1,81 @@
+
+<div ng-controller="mapController as vm"  ng-if="modalData.activeLink == 'vehicles'"
+     ng-cloak id="map_canvas">
+
+
+    <ng-map zoom="10" center="{{data.mapFocus.lat}}, {{data.mapFocus.lon}}" 
+            default-style="false" 
+            tilt="45" 
+            options="{{vm.options}}"
+            style='height:600px;'
+            pan-control="true"
+            map-type-control="true"
+            events="$scope.events" 
+            map-type-control-options="{
+            mapTypeIds: ['ROADMAP', 'SATELLITE','TERRAIN','HYBRID']
+            }"
+            zoom-to-include-markers="true"
+            >
+
+        <custom-control id="go-home"  position="TOP_LEFT" index="1" > 
+            <button ng-click="data.toggleTrafficMode()" class=" btn btn-default map-btn" style="color:black !important" >Traffic</button>
+        </custom-control>
+        <!-- <custom-control id="go-home" position="TOP_LEFT" index="1" > 
+             <button ng-click="vm.add()" class="btn btn-default map-btn ">Open street</button>
+         </custom-control>
+        
+        -->
+
+
+
+        <div ng-if="data.mapFocus.showTraffic">
+            <traffic-layer >
+
+            </traffic-layer>
+        </div>   
+        <transit-layer>
+
+        </transit-layer>
+
+        <kml-layer url="https://gmaps-samples.googlecode.com/svn/trunk/ggeoxml/cta.kml">
+        </kml-layer>
+
+
+
+
+        <marker ng-repeat="beach in data.searchedVehicles"
+                icon="{{data.returnMarkerIcon(beach.lastValidHeading)}}"
+                title="{{beach.description}}"
+                position="{{beach.lastValidLatitude}}, {{beach.lastValidLongitude}}"
+                animation="{{mapData.returnAnimation(beach.description)}}"
+                z-index="{{beach.id}}"  
+                id='{{beach.description}}' 
+                on-click="vm.showDetail(beach)"
+
+                >
+
+
+        </marker>
+
+
+
+
+        <shape id="polyline" name="polyline"
+               geodesic="true" stroke-color="green"
+               stroke-opacity="0.6" stroke-weight="3"
+
+               origin="{{data.mapFocus.lat}}, {{data.mapFocus.lon}}"
+               destination="{{data.mapFocus.lat}}, {{data.mapFocus.lon}}"
+               >
+        </shape>
+
+    </ng-map>
+</div>
+<!---
+<div ng-controller="IconComplexCtrl">
+    <ul>
+        <li ng-repeat="tracker in mapData.trackerData">{{tracker.id}}-{{tracker.lat}}</li>
+    </ul>
+</div> 
+-->
+

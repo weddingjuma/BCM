@@ -1,0 +1,66 @@
+<div class="panel panel-default" ng-controller="modalsController" ng-show="modalData.returnMenuFlag(38)">
+    <div class="panel-heading" ng-init="modalData.getSavedCertificates()">
+        Email Certificates
+    </div>
+    <div class="panel-body">
+        <div class="pull-right" >
+            <ul class="nav nav-tabs">
+
+                <li class='pull-right'>
+                    <input type="search"
+                           class="form-control" placeholder='Search Certficate' ng-model='filterCerts'/>
+                </li>
+
+                <li class='pull-right'>
+                    <button class="btn btn-default" ng-click="modalData.getSavedCertificates()">
+                        <i class="fa fa-refresh " style="color:black"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div  class="pre-scrollable col-md-12">
+            <table class="table table-responsive  ">
+
+                <thead>
+                    <tr>
+
+                        <th>Certificate No</th>
+                        <th>Customer Name</th>
+                        <th>Vehicle</th>
+                        <th>Email</th>
+                        <th>Date printed</th>
+                        <th></th>
+
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr dir-paginate="pricesGroup in modalData.savedCerts|filter : filterCerts |itemsPerPage: pageSize"
+                        class="{{modalData.returnRowClass($index)}}" ng-click="modalData.makeRowActive($index)"
+                        current-page="currentPage" pagination-id="dataPagination">
+
+
+                        <td>{{pricesGroup.certNo}}</td>
+                        <td>{{pricesGroup.name}}</td>
+                        <td>{{pricesGroup.regNo}}</td>
+                        <td>{{pricesGroup.email}}</td>
+                        <td>{{data.convertToHumanTime(pricesGroup.dateCreated)}}</td>
+                        <td ng-show="modalData.returnMenuFlag(68)"><div class="btn btn-success" ng-click="modalData.sendEmailToClient(pricesGroup)">
+                                Email
+                            </div></td>
+                    </tr>
+                </tbody>    
+            </table>
+             <pagination></pagination>
+        </div>
+
+        <div ng-controller="modalsController">
+            <div class="modal fade" id="invalidEmail" role="dialog">
+                <div ng-include="'modals/invalidEmail.html'"></div>
+            </div>
+        </div>
+        <div ng-controller="modalsController">
+            <div class="modal fade" id="confirmEmail" role="dialog">
+                <div ng-include="'modals/confirmEmail.html'"></div>
+            </div>
+        </div>

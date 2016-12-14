@@ -1,0 +1,117 @@
+<div class="pull-right col-md-12">
+    <div class="panel panel-default" ng-controller="modalsController">
+        <div class="panel-heading" >
+
+            <h4><small>Payment # {{data.currentPaymentsInfo.id}}</small> </h4>
+
+                <div class="pull-right col-lg-3">
+                    <div class="dropdown pull-right" ng-controller="reportsController">
+                        <a href="#/accounts" ng-click="data.generatePDFTest('Customer Payment Details')" ng-show="modalData.returnMenuFlag(70)"><i class="fa fa-print"></i></a>
+                        <button  class="btn btn-primary" data-toggle="dropdown" 
+                                 style="height: 30px;">Payment
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <!--     <li  class="diabled">
+                                     <a href="#/accounts" target="_self" 
+                                        ng-click="data.saveTicketUpdate(1, data.currentPaymentsInfo.id, 'TBL_TICKETS')">Refund Customer 
+                                     </a>
+                                 </li>
+                            -->
+                            <li>
+                                <a href="#/accounts" target="_self" 
+                                   ng-click="modalData.editPayments()">Edit 
+                                </a>
+                            </li>
+                            <li><a href="#/accounts"  target="_self"                              
+                                   ng-click="modalData.deactivateRecord(data.currentPaymentsInfo.id, 'TBL_SIMPLE_PAYMENTS', 0)"
+                                   >Cancel
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            
+        </div>
+        <div class="panel panel-body" id='printArea'>
+            <table class="table table-striped">
+                <tr>
+                    <td><b>CUSTOMER DETAILS</b></td>   <td><b>Receipt # : {{data.currentPaymentsInfo.id}}</b> </td>
+                </tr>
+                <tr>
+
+                    <td><b>Customer Name</b></td><td><b>Id No</b></td><td><b>phone No</b></td>
+                    <td><b>Vehicle Reg #</b></td>
+                    <td><b></b></td>
+                </tr>
+
+                <tr>
+
+                    <td>{{data.currentPaymentsInfo.customerName}}</td>
+                    <td>{{data.currentPaymentsInfo.idNo}}</td>
+                    <td>{{data.currentPaymentsInfo.mobile_1}}</td>
+                    <td>{{data.currentPaymentsInfo.regNo}}</td>
+                    <td><b></b></td>
+                </tr>
+
+                <tr>
+                    <td><b>PAYMENT DETAILS</b></td><td><b></b></td><td><b></b></td><td><b></b></td><td><b></b></td>
+                </tr>
+                <tr>
+                    <td><b>Receipt</b></td>
+                    <td><b>Service Name</b></td><td><b>Period</b></td><td><b>Service Amount</b></td>
+                    <td><b>Amount Pain</b></td>
+
+                </tr>
+
+                <tr>
+                    <td>{{data.currentPaymentsInfo.receiptNo}}</td>
+                    <td>{{data.currentPaymentsInfo.priceGroupName}}</td>
+                    <td>{{data.currentPaymentsInfo.period}} Years</td>
+                    <td>{{data.currentPaymentsInfo.priceGroupAmount}}</td>
+                    <td>{{data.currentPaymentsInfo.amount}}.Kshs</td>
+
+                </tr>
+                <tr>
+
+                    <td><b>Mode of Payment</b></td><td><b>Date Paid</b></td><td>Date Received<b></b></td>
+                   
+                    <td><b></b></td>
+                </tr>
+
+                <tr>
+
+                    <td>{{data.currentPaymentsInfo.priceCategory}}</td>
+                    <td>{{data.currentPaymentsInfo.date}}</td>
+                    <td>{{data.convertToHumanTime(data.currentPaymentsInfo.dateCreated)}}</td>
+                    <td><b></b></td>
+                </tr>
+
+                <tr>
+                    <td><b>Other Details</b></td><td><b></b></td><td><b></b></td><td><b></b></td><td><b></b></td>
+                </tr>
+                <tr>
+                    <td><b>Received By</b></td>
+                    <td><b>Dealer Name</b></td>
+                    <td><b>Extra Info</b></td>
+                    <td><b>status</b></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>{{data.currentPaymentsInfo.receivedBy}}</td>
+                    <td>{{data.currentPaymentsInfo.dealerName}}</td>
+                    <td>{{data.currentPaymentsInfo.extras}}</td>
+                    <td>{{data.currentPaymentsInfo.status}}</td>
+                    <td></td>
+
+                </tr>
+
+
+
+
+            </table>
+        </div>
+
+    </div>
+</div>

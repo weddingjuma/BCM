@@ -1,0 +1,23 @@
+{
+    "elements": {
+        "dir-pagination-controls": {},
+        "a": {},
+        "pagination": {},
+        "tab-heading": {},
+        "div": {},
+        "notification": {},
+        "md-item-template": {},
+        "tab": {},
+        "ul": {},
+        "tabset": {},
+        "md-autocomplete": {},
+        "li": {},
+        "spinner": {}
+    },
+    "attributes": {
+        "md-highlight-text": {
+            "context": "span"
+        },
+        "dir-paginate": {}
+    }
+}
